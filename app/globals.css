@@ -1,26 +1,285 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-background: #07090d;
+  --color-foreground: #f8fafc;
+  --color-muted: #94a3b8;
+  --color-panel: rgba(11, 16, 22, 0.88);
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-accent: #c9a56a;
+  --shadow-elevated: 0 24px 80px rgba(0, 0, 0, 0.32);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-manrope);
+  --font-mono: var(--font-ibm-plex-mono);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(107, 198, 189, 0.12), transparent 28%),
+    radial-gradient(circle at 88% 14%, rgba(201, 165, 106, 0.18), transparent 24%),
+    linear-gradient(180deg, #0b1016 0%, #07090d 100%);
+  color: var(--color-foreground);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at center, black 22%, transparent 78%);
+  opacity: 0.35;
+}
+
+a,
+button,
+input,
+textarea {
+  outline-offset: 4px;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(201, 165, 106, 0.9);
+}
+
+::selection {
+  background: rgba(201, 165, 106, 0.3);
+  color: white;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 60;
+  border-radius: 999px;
+  background: white;
+  color: black;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  transition: top 180ms ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.site-shell {
+  width: min(1200px, calc(100% - 1.5rem));
+  margin-inline: auto;
+}
+
+.section-space {
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+.surface-panel {
+  background: linear-gradient(180deg, rgba(13, 18, 24, 0.92), rgba(8, 10, 14, 0.92));
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-elevated);
+  backdrop-filter: blur(16px);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--color-accent);
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  height: 1px;
+  width: 2.5rem;
+  background: rgba(201, 165, 106, 0.72);
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3.65rem);
+  line-height: 1.02;
+  letter-spacing: -0.06em;
+  color: white;
+}
+
+.copy-muted {
+  color: var(--color-muted);
+  line-height: 1.8;
+}
+
+.button-primary,
+.button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.2rem;
+  font-size: 0.94rem;
+  font-weight: 600;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.button-primary {
+  border: 1px solid rgba(201, 165, 106, 0.38);
+  background: linear-gradient(180deg, rgba(201, 165, 106, 0.96), rgba(173, 137, 77, 0.96));
+  color: #090b0f;
+}
+
+.button-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+}
+
+.button-primary:hover,
+.button-secondary:hover {
+  transform: translateY(-1px);
+}
+
+.button-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tag-chip,
+.tag-chip-subtle {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tag-chip {
+  border: 1px solid rgba(201, 165, 106, 0.26);
+  background: rgba(201, 165, 106, 0.1);
+  color: var(--color-accent);
+}
+
+.tag-chip-subtle {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d7dce3;
+}
+
+.skill-progress {
+  appearance: none;
+  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.skill-progress::-webkit-progress-bar {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.skill-progress::-webkit-progress-value {
+  background: linear-gradient(90deg, #c9a56a 0%, #f0d8a3 100%);
+  border-radius: 999px;
+}
+
+.skill-progress::-moz-progress-bar {
+  background: linear-gradient(90deg, #c9a56a 0%, #f0d8a3 100%);
+  border-radius: 999px;
+}
+
+.field-input {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  padding: 0.95rem 1rem;
+}
+
+.field-input::placeholder {
+  color: #718096;
+}
+
+.field-input:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.field-input:focus {
+  border-color: rgba(201, 165, 106, 0.66);
+}
+
+.honeypot-field {
+  position: absolute;
+  left: -100vw;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-reveal {
+  animation: fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-reveal[data-delay="2"] {
+  animation-delay: 120ms;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .site-shell {
+    width: min(1200px, calc(100% - 1rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -1,22 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project configured to run with [Bun](https://bun.sh).
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Useful commands:
+
+```bash
+bun run lint
+bun run test
+bun run build
+bun run prisma:generate -- --config prisma.config.ts
+bun run db:push -- --config prisma.config.ts
+bun run db:seed
+bun run audit:prune:dry-run
+bun run audit:prune
+```
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+## Audit Operations
+
+Audit log memiliki lifecycle operasional yang dibatasi:
+
+- Retention default `90` hari melalui `AUDIT_LOG_RETENTION_DAYS`
+- Failed-login alert threshold default `10` event dalam `15` menit
+- Export audit dibatasi maksimal `500` baris dan `31` hari per request
+- Pruning dijalankan terpisah melalui `bun run audit:prune` agar surface area admin tetap kecil
+
+Praktik yang dipakai:
+
+- Failed-login identifier disimpan dalam bentuk masked display + hash korelasi
+- Export admin hanya memuat subset field yang aman, bukan payload mentah
+- Archive dilakukan dengan pola `export terlebih dahulu`, lalu pruning terjadwal
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
