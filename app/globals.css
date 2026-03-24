@@ -1169,6 +1169,32 @@ body:has([data-admin-shell="true"]) > footer {
   color: #f8e2b4;
 }
 
+@media (max-width: 767px) {
+  .content-card--project-compact .content-card-title {
+    font-size: 1.2rem;
+  }
+
+  .content-card--project-compact .tag-chip,
+  .content-card--project-compact .tag-chip-subtle {
+    padding: 0.38rem 0.68rem;
+    font-size: 0.68rem;
+  }
+
+  .content-card--project-compact .button-primary {
+    min-height: 2.65rem;
+    padding: 0.68rem 1rem;
+    font-size: 0.88rem;
+  }
+
+  .content-card--project-compact .content-chip-row {
+    gap: 0.45rem;
+  }
+
+  .content-card--project-compact .content-card-link-row {
+    gap: 0.7rem;
+  }
+}
+
 .content-list-header,
 .content-section-heading {
   display: grid;

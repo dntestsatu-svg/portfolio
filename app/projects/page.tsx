@@ -123,6 +123,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                     <Link
                       key={option.value}
                       href={pageHref("/projects", params, 1)}
+                      prefetch={false}
                       aria-current={sort === option.value ? "page" : undefined}
                       className={
                         sort === option.value
@@ -252,6 +253,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                     <Link
                       key={stackItem.slug}
                       href={`/projects?stack=${stackItem.slug}`}
+                      prefetch={false}
                       className={
                         archive.activeStack === stackItem.slug ? "tag-chip" : "tag-chip-subtle"
                       }
@@ -269,6 +271,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                     <Link
                       key={category.slug}
                       href={`/projects/category/${category.slug}`}
+                      prefetch={false}
                       className="content-taxonomy-link"
                     >
                       <span>{category.label}</span>
@@ -283,7 +286,12 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                   <h2 className="content-sidebar-title">Shortcut unggulan</h2>
                   <div className="content-compact-list">
                     {archive.featuredProjects.map((project) => (
-                      <Link key={project.slug} href={project.href} className="content-compact-link">
+                      <Link
+                        key={project.slug}
+                        href={project.href}
+                        prefetch={false}
+                        className="content-compact-link"
+                      >
                         <span className="content-compact-title">{project.name}</span>
                         <span className="content-compact-meta">
                           {project.category} · {project.status.label}

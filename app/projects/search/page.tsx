@@ -182,6 +182,7 @@ export default async function ProjectSearchPage({ searchParams }: ProjectSearchP
                     <Link
                       key={category.slug}
                       href={`/projects/category/${category.slug}`}
+                      prefetch={false}
                       className="content-taxonomy-link"
                     >
                       <span>{category.label}</span>
@@ -195,7 +196,12 @@ export default async function ProjectSearchPage({ searchParams }: ProjectSearchP
                 <h2 className="content-sidebar-title">Stack shortcut</h2>
                 <div className="content-chip-row">
                   {searchResults.stacks.slice(0, 14).map((stack) => (
-                    <Link key={stack.slug} href={`/projects?stack=${stack.slug}`} className="tag-chip-subtle">
+                    <Link
+                      key={stack.slug}
+                      href={`/projects?stack=${stack.slug}`}
+                      prefetch={false}
+                      className="tag-chip-subtle"
+                    >
                       {stack.label}
                     </Link>
                   ))}
@@ -207,7 +213,12 @@ export default async function ProjectSearchPage({ searchParams }: ProjectSearchP
                   <h2 className="content-sidebar-title">Featured projects</h2>
                   <div className="content-compact-list">
                     {searchResults.featuredProjects.map((project) => (
-                      <Link key={project.slug} href={project.href} className="content-compact-link">
+                      <Link
+                        key={project.slug}
+                        href={project.href}
+                        prefetch={false}
+                        className="content-compact-link"
+                      >
                         <span className="content-compact-title">{project.name}</span>
                         <span className="content-compact-meta">{project.status.label}</span>
                       </Link>

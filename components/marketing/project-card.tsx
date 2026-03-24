@@ -56,6 +56,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
                 ? `/projects/category/${project.categorySlug}`
                 : `/projects/${project.slug}`
             }
+            prefetch={false}
             className="tag-chip"
           >
             {project.category}
@@ -68,10 +69,16 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
         </div>
       </div>
 
-      <div className={`flex flex-1 flex-col ${isCompact ? "gap-4 p-5" : "gap-5 p-6"}`}>
+      <div
+        className={`flex flex-1 flex-col ${
+          isCompact ? "gap-3 p-4 sm:gap-4 sm:p-5" : "gap-5 p-6"
+        }`}
+      >
         <div className={isCompact ? "space-y-2.5" : "space-y-3"}>
           <h3 className="content-card-title">
-            <Link href={`/projects/${project.slug}`}>{project.name}</Link>
+            <Link href={`/projects/${project.slug}`} prefetch={false}>
+              {project.name}
+            </Link>
           </h3>
           <p className="content-card-summary">{project.summary}</p>
           {!isCompact ? <p className="copy-muted text-sm">{project.description}</p> : null}
@@ -82,6 +89,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
             <Link
               key={item.slug}
               href={`/projects?stack=${item.slug}`}
+              prefetch={false}
               className="tag-chip-subtle"
             >
               {item.label}
@@ -125,7 +133,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
         ) : null}
 
         <div className={`mt-auto flex flex-wrap ${isCompact ? "items-center gap-2.5 pt-1" : "gap-3 pt-2"}`}>
-          <Link href={`/projects/${project.slug}`} className="button-primary">
+          <Link href={`/projects/${project.slug}`} prefetch={false} className="button-primary">
             Lihat case study
           </Link>
 
@@ -133,7 +141,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
             supportingLinks.length > 0 ? (
               <div className="content-card-link-row">
                 {supportingLinks.map((item) => (
-                  <Link key={`${project.slug}-${item.label}`} href={item.href}>
+                  <Link key={`${project.slug}-${item.label}`} href={item.href} prefetch={false}>
                     {item.label}
                   </Link>
                 ))}

@@ -189,7 +189,12 @@ export default async function ProjectCategoryPage({
                 <h2 className="content-sidebar-title">Stack shortcut</h2>
                 <div className="content-chip-row">
                   {categoryPage.stacks.slice(0, 14).map((stack) => (
-                    <Link key={stack.slug} href={`/projects?stack=${stack.slug}`} className="tag-chip-subtle">
+                    <Link
+                      key={stack.slug}
+                      href={`/projects?stack=${stack.slug}`}
+                      prefetch={false}
+                      className="tag-chip-subtle"
+                    >
                       {stack.label}
                     </Link>
                   ))}
