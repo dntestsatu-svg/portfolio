@@ -276,13 +276,64 @@ export const reasonsToWorkWithMe: ValuePoint[] = [
 
 export const projects: ProjectItem[] = [
   {
+    slug: "portfolio-content-platform",
+    name: "Portfolio Content Platform",
+    category: "Content Platform",
+    summary:
+      "Platform portfolio dan content system yang menggabungkan landing page profesional, blog teknis, case study projects, admin CMS, discovery layer, dan SEO production dalam satu codebase Next.js.",
+    description:
+      "Project ini adalah aplikasi yang sedang Anda lihat sekarang: portfolio publik yang saya kembangkan menjadi sistem konten dengan blog, project archive, admin workspace, audit log, dan jalur discovery yang nyata.",
+    problemContext:
+      "Banyak portfolio developer berhenti sebagai landing page statis: pengunjung datang, melihat beberapa section, lalu mentok. Di sisi lain, CMS kecil sering terasa berat, tidak SEO-aware, atau tidak nyaman dipakai untuk menulis dan mengelola konten. Project ini dibuat untuk menjembatani keduanya dalam satu platform yang tetap cepat, jelas, dan production-minded.",
+    solutionBuilt:
+      "Saya membangun satu platform yang menyatukan halaman publik, blog teknis, project archive, case study detail, admin workspace, auth yang diperketat, audit log, taxonomy, search, related content, dan metadata SEO tanpa memecah semuanya ke banyak aplikasi terpisah.",
+    roleLabel: "Product design · fullstack engineering",
+    roleSummary:
+      "Saya menangani product thinking, information architecture, implementasi Next.js App Router, data model Prisma, auth admin, hardening security, rendering markdown, discovery service, serta polish UX publik dan admin.",
+    focusAreas: [
+      "Public content discovery untuk blog dan projects",
+      "Admin workspace yang efisien untuk authoring dan audit",
+      "SEO, security, dan operasional production dalam satu codebase",
+    ],
+    architectureHighlights: [
+      "Public site dan admin dipisah dengan shell yang berbeda, tetapi berbagi service layer untuk content, rendering, SEO, dan cache invalidation.",
+      "Blog dan project discovery dibangun dengan service modular untuk archive, taxonomy, search, related content, dan pagination agar query tetap rapi dan siap ditingkatkan.",
+      "Auth admin memakai JWT HttpOnly cookie, CSRF protection, rate limiting terdistribusi, audit log, dan ISR revalidation setelah setiap mutasi konten.",
+    ],
+    decisionNotes: [
+      "Markdown dipilih sebagai format authoring utama karena stabil untuk versioning, mudah dipreview, dan konsisten dirender di admin maupun publik.",
+      "Halaman search dibuat noindex, sedangkan detail content dan category page tetap indexable agar SEO tidak dipenuhi halaman tipis.",
+      "Admin workspace diprioritaskan untuk kepadatan informasi dan kecepatan kerja, bukan mengikuti gaya landing page publik.",
+    ],
+    lessonsLearned:
+      "Portfolio yang benar-benar meyakinkan bukan hanya soal tampilan, tetapi soal bagaimana pengunjung menemukan konten yang relevan, memahami kedalaman implementasi, dan melihat bahwa sistemnya memang dibangun dengan disiplin engineering.",
+    body:
+      "## Tujuan produk\n\nProject ini berangkat dari kebutuhan untuk membuat portfolio yang tidak berhenti sebagai halaman profil. Saya ingin situs ini berfungsi sebagai sistem konten yang benar-benar hidup: pengunjung bisa masuk dari landing page, archive blog, detail article, taxonomy, search, atau project case study, lalu tetap punya jalur eksplorasi yang jelas.\n\n## Fondasi teknis\n\nAplikasi dibangun dengan Next.js App Router dan TypeScript, memakai server components sebagai default, Prisma untuk data layer, MySQL untuk persistence, dan pendekatan ISR untuk menjaga keseimbangan antara performa, freshness konten, dan SEO. Rendering markdown, admin preview, dan public detail page juga dibuat konsisten agar authoring tidak menghasilkan kejutan saat publish.\n\n## Discovery dan SEO\n\nNilai utama project ini ada pada discovery. Blog dan projects tidak diperlakukan sebagai daftar card statis, melainkan sistem yang punya archive, taxonomy, search, related content, prev or next navigation, metadata dinamis, JSON-LD, sitemap, dan robots policy yang sengaja dirancang. Dengan begitu, pengunjung tidak mentok di satu halaman, dan crawler juga mendapat struktur yang lebih sehat.\n\n## Operasional dan hardening\n\nDi sisi admin, sistem ini memakai auth berbasis JWT HttpOnly cookie, CSRF protection, rate limiting, audit log, dan retention policy untuk menjaga operasional tetap rapi. Tujuannya bukan hanya membuat halaman admin bisa dipakai, tetapi membuatnya cukup aman dan cukup terukur untuk workflow yang benar-benar dipakai mengelola konten.",
+    tutorial:
+      "Jika Anda ingin mengembangkan portfolio menjadi content system, mulai dari tiga fondasi ini: struktur content model yang jelas, discovery flow publik yang hidup, dan admin workspace yang benar-benar nyaman dipakai menulis. Visual bisa dipoles belakangan, tetapi arsitektur informasi harus benar sejak awal.",
+    thumbnail: "/projects/knowledge-base-portal.svg",
+    thumbnailAlt: "Ilustrasi platform portfolio dan content system dengan layout editorial modern",
+    techStack: ["Next.js", "TypeScript", "Prisma", "MySQL", "Upstash Redis"],
+    features: [
+      "Admin CMS untuk blog dan projects",
+      "Search, taxonomy, dan related content",
+      "Audit log, CSRF, dan rate limiting",
+      "Metadata SEO, sitemap, dan robots policy",
+    ],
+    featured: true,
+    published: true,
+    updatedAt: "2026-03-24T00:00:00.000Z",
+    demoUrl: "/",
+    tutorialUrl: "/blog/membangun-portfolio-content-system-dengan-nextjs-app-router",
+  },
+  {
     slug: "operational-dashboard",
     name: "Operational Dashboard",
-    category: "Seed studi kasus",
+    category: "Internal Operations",
     summary:
       "Dashboard operasional untuk memusatkan KPI harian, exception queue, approval lintas role, dan laporan yang harus dibaca tim setiap pagi.",
     description:
-      "Studi kasus ini memodelkan tim operasional yang sebelumnya mengandalkan spreadsheet terpisah, rekap manual, dan follow-up chat untuk memantau exception harian.",
+      "Project ini merangkum kebutuhan tim operasional yang sebelumnya mengandalkan spreadsheet terpisah, rekap manual, dan follow-up chat untuk memantau exception harian.",
     problemContext:
       "Masalah utamanya bukan sekadar tidak adanya dashboard, tetapi tidak adanya satu jalur kerja yang menyatukan snapshot KPI, antrean masalah yang perlu ditindak, dan histori approval yang bisa diaudit ketika angka laporan berubah.",
     solutionBuilt:
@@ -328,11 +379,11 @@ export const projects: ProjectItem[] = [
   {
     slug: "service-management-suite",
     name: "Service Management Suite",
-    category: "Seed studi kasus",
+    category: "Internal Operations",
     summary:
       "Sistem layanan untuk intake request, assignment, SLA tracking, approval, dan audit trail yang tetap rapi saat volume tiket bertambah.",
     description:
-      "Studi kasus ini mewakili operasi layanan internal yang sebelumnya sulit dilacak karena status, penugasan, dan histori perubahan tersebar di banyak kanal komunikasi.",
+      "Project ini mewakili operasi layanan internal yang sebelumnya sulit dilacak karena status, penugasan, dan histori perubahan tersebar di banyak kanal komunikasi.",
     problemContext:
       "Masalah utama di sistem layanan biasanya muncul ketika request masuk dari banyak arah, status dikelola secara longgar, dan setiap perubahan tidak punya konteks yang bisa diaudit. Akibatnya SLA sulit diukur dan tim support kehilangan visibilitas atas bottleneck.",
     solutionBuilt:
@@ -378,11 +429,11 @@ export const projects: ProjectItem[] = [
   {
     slug: "knowledge-base-portal",
     name: "Knowledge Base Portal",
-    category: "Seed studi kasus",
+    category: "Content Platform",
     summary:
       "Portal dokumentasi dan tutorial berslug yang membantu pengguna menemukan panduan, artikel terkait, dan jalur belajar tanpa mentok di satu halaman.",
     description:
-      "Studi kasus ini memodelkan produk yang dokumentasinya tersebar di chat, PDF, dan catatan internal sehingga pengguna kesulitan menemukan jawaban yang konsisten.",
+      "Project ini berangkat dari kebutuhan produk yang dokumentasinya tersebar di chat, PDF, dan catatan internal sehingga pengguna kesulitan menemukan jawaban yang konsisten.",
     problemContext:
       "Ketika dokumentasi tersebar di banyak kanal, tim support harus mengulang jawaban yang sama, pengguna kesulitan mencari topik yang tepat, dan halaman artikel yang ada tidak membentuk jalur eksplorasi yang rapi.",
     solutionBuilt:
@@ -428,11 +479,11 @@ export const projects: ProjectItem[] = [
   {
     slug: "analytics-reporting-workbench",
     name: "Analytics Reporting Workbench",
-    category: "Seed studi kasus",
+    category: "Reporting & Analytics",
     summary:
       "Workbench analitik untuk merangkum data operasional menjadi laporan yang bisa diverifikasi, diekspor, dan dipakai mengambil keputusan lebih cepat.",
     description:
-      "Studi kasus ini mewakili kebutuhan reporting ketika tim masih menggabungkan data dari beberapa sumber secara manual sebelum menyusun laporan mingguan atau bulanan.",
+      "Project ini berangkat dari kebutuhan reporting ketika tim masih menggabungkan data dari beberapa sumber secara manual sebelum menyusun laporan mingguan atau bulanan.",
     problemContext:
       "Masalah utama reporting biasanya muncul ketika definisi metrik tidak seragam, data mentah perlu dibersihkan manual, dan export spreadsheet tidak selalu selaras dengan angka yang dilihat di dashboard.",
     solutionBuilt:
@@ -479,54 +530,70 @@ export const projects: ProjectItem[] = [
 
 export const articles: ArticleItem[] = [
   {
-    slug: "membangun-dashboard-yang-terstruktur",
-    title: "Membangun Dashboard yang Terstruktur dan Mudah Dipelihara",
+    slug: "membangun-portfolio-content-system-dengan-nextjs-app-router",
+    title: "Membangun Portfolio Content System dengan Next.js App Router",
     summary:
-      "Konten awal untuk menjelaskan cara menyusun modul dashboard, data flow, dan keputusan UI agar tetap rapi dalam jangka panjang.",
+      "Catatan teknis tentang bagaimana portfolio ini berkembang dari landing page menjadi sistem konten dengan blog, projects, admin CMS, discovery layer, dan SEO production.",
+    category: "Next.js",
+    publishedAt: "24 Maret 2026",
+    publishedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtLabel: "24 Maret 2026",
+    content:
+      "Project ini awalnya dimulai sebagai landing page portfolio biasa, tetapi cepat terasa kurang cukup karena pengunjung hanya datang ke satu halaman lalu mentok.\n\n## Dari showcase ke content system\n\nSaya ingin portfolio ini bisa menjelaskan lebih dari sekadar profil. Karena itu, blog, projects, taxonomy, search, dan related content saya perlakukan sebagai satu sistem discovery yang saling mendukung. Pengunjung harus bisa masuk dari artikel, dari case study, atau dari halaman archive, lalu tetap punya jalur eksplorasi yang jelas.\n\n## Admin bukan bagian publik\n\nSalah satu keputusan penting adalah memisahkan shell admin dari navigasi publik. Workspace admin harus terasa seperti alat kerja: padat, jelas, cepat dipakai, dan tidak ikut terbawa gaya landing page. Dari situ, blog editor, project editor, audit viewer, dan messages bisa berkembang dengan bahasa UX yang lebih tepat.\n\n## SEO dan rendering harus sengaja dirancang\n\nSaya juga sengaja membuat metadata dinamis, sitemap, robots, JSON-LD, dan canonical URL sebagai bagian dari fondasi. Untuk konten teknis, pipeline markdown dibuat konsisten antara preview admin dan halaman publik agar authoring, rendering, dan discovery tetap sejalan.\n\n## Pelajaran utamanya\n\nPortfolio yang matang bukan hanya tampak rapi di halaman utama. Ia harus punya struktur konten, discovery flow, dan operasi admin yang cukup kuat untuk tumbuh menjadi sistem publik yang benar-benar berguna.",
+    tags: ["nextjs", "content-system", "seo", "admin", "architecture"],
+    published: true,
+    href: "/blog/membangun-portfolio-content-system-dengan-nextjs-app-router",
+  },
+  {
+    slug: "merancang-dashboard-operasional-yang-bisa-dipakai-tim-setiap-pagi",
+    title: "Merancang Dashboard Operasional yang Bisa Dipakai Tim Setiap Pagi",
+    summary:
+      "Panduan merancang dashboard operasional yang fokus pada keputusan harian, KPI yang benar-benar dipakai, dan alur exception yang bisa ditindak tanpa berpindah-pindah layar.",
     category: "Architecture",
     publishedAt: "24 Maret 2026",
     publishedAtISO: "2026-03-24T00:00:00.000Z",
     updatedAtISO: "2026-03-24T00:00:00.000Z",
     updatedAtLabel: "24 Maret 2026",
     content:
-      "Dashboard yang baik tidak hanya terlihat rapi, tetapi juga memiliki alur data yang jelas, hirarki informasi yang tegas, dan batas tanggung jawab yang tidak kabur antara backend dan frontend.\n\nDalam praktiknya, saya lebih memilih memulai dari definisi kebutuhan operasional, sumber data, dan modul yang benar-benar penting. Setelah itu, tampilan mengikuti struktur informasi, bukan sebaliknya. Pendekatan ini membuat dashboard lebih mudah dipelihara dan tidak cepat kehilangan arah ketika kebutuhan berkembang.",
-    tags: ["dashboard", "architecture", "maintainability"],
+      "Dashboard operasional yang benar-benar dipakai tim setiap pagi biasanya lahir dari kebutuhan keputusan, bukan dari daftar widget yang ingin ditampilkan sekaligus.\n\n## Mulai dari keputusan, bukan widget\n\nLangkah pertama adalah menentukan pertanyaan apa yang harus terjawab dalam 30 detik pertama setelah halaman dibuka. KPI apa yang harus terlihat? Exception mana yang wajib ditindak? Siapa yang perlu melakukan approval? Dengan urutan seperti ini, struktur halaman akan mengikuti alur kerja, bukan sekadar menumpuk angka di layar.\n\n## Pisahkan snapshot dari data transaksi mentah\n\nBegitu dashboard mulai memuat banyak agregasi sekaligus, membaca tabel transaksi mentah pada setiap render biasanya menjadi bottleneck. Saya lebih memilih menyiapkan snapshot atau layer agregasi yang memang dirancang untuk kebutuhan monitoring. Pendekatan ini membuat loading lebih stabil dan memudahkan audit ketika angka berubah.\n\n## Audit perubahan angka sejak awal\n\nUntuk dashboard yang memengaruhi keputusan operasional, histori perubahan tidak boleh menjadi tambahan belakangan. Jika ada approval, override, atau koreksi data, sistem harus bisa menjelaskan siapa yang mengubah angka, kapan perubahan terjadi, dan data apa yang dipakai sebagai sumber saat itu. Inilah yang membuat dashboard terasa dapat dipercaya, bukan sekadar terlihat rapi.",
+    tags: ["dashboard", "architecture", "operations"],
     published: true,
-    href: "/blog/membangun-dashboard-yang-terstruktur",
+    href: "/blog/merancang-dashboard-operasional-yang-bisa-dipakai-tim-setiap-pagi",
   },
   {
-    slug: "strategi-validasi-dan-keamanan-input",
-    title: "Strategi Validasi Input dan Keamanan Dasar Aplikasi Web",
+    slug: "state-transition-yang-sehat-untuk-sistem-layanan-internal",
+    title: "State Transition yang Sehat untuk Sistem Layanan Internal",
     summary:
-      "Ruang untuk artikel yang membahas validasi, sanitasi, mitigasi serangan umum, dan kebiasaan engineering yang aman.",
-    category: "Security",
+      "Cara merancang lifecycle request, status, SLA, dan audit trail agar sistem layanan internal tetap jelas, dapat diuji, dan tidak bocor business rule ke banyak handler.",
+    category: "Backend",
     publishedAt: "24 Maret 2026",
     publishedAtISO: "2026-03-24T00:00:00.000Z",
     updatedAtISO: "2026-03-24T00:00:00.000Z",
     updatedAtLabel: "24 Maret 2026",
     content:
-      "Validasi input sebaiknya tidak diperlakukan sebagai lapisan tambahan yang ditempel belakangan. Ia perlu menjadi bagian dari desain request, struktur data, dan alur interaksi sejak awal.\n\nSaya terbiasa memikirkan validasi, sanitasi, SQL Injection mitigation, dan kebersihan alur autentikasi sebagai kebiasaan engineering dasar. Dengan begitu, kualitas sistem tidak bergantung pada satu titik pemeriksaan saja, tetapi tersebar secara proporsional di seluruh aplikasi.",
-    tags: ["security", "validation", "backend"],
+      "Masalah terbesar di banyak sistem layanan internal bukan ada pada UI, tetapi pada status yang longgar dan perubahan state yang tidak punya aturan tegas.\n\n## Status harus punya arti yang jelas\n\nSetiap status perlu menjawab apa yang sedang terjadi, siapa aktor yang boleh mengubahnya, dan langkah berikutnya apa. Kalau satu status dipakai untuk terlalu banyak kondisi, tim support akan sulit membaca backlog dan SLA akan cepat kehilangan makna.\n\n## Pisahkan lifecycle dari handler HTTP\n\nBusiness rule seperti kapan tiket boleh ditutup, kapan perlu approval, atau kapan request bisa dibuka ulang sebaiknya tidak hidup di controller. Saya lebih memilih menaruh rule transisi di service layer atau use case sehingga alurnya dapat diuji tanpa bergantung pada HTTP.\n\n## Audit trail bukan fitur tambahan\n\nBegitu volume request naik, histori perubahan menjadi alat utama untuk membaca bottleneck dan eskalasi. Audit trail yang baik membantu tim melihat siapa yang mengambil alih tiket, kapan SLA mulai terganggu, dan titik mana yang paling sering menunda delivery. Untuk sistem layanan, ini lebih penting daripada sekadar punya daftar status yang panjang.",
+    tags: ["backend", "service-management", "state-machine"],
     published: true,
-    href: "/blog/strategi-validasi-dan-keamanan-input",
+    href: "/blog/state-transition-yang-sehat-untuk-sistem-layanan-internal",
   },
   {
-    slug: "dokumentasi-project-yang-nyaman-dibaca",
-    title: "Menulis Dokumentasi Project yang Nyaman Dibaca Pengguna",
+    slug: "membangun-knowledge-base-yang-searchable-dan-seo-aware",
+    title: "Membangun Knowledge Base yang Searchable dan SEO-Aware",
     summary:
-      "Contoh struktur artikel tutorial untuk membantu user memahami setup, fitur, dan alur penggunaan tanpa kebingungan.",
+      "Panduan menyusun archive, taxonomy, search, dan internal linking agar knowledge base terasa hidup, mudah dijelajahi, dan tetap nyaman dikelola saat kontennya bertambah.",
     category: "Documentation",
     publishedAt: "24 Maret 2026",
     publishedAtISO: "2026-03-24T00:00:00.000Z",
     updatedAtISO: "2026-03-24T00:00:00.000Z",
     updatedAtLabel: "24 Maret 2026",
     content:
-      "Dokumentasi yang baik harus membantu pembaca memahami konteks, langkah penggunaan, dan kemungkinan kendala tanpa perlu menebak-nebak. Itu berarti struktur tulisan, istilah, dan urutan informasi harus sengaja disusun, bukan hanya dikumpulkan.\n\nSaya biasanya memisahkan artikel pengenalan, tutorial langkah demi langkah, dan referensi teknis agar pembaca bisa langsung masuk ke konteks yang mereka butuhkan. Pola ini juga membantu portfolio terasa lebih kredibel karena menjelaskan cara kerja, bukan hanya menampilkan hasil akhir.",
-    tags: ["documentation", "tutorial", "ux-writing"],
+      "Knowledge base yang baik tidak membuat pembaca berhenti di satu halaman. Ia membantu pengguna menemukan jawaban pertama, lalu mengarahkan mereka ke topik berikutnya yang masih relevan.\n\n## Setiap artikel harus punya peran\n\nSaya memisahkan artikel pengenalan, tutorial langkah demi langkah, dan referensi teknis karena kebutuhan pembaca tidak selalu sama. Dengan peran yang jelas, archive dan search menjadi jauh lebih berguna daripada sekadar kumpulan judul.\n\n## Taxonomy adalah navigasi, bukan label dekoratif\n\nKategori dan tag seharusnya menjadi jalur eksplorasi yang nyata. Itu berarti setiap taxonomy page perlu punya konteks, listing konten, dan hubungan yang masuk akal dengan artikel lain. Jika taxonomy hanya muncul sebagai chip di card, nilainya untuk discovery sangat terbatas.\n\n## Search dan related content harus saling menguatkan\n\nSearch membantu pembaca yang datang dengan intent spesifik, sedangkan related content membantu mereka yang mulai dari satu artikel lalu ingin memperdalam topik. Ketika dua jalur ini bekerja bersama, knowledge base terasa seperti sistem konten yang hidup dan bukan sekadar tumpukan dokumentasi lama.",
+    tags: ["documentation", "seo", "content-system"],
     published: true,
-    href: "/blog/dokumentasi-project-yang-nyaman-dibaca",
+    href: "/blog/membangun-knowledge-base-yang-searchable-dan-seo-aware",
   },
 ];
 
 export const seedContentNote =
-  "Project dan artikel di situs ini ditata sebagai studi kasus, dokumentasi teknis, dan konten eksplorasi engineering agar pengunjung bisa memahami pendekatan kerja, kualitas implementasi, dan cara berpikir teknis yang saya bawa ke setiap produk.";
+  "Konten di situs ini menggabungkan project yang saya bangun langsung, studi kasus sistem internal, dan artikel teknis yang memperlihatkan cara saya merancang discovery, kualitas implementasi, dan keputusan engineering secara lebih konkret.";
