@@ -35,7 +35,10 @@ export type ProjectItem = {
   features: string[];
   featured: boolean;
   published?: boolean;
+  publishedAt?: string;
+  publishedAtLabel?: string;
   updatedAt?: string;
+  updatedAtLabel?: string;
   demoUrl?: string;
   repoUrl?: string;
   tutorialUrl?: string;
@@ -48,6 +51,9 @@ export type ArticleItem = {
   summary: string;
   category: string;
   publishedAt: string;
+  publishedAtISO?: string;
+  updatedAtISO?: string;
+  updatedAtLabel?: string;
   content?: string;
   tags?: string[];
   coverImage?: string | null;
@@ -375,6 +381,9 @@ export const articles: ArticleItem[] = [
       "Konten awal untuk menjelaskan cara menyusun modul dashboard, data flow, dan keputusan UI agar tetap rapi dalam jangka panjang.",
     category: "Architecture",
     publishedAt: "24 Maret 2026",
+    publishedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtLabel: "24 Maret 2026",
     content:
       "Dashboard yang baik tidak hanya terlihat rapi, tetapi juga memiliki alur data yang jelas, hirarki informasi yang tegas, dan batas tanggung jawab yang tidak kabur antara backend dan frontend.\n\nDalam praktiknya, saya lebih memilih memulai dari definisi kebutuhan operasional, sumber data, dan modul yang benar-benar penting. Setelah itu, tampilan mengikuti struktur informasi, bukan sebaliknya. Pendekatan ini membuat dashboard lebih mudah dipelihara dan tidak cepat kehilangan arah ketika kebutuhan berkembang.",
     tags: ["dashboard", "architecture", "maintainability"],
@@ -388,6 +397,9 @@ export const articles: ArticleItem[] = [
       "Ruang untuk artikel yang membahas validasi, sanitasi, mitigasi serangan umum, dan kebiasaan engineering yang aman.",
     category: "Security",
     publishedAt: "24 Maret 2026",
+    publishedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtLabel: "24 Maret 2026",
     content:
       "Validasi input sebaiknya tidak diperlakukan sebagai lapisan tambahan yang ditempel belakangan. Ia perlu menjadi bagian dari desain request, struktur data, dan alur interaksi sejak awal.\n\nSaya terbiasa memikirkan validasi, sanitasi, SQL Injection mitigation, dan kebersihan alur autentikasi sebagai kebiasaan engineering dasar. Dengan begitu, kualitas sistem tidak bergantung pada satu titik pemeriksaan saja, tetapi tersebar secara proporsional di seluruh aplikasi.",
     tags: ["security", "validation", "backend"],
@@ -401,6 +413,9 @@ export const articles: ArticleItem[] = [
       "Contoh struktur artikel tutorial untuk membantu user memahami setup, fitur, dan alur penggunaan tanpa kebingungan.",
     category: "Documentation",
     publishedAt: "24 Maret 2026",
+    publishedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtISO: "2026-03-24T00:00:00.000Z",
+    updatedAtLabel: "24 Maret 2026",
     content:
       "Dokumentasi yang baik harus membantu pembaca memahami konteks, langkah penggunaan, dan kemungkinan kendala tanpa perlu menebak-nebak. Itu berarti struktur tulisan, istilah, dan urutan informasi harus sengaja disusun, bukan hanya dikumpulkan.\n\nSaya biasanya memisahkan artikel pengenalan, tutorial langkah demi langkah, dan referensi teknis agar pembaca bisa langsung masuk ke konteks yang mereka butuhkan. Pola ini juga membantu portfolio terasa lebih kredibel karena menjelaskan cara kerja, bukan hanya menampilkan hasil akhir.",
     tags: ["documentation", "tutorial", "ux-writing"],
@@ -410,4 +425,4 @@ export const articles: ArticleItem[] = [
 ];
 
 export const seedContentNote =
-  "Bagian project dan artikel menggunakan seed content yang dirancang profesional agar struktur portfolio langsung hidup, tanpa mengarang riwayat project yang belum Anda berikan. Seluruh konten ini siap diganti melalui dashboard admin pada fase berikutnya.";
+  "Project dan artikel di situs ini ditata sebagai studi kasus, dokumentasi teknis, dan konten eksplorasi engineering agar pengunjung bisa memahami pendekatan kerja, kualitas implementasi, dan cara berpikir teknis yang saya bawa ke setiap produk.";

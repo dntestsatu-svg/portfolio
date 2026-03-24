@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { getPublicProjectBySlug, getPublicProjects } from "@/lib/services/content";
+import { ProjectCard } from "@/components/marketing/project-card";
+import { Breadcrumbs } from "@/components/content/breadcrumbs";
+import { CopyLinkButton } from "@/components/content/copy-link-button";
+import { MarkdownContent } from "@/components/content/markdown-content";
+import {
+  getProjectBySlug,
+  getProjectSlugs,
+  getRelatedProjectArticles,
+  getRelatedProjects,
+} from "@/lib/services/projects";
+import { siteConfig } from "@/lib/site-config";
+import {
+  getBreadcrumbStructuredData,
+  getWebPageStructuredData,
+  toStructuredDataJson,
+} from "@/lib/structured-data";
 
 type ProjectDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -15,7 +29,7 @@ export async function generateMetadata({
   params,
 }: ProjectDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = await getPublicProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return {
@@ -30,16 +44,19 @@ export async function generateMetadata({
   return {
     title: project.name,
     description: project.summary,
+    keywords: [project.category, ...project.stackDetailed.map((stack) => stack.label)],
     alternates: {
       canonical: `/projects/${project.slug}`,
     },
     openGraph: {
+      type: "website",
       url: `/projects/${project.slug}`,
       title: `${project.name} | Rodex Castello`,
       description: project.summary,
       images: project.thumbnail ? [project.thumbnail] : undefined,
     },
     twitter: {
+      card: "summary_large_image",
       title: `${project.name} | Rodex Castello`,
       description: project.summary,
       images: project.thumbnail ? [project.thumbnail] : undefined,
@@ -48,103 +65,283 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const projects = await getPublicProjects();
-  return projects.map((project) => ({ slug: project.slug }));
+  const slugs = await getProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { slug } = await params;
-  const project = await getPublicProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     notFound();
   }
 
+  const [relatedProjects, relatedArticles] = await Promise.all([
+    getRelatedProjects(project.slug, 4),
+    getRelatedProjectArticles(project.slug, 3),
+  ]);
+  const breadcrumbJson = toStructuredDataJson(
+    getBreadcrumbStructuredData([
+      { name: "Beranda", path: "/" },
+      { name: "Projects", path: "/projects" },
+      { name: project.category, path: `/projects/category/${project.categorySlug}` },
+      { name: project.name, path: `/projects/${project.slug}` },
+    ]),
+  );
+  const pageJson = toStructuredDataJson(
+    getWebPageStructuredData({
+      path: `/projects/${project.slug}`,
+      title: `${project.name} | Rodex Castello`,
+      description: project.summary,
+    }),
+  );
+  const publicUrl = `${siteConfig.siteUrl}/projects/${project.slug}`;
+
   return (
     <main id="main-content" className="section-space">
       <div className="site-shell space-y-8">
-        <div className="flex flex-wrap gap-3">
-          <span className="tag-chip">{project.category}</span>
-          <span className="tag-chip-subtle">{project.slug}</span>
-        </div>
+        <section className="content-shell content-shell--detail">
+          <div className="content-main-column space-y-8">
+            <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+              <Breadcrumbs
+                items={[
+                  { label: "Projects", href: "/projects" },
+                  {
+                    label: project.category,
+                    href: `/projects/category/${project.categorySlug}`,
+                  },
+                  { label: project.name },
+                ]}
+              />
 
-        <section className="surface-panel rounded-[2rem] p-8">
-          <h1 className="text-4xl font-semibold tracking-[-0.05em] text-white md:text-5xl">
-            {project.name}
-          </h1>
-          <p className="mt-5 max-w-4xl text-xl leading-9 text-slate-200">{project.summary}</p>
-          <p className="copy-muted mt-5 max-w-4xl text-base">{project.description}</p>
+              <div className="content-detail-header">
+                <div className="content-detail-meta-row">
+                  <Link href={`/projects/category/${project.categorySlug}`} className="tag-chip">
+                    {project.category}
+                  </Link>
+                  <span
+                    className={`content-status-badge tone-${project.status.tone}`}
+                    aria-label={`Status ${project.status.label}`}
+                  >
+                    {project.status.label}
+                  </span>
+                  <span className="tag-chip-subtle">Update {project.updatedAtLabel}</span>
+                </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/projects" className="button-secondary">
-              Kembali ke archive
-            </Link>
-            {project.demoUrl ? (
-              <Link href={project.demoUrl} className="button-primary">
-                Live demo
-              </Link>
-            ) : null}
-            {project.repoUrl ? (
-              <Link href={project.repoUrl} className="button-secondary">
-                Repository
-              </Link>
-            ) : null}
-          </div>
-        </section>
+                <h1 className="content-detail-title">{project.name}</h1>
+                <p className="content-detail-excerpt">{project.summary}</p>
+                <p className="copy-muted text-base">{project.description}</p>
 
-        <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_320px]">
-          <article className="surface-panel rounded-[2rem] p-8">
-            <h2 className="text-2xl font-semibold text-white">Detail implementasi</h2>
-            <div className="markdown-prose mt-5">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {project.body ?? project.description}
-              </ReactMarkdown>
-            </div>
+                <div className="content-chip-row">
+                  {project.stackDetailed.map((stack) => (
+                    <Link
+                      key={stack.slug}
+                      href={`/projects?stack=${stack.slug}`}
+                      className="tag-chip-subtle"
+                    >
+                      {stack.label}
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="content-share-row">
+                  <CopyLinkButton url={publicUrl} />
+                  {project.demoUrl ? (
+                    <Link href={project.demoUrl} className="button-primary">
+                      Live demo
+                    </Link>
+                  ) : null}
+                  {project.repoUrl ? (
+                    <Link href={project.repoUrl} className="button-secondary">
+                      Repository
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="content-hero-image mt-8">
+                <Image
+                  src={project.thumbnail}
+                  alt={project.thumbnailAlt}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 70vw, 100vw"
+                />
+              </div>
+            </section>
+
+            <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+              <div className="content-section-heading">
+                <h2 className="text-2xl font-semibold tracking-tight text-white">
+                  Ringkasan problem dan solusi
+                </h2>
+                <p className="copy-muted text-sm">
+                  Bagian ini menempatkan project sebagai case study: masalah yang dihadapi, solusi
+                  yang dibangun, serta alasan teknis di balik keputusan implementasi.
+                </p>
+              </div>
+
+              <div className="content-case-grid">
+                <section className="content-case-section">
+                  <h3>Problem context</h3>
+                  <p>{project.description}</p>
+                </section>
+
+                <section className="content-case-section">
+                  <h3>Solution built</h3>
+                  <p>{project.summary}</p>
+                </section>
+
+                <section className="content-case-section">
+                  <h3>Technical focus</h3>
+                  <ul>
+                    {project.technicalFocus.map((focus) => (
+                      <li key={focus}>{focus}</li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+            </section>
+
+            <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+              <div className="content-section-heading">
+                <h2 className="text-2xl font-semibold tracking-tight text-white">
+                  Architecture dan technical decisions
+                </h2>
+                <p className="copy-muted text-sm">
+                  Detail implementasi, arsitektur modul, keputusan teknis, serta trade-off yang
+                  membuat project ini relevan sebagai studi kasus.
+                </p>
+              </div>
+
+              <MarkdownContent content={project.body ?? project.description} className="markdown-prose" />
+            </section>
 
             {project.tutorial ? (
-              <>
-                <h2 className="mt-10 text-2xl font-semibold text-white">Tutorial penggunaan</h2>
-                <div className="markdown-prose mt-5">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {project.tutorial}
-                  </ReactMarkdown>
+              <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+                <div className="content-section-heading">
+                  <h2 className="text-2xl font-semibold tracking-tight text-white">
+                    Tutorial dan implementasi lanjutan
+                  </h2>
+                  <p className="copy-muted text-sm">
+                    Bagian ini menjembatani project showcase dengan jalur belajar atau penggunaan
+                    yang lebih praktis.
+                  </p>
                 </div>
-              </>
+
+                <MarkdownContent content={project.tutorial} className="markdown-prose" />
+              </section>
             ) : null}
-          </article>
 
-          <aside className="surface-panel rounded-[2rem] p-6">
-            <h2 className="text-xl font-semibold text-white">Stack & fitur</h2>
+            {relatedProjects.length > 0 ? (
+              <section className="space-y-5">
+                <div className="content-section-heading">
+                  <h2 className="text-2xl font-semibold tracking-tight text-white">
+                    Related projects
+                  </h2>
+                  <p className="copy-muted text-sm">
+                    Project dipilih berdasarkan kategori yang sama, tumpang tindih stack, dan fokus
+                    teknis yang paling mendekati studi kasus ini.
+                  </p>
+                </div>
+                <div className="grid gap-5 xl:grid-cols-2">
+                  {relatedProjects.map((relatedProject) => (
+                    <ProjectCard key={relatedProject.slug} project={relatedProject} />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+          </div>
 
-            <div className="mt-5">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Tech stack
-              </h3>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {project.techStack.map((item) => (
-                  <span key={item} className="tag-chip-subtle">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
+          <aside className="content-sidebar-column">
+            <div className="content-sidebar-stack is-sticky">
+              <section className="content-sidebar-card">
+                <h2 className="content-sidebar-title">Quick facts</h2>
+                <dl className="content-definition-list">
+                  <div>
+                    <dt>Status</dt>
+                    <dd>{project.status.label}</dd>
+                  </div>
+                  <div>
+                    <dt>Kategori</dt>
+                    <dd>
+                      <Link href={`/projects/category/${project.categorySlug}`}>{project.category}</Link>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Update terakhir</dt>
+                    <dd>{project.updatedAtLabel}</dd>
+                  </div>
+                  <div>
+                    <dt>Fokus</dt>
+                    <dd>{project.technicalFocus[0] ?? "Case study"}</dd>
+                  </div>
+                </dl>
+              </section>
 
-            <div className="mt-6">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Fitur utama
-              </h3>
-              <ul className="mt-3 grid gap-2 text-sm text-slate-200">
-                {project.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              <section className="content-sidebar-card">
+                <h2 className="content-sidebar-title">Stack & tools</h2>
+                <div className="content-chip-row">
+                  {project.stackDetailed.map((stack) => (
+                    <Link
+                      key={stack.slug}
+                      href={`/projects?stack=${stack.slug}`}
+                      className="tag-chip-subtle"
+                    >
+                      {stack.label}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+
+              <section className="content-sidebar-card">
+                <h2 className="content-sidebar-title">Important links</h2>
+                <div className="content-compact-list">
+                  {project.demoUrl ? (
+                    <Link href={project.demoUrl} className="content-compact-link">
+                      <span className="content-compact-title">Live demo</span>
+                      <span className="content-compact-meta">Versi publik project</span>
+                    </Link>
+                  ) : null}
+                  {project.repoUrl ? (
+                    <Link href={project.repoUrl} className="content-compact-link">
+                      <span className="content-compact-title">Repository</span>
+                      <span className="content-compact-meta">Kode sumber atau referensi implementasi</span>
+                    </Link>
+                  ) : null}
+                  {project.tutorialUrl ? (
+                    <Link href={project.tutorialUrl} className="content-compact-link">
+                      <span className="content-compact-title">Tutorial terkait</span>
+                      <span className="content-compact-meta">Panduan penggunaan atau implementasi</span>
+                    </Link>
+                  ) : null}
+                </div>
+              </section>
+
+              {relatedArticles.length > 0 ? (
+                <section className="content-sidebar-card">
+                  <h2 className="content-sidebar-title">Bacaan terkait</h2>
+                  <div className="content-compact-list">
+                    {relatedArticles.map((article) => (
+                      <Link key={article.slug} href={article.href} className="content-compact-link">
+                        <span className="content-compact-title">{article.title}</span>
+                        <span className="content-compact-meta">{article.category}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
             </div>
           </aside>
         </section>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJson }}
+      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: pageJson }} />
     </main>
   );
 }

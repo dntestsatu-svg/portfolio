@@ -4,6 +4,7 @@ import { buildPublicUrl, formDataToObject } from "@/lib/request";
 import { revalidatePortfolioContent } from "@/lib/revalidate";
 import { assertAdminMutationRequest } from "@/lib/security/csrf";
 import { SecurityError } from "@/lib/security/security-error";
+import { slugify } from "@/lib/slug";
 import { recordAdminContentAuditLogSafely } from "@/lib/services/audit-log";
 import { deleteProject, getAdminProjectById, updateProject } from "@/lib/services/content";
 import { projectInputSchema } from "@/lib/validators";
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest, { params }: Params) {
       const slug = await deleteProject(id);
       revalidatePortfolioContent({
         slug: slug ?? undefined,
+        categorySlugs: current ? [slugify(current.category)] : [],
         type: "project",
       });
       if (current) {
@@ -105,6 +107,10 @@ export async function POST(request: NextRequest, { params }: Params) {
     const project = await updateProject(id, input, thumbnail instanceof File ? thumbnail : null);
     revalidatePortfolioContent({
       slug: project.slug,
+      categorySlugs: [
+        slugify(project.category),
+        current?.category ? slugify(current.category) : "",
+      ],
       previousSlug: current?.slug ?? null,
       type: "project",
     });
@@ -154,6 +160,10 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const project = await updateProject(id, input);
     revalidatePortfolioContent({
       slug: project.slug,
+      categorySlugs: [
+        slugify(project.category),
+        current?.category ? slugify(current.category) : "",
+      ],
       previousSlug: current?.slug ?? null,
       type: "project",
     });
@@ -202,6 +212,7 @@ export async function DELETE(request: NextRequest, { params }: Params) {
     const slug = await deleteProject(id);
     revalidatePortfolioContent({
       slug: slug ?? undefined,
+      categorySlugs: current ? [slugify(current.category)] : [],
       type: "project",
     });
     if (current) {

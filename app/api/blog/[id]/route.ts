@@ -4,6 +4,7 @@ import { buildPublicUrl, formDataToObject } from "@/lib/request";
 import { revalidatePortfolioContent } from "@/lib/revalidate";
 import { assertAdminMutationRequest } from "@/lib/security/csrf";
 import { SecurityError } from "@/lib/security/security-error";
+import { slugify } from "@/lib/slug";
 import { recordAdminContentAuditLogSafely } from "@/lib/services/audit-log";
 import { deleteArticle, getAdminArticleById, updateArticle } from "@/lib/services/content";
 import { blogInputSchema } from "@/lib/validators";
@@ -65,6 +66,8 @@ export async function POST(request: NextRequest, { params }: Params) {
       const slug = await deleteArticle(id);
       revalidatePortfolioContent({
         slug: slug ?? undefined,
+        categorySlugs: current ? [slugify(current.category)] : [],
+        tagSlugs: current?.tags?.map(slugify) ?? [],
         type: "blog",
       });
       if (current) {
@@ -105,7 +108,12 @@ export async function POST(request: NextRequest, { params }: Params) {
     const article = await updateArticle(id, input, coverImage instanceof File ? coverImage : null);
     revalidatePortfolioContent({
       slug: article.slug,
+      categorySlugs: [
+        slugify(article.category),
+        current?.category ? slugify(current.category) : "",
+      ],
       previousSlug: current?.slug ?? null,
+      tagSlugs: [...(article.tags ?? []), ...(current?.tags ?? [])].map(slugify),
       type: "blog",
     });
     await recordAdminContentAuditLogSafely({
@@ -153,7 +161,12 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const article = await updateArticle(id, input);
     revalidatePortfolioContent({
       slug: article.slug,
+      categorySlugs: [
+        slugify(article.category),
+        current?.category ? slugify(current.category) : "",
+      ],
       previousSlug: current?.slug ?? null,
+      tagSlugs: [...(article.tags ?? []), ...(current?.tags ?? [])].map(slugify),
       type: "blog",
     });
     await recordAdminContentAuditLogSafely({
@@ -200,6 +213,8 @@ export async function DELETE(request: NextRequest, { params }: Params) {
     const slug = await deleteArticle(id);
     revalidatePortfolioContent({
       slug: slug ?? undefined,
+      categorySlugs: current ? [slugify(current.category)] : [],
+      tagSlugs: current?.tags?.map(slugify) ?? [],
       type: "blog",
     });
     if (current) {

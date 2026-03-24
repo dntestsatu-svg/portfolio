@@ -4,6 +4,8 @@ export function revalidatePortfolioContent(options?: {
   slug?: string;
   previousSlug?: string | null;
   type?: "project" | "blog";
+  categorySlugs?: string[];
+  tagSlugs?: string[];
 }) {
   revalidatePath("/");
   revalidatePath("/projects");
@@ -28,5 +30,21 @@ export function revalidatePortfolioContent(options?: {
 
   if (type === "blog" && currentSlug) {
     revalidatePath(`/blog/${currentSlug}`);
+  }
+
+  if (type === "blog") {
+    for (const categorySlug of new Set(options?.categorySlugs?.filter(Boolean) ?? [])) {
+      revalidatePath(`/blog/category/${categorySlug}`);
+    }
+
+    for (const tagSlug of new Set(options?.tagSlugs?.filter(Boolean) ?? [])) {
+      revalidatePath(`/blog/tag/${tagSlug}`);
+    }
+  }
+
+  if (type === "project") {
+    for (const categorySlug of new Set(options?.categorySlugs?.filter(Boolean) ?? [])) {
+      revalidatePath(`/projects/category/${categorySlug}`);
+    }
   }
 }

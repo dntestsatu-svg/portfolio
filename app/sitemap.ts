@@ -1,11 +1,19 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site-config";
-import { getPublicArticles, getPublicProjects } from "@/lib/services/content";
+import {
+  getAllBlogArticles,
+  getBlogTaxonomies,
+  getIndexableBlogTags,
+} from "@/lib/services/blog";
+import { getProjectSlugs, getProjectTaxonomies } from "@/lib/services/projects";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [projects, articles] = await Promise.all([
-    getPublicProjects(),
-    getPublicArticles(),
+  const [projectSlugs, articles, blogTaxonomies, projectTaxonomies, indexableTags] = await Promise.all([
+    getProjectSlugs(),
+    getAllBlogArticles(),
+    getBlogTaxonomies(),
+    getProjectTaxonomies(),
+    getIndexableBlogTags(),
   ]);
 
   return [
@@ -27,17 +35,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.75,
     },
-    ...projects.map((project) => ({
-      url: `${siteConfig.siteUrl}/projects/${project.slug}`,
-      lastModified: project.updatedAt ? new Date(project.updatedAt) : new Date(),
+    ...projectSlugs.map((slug) => ({
+      url: `${siteConfig.siteUrl}/projects/${slug}`,
+      lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })),
     ...articles.map((article) => ({
       url: `${siteConfig.siteUrl}/blog/${article.slug}`,
-      lastModified: new Date(),
+      lastModified: new Date(article.updatedAtISO),
       changeFrequency: "weekly" as const,
       priority: 0.65,
+    })),
+    ...blogTaxonomies.categories.map((category) => ({
+      url: `${siteConfig.siteUrl}/blog/category/${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.55,
+    })),
+    ...indexableTags.map((tag) => ({
+      url: `${siteConfig.siteUrl}/blog/tag/${tag.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.45,
+    })),
+    ...projectTaxonomies.categories.map((category) => ({
+      url: `${siteConfig.siteUrl}/projects/category/${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.55,
     })),
   ];
 }

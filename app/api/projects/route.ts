@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/session";
 import { buildPublicUrl, formDataToObject, isFormRequest } from "@/lib/request";
 import { revalidatePortfolioContent } from "@/lib/revalidate";
+import { slugify } from "@/lib/slug";
 import { createProject, getAdminProjects, getPublicProjects } from "@/lib/services/content";
 import { assertAdminMutationRequest } from "@/lib/security/csrf";
 import { SecurityError } from "@/lib/security/security-error";
@@ -63,6 +64,7 @@ export async function POST(request: NextRequest) {
 
     revalidatePortfolioContent({
       slug: project.slug,
+      categorySlugs: [slugify(project.category)],
       type: "project",
     });
     await recordAdminContentAuditLogSafely({

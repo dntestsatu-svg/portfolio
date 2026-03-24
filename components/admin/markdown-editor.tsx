@@ -1,8 +1,7 @@
 "use client";
 
 import { useDeferredValue, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { MarkdownContent } from "@/components/content/markdown-content";
 
 type MarkdownEditorProps = {
   name: string;
@@ -277,9 +276,7 @@ export function MarkdownEditor({
           <div className="admin-editor-panel">
             <div className="admin-editor-preview">
               {deferredValue.trim().length > 0 ? (
-                <div className="markdown-prose">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{deferredValue}</ReactMarkdown>
-                </div>
+                <MarkdownContent content={deferredValue} className="markdown-prose" />
               ) : (
                 <div className="admin-editor-placeholder">
                   Preview akan muncul saat Anda mulai menulis. Gunakan toolbar di atas untuk
