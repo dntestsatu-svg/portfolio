@@ -201,7 +201,7 @@ export function BlogFormFields({ article, mode }: BlogFormFieldsProps) {
 
               {article?.coverImage ? (
                 <div className="overflow-hidden rounded-2xl border border-white/8 bg-black/25">
-                  <div className="relative aspect-[16/9]">
+                  <div className="relative aspect-video">
                     <Image
                       src={article.coverImage}
                       alt={`Cover ${article.title}`}

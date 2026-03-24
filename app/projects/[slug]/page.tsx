@@ -116,7 +116,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       <div className="site-shell space-y-8">
         <section className="content-shell content-shell--detail">
           <div className="content-main-column space-y-8">
-            <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+            <section className="surface-panel rounded-4xl p-6 md:p-8">
               <Breadcrumbs
                 items={[
                   { label: "Projects", href: "/projects" },
@@ -184,7 +184,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               </div>
             </section>
 
-            <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+            <section className="surface-panel rounded-4xl p-6 md:p-8">
               <div className="content-section-heading">
                 <h2 className="text-2xl font-semibold tracking-tight text-white">
                   Ringkasan problem dan solusi
@@ -213,7 +213,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               </div>
             </section>
 
-            <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+            <section className="surface-panel rounded-4xl p-6 md:p-8">
               <div className="content-section-heading">
                 <h2 className="text-2xl font-semibold tracking-tight text-white">
                   Architecture dan technical decisions
@@ -248,7 +248,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             </section>
 
             {project.lessonsLearned ? (
-              <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+              <section className="surface-panel rounded-4xl p-6 md:p-8">
                 <div className="content-section-heading">
                   <h2 className="text-2xl font-semibold tracking-tight text-white">
                     Lessons learned
@@ -264,7 +264,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             ) : null}
 
             {project.tutorial ? (
-              <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+              <section className="surface-panel rounded-4xl p-6 md:p-8">
                 <div className="content-section-heading">
                   <h2 className="text-2xl font-semibold tracking-tight text-white">
                     Tutorial dan implementasi lanjutan
@@ -400,3 +400,4 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     </main>
   );
 }
+

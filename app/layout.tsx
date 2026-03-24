@@ -93,7 +93,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${manrope.variable} ${ibmPlexMono.variable}`}>
-      <body className="min-h-screen bg-[var(--color-background)] font-sans text-[var(--color-foreground)] antialiased">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <a href="#main-content" className="skip-link">
           Lewati ke konten utama
         </a>
@@ -104,3 +104,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -110,7 +110,7 @@ export default async function BlogCategoryPage({
       <div className="site-shell space-y-8">
         <section className="content-shell content-shell--archive">
           <div className="content-main-column space-y-8">
-            <div className="surface-panel rounded-[2rem] p-6 md:p-8">
+            <div className="surface-panel rounded-4xl p-6 md:p-8">
               <Breadcrumbs
                 items={[
                   { label: "Blog", href: "/blog" },
@@ -214,3 +214,4 @@ export default async function BlogCategoryPage({
     </main>
   );
 }
+

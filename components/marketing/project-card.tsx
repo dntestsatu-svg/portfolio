@@ -40,7 +40,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
         isCompact ? " content-card--project-compact" : ""
       }`}
     >
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-white/8">
+      <div className="relative aspect-16/10 overflow-hidden border-b border-white/8">
         <Image
           src={project.thumbnail}
           alt={project.thumbnailAlt}
@@ -48,7 +48,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/25 to-transparent" />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
           <Link
             href={
@@ -109,7 +109,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
           <ul className={isCompact ? "content-card-focus-list" : "grid gap-2 text-sm text-slate-300"}>
             {focusItems.map((focus) => (
               <li key={focus} className="flex items-start gap-2">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-(--color-accent)" />
                 <span>{focus}</span>
               </li>
             ))}
@@ -124,7 +124,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
             <ul className="grid gap-2 text-sm text-slate-300">
               {project.features.slice(0, 4).map((feature) => (
                 <li key={feature} className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-(--color-accent)" />
                   <span>{feature}</span>
                 </li>
               ))}
@@ -173,3 +173,4 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
     </article>
   );
 }
+

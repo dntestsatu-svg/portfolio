@@ -112,7 +112,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       <div className="site-shell space-y-8">
         <section className="content-shell content-shell--detail">
           <div className="content-main-column space-y-8">
-            <article className="surface-panel rounded-[2rem] p-6 md:p-8">
+            <article className="surface-panel rounded-4xl p-6 md:p-8">
               <Breadcrumbs
                 items={[
                   { label: "Blog", href: "/blog" },
@@ -171,12 +171,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             </article>
 
             {article.headings.length > 0 ? (
-              <section className="surface-panel content-mobile-only rounded-[2rem] p-5">
+              <section className="surface-panel content-mobile-only rounded-4xl p-5">
                 <Toc headings={article.headings} variant="mobile" />
               </section>
             ) : null}
 
-            <article className="surface-panel rounded-[2rem] p-6 md:p-8">
+            <article className="surface-panel rounded-4xl p-6 md:p-8">
               <div className="content-article-meta-banner">
                 <div>
                   <p className="content-sidebar-title">Context cepat</p>
@@ -303,3 +303,4 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     </main>
   );
 }
+

@@ -6,25 +6,25 @@ export default async function AdminDashboardPage() {
 
   return (
     <section className="grid gap-5 md:grid-cols-3">
-      <article className="surface-panel rounded-[2rem] p-6">
+      <article className="surface-panel rounded-4xl p-6">
         <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Projects</p>
         <p className="mt-4 text-4xl font-semibold text-white">{summary.projectCount}</p>
         <p className="copy-muted mt-3 text-sm">Total item project tersimpan di database.</p>
       </article>
 
-      <article className="surface-panel rounded-[2rem] p-6">
+      <article className="surface-panel rounded-4xl p-6">
         <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Articles</p>
         <p className="mt-4 text-4xl font-semibold text-white">{summary.articleCount}</p>
         <p className="copy-muted mt-3 text-sm">Konten blog dan tutorial yang siap dipublikasikan.</p>
       </article>
 
-      <article className="surface-panel rounded-[2rem] p-6">
+      <article className="surface-panel rounded-4xl p-6">
         <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Unread messages</p>
         <p className="mt-4 text-4xl font-semibold text-white">{summary.unreadContactCount}</p>
         <p className="copy-muted mt-3 text-sm">Pesan kontak yang belum ditindaklanjuti.</p>
       </article>
 
-      <article className="surface-panel rounded-[2rem] p-6 md:col-span-3">
+      <article className="surface-panel rounded-4xl p-6 md:col-span-3">
         <h2 className="text-2xl font-semibold text-white">Quick actions</h2>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link href="/admin/projects" className="button-primary">
@@ -44,3 +44,4 @@ export default async function AdminDashboardPage() {
     </section>
   );
 }
+

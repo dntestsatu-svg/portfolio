@@ -12,7 +12,7 @@ export function SkillMeter({ skill }: SkillMeterProps) {
           <h3 className="text-lg font-semibold text-white">{skill.name}</h3>
           <p className="copy-muted mt-2 text-sm">{skill.description}</p>
         </div>
-        <span className="font-mono text-sm text-[var(--color-accent)]">{skill.level}%</span>
+        <span className="font-mono text-sm text-(--color-accent)">{skill.level}%</span>
       </div>
 
       <progress
@@ -25,3 +25,4 @@ export function SkillMeter({ skill }: SkillMeterProps) {
     </article>
   );
 }
+

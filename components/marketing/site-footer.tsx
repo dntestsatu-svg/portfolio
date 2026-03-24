@@ -6,7 +6,7 @@ export function SiteFooter() {
     <footer className="border-t border-white/8 bg-black/30">
       <div className="site-shell flex flex-col gap-8 py-10 md:flex-row md:items-end md:justify-between">
         <div className="max-w-xl">
-          <p className="text-sm font-semibold tracking-[0.24em] text-[var(--color-accent)] uppercase">
+          <p className="text-sm font-semibold tracking-[0.24em] text-(--color-accent) uppercase">
             {siteConfig.name}
           </p>
           <p className="mt-3 text-lg font-medium text-white">{siteConfig.role}</p>
@@ -32,3 +32,4 @@ export function SiteFooter() {
     </footer>
   );
 }
+

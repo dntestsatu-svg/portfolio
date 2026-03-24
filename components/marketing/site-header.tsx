@@ -10,7 +10,7 @@ export function SiteHeader() {
           className="flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-white uppercase"
           aria-label="Kembali ke beranda"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/6 text-xs text-[var(--color-accent)]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/6 text-xs text-(--color-accent)">
             RC
           </span>
           <span className="hidden sm:inline">{siteConfig.shortName}</span>
@@ -40,3 +40,4 @@ export function SiteHeader() {
     </header>
   );
 }
+
