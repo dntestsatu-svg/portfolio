@@ -9,16 +9,8 @@ export function StatusAlert({ status, error }: StatusAlertProps) {
   }
 
   if (error) {
-    return (
-      <div className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-        {error}
-      </div>
-    );
+    return <div className="admin-alert admin-alert-error">{error}</div>;
   }
 
-  return (
-    <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
-      Perubahan berhasil diproses.
-    </div>
-  );
+  return <div className="admin-alert admin-alert-success">Perubahan berhasil diproses.</div>;
 }

@@ -7,6 +7,8 @@ import remarkGfm from "remark-gfm";
 type MarkdownEditorProps = {
   name: string;
   defaultValue?: string;
+  initialView?: ViewMode;
+  size?: "default" | "compact";
 };
 
 type ViewMode = "write" | "split" | "preview";
@@ -165,10 +167,15 @@ const viewOptions: Array<{ value: ViewMode; label: string }> = [
   { value: "preview", label: "Preview" },
 ];
 
-export function MarkdownEditor({ name, defaultValue = "" }: MarkdownEditorProps) {
+export function MarkdownEditor({
+  name,
+  defaultValue = "",
+  initialView = "split",
+  size = "default",
+}: MarkdownEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState(defaultValue);
-  const [view, setView] = useState<ViewMode>("split");
+  const [view, setView] = useState<ViewMode>(initialView);
   const deferredValue = useDeferredValue(value);
   const wordCount = countWords(value);
   const readMinutes = Math.max(1, Math.ceil(wordCount / 220));
@@ -201,7 +208,7 @@ export function MarkdownEditor({ name, defaultValue = "" }: MarkdownEditorProps)
   const showPreview = view !== "write";
 
   return (
-    <div className="admin-editor">
+    <div className={`admin-editor${size === "compact" ? " is-compact" : ""}`}>
       <div className="admin-editor-toolbar">
         <div className="admin-editor-tools">
           <button type="button" className="admin-tool-button" onClick={handleHeading}>

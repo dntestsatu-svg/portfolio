@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getPublicProjectBySlug, getPublicProjects } from "@/lib/services/content";
 
 type ProjectDetailPageProps = {
@@ -93,15 +95,19 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_320px]">
           <article className="surface-panel rounded-[2rem] p-8">
             <h2 className="text-2xl font-semibold text-white">Detail implementasi</h2>
-            <div className="mt-5 whitespace-pre-line text-sm leading-8 text-slate-200">
-              {project.body ?? project.description}
+            <div className="markdown-prose mt-5">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {project.body ?? project.description}
+              </ReactMarkdown>
             </div>
 
             {project.tutorial ? (
               <>
                 <h2 className="mt-10 text-2xl font-semibold text-white">Tutorial penggunaan</h2>
-                <div className="mt-5 whitespace-pre-line text-sm leading-8 text-slate-200">
-                  {project.tutorial}
+                <div className="markdown-prose mt-5">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {project.tutorial}
+                  </ReactMarkdown>
                 </div>
               </>
             ) : null}

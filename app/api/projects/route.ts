@@ -81,9 +81,12 @@ export async function POST(request: NextRequest) {
     });
 
     if (formSubmission) {
-      return NextResponse.redirect(buildPublicUrl(request, "/admin/projects?status=created"), {
-        status: 303,
-      });
+      return NextResponse.redirect(
+        buildPublicUrl(request, `/admin/projects/${project.id}?status=created`),
+        {
+          status: 303,
+        },
+      );
     }
 
     return NextResponse.json(project, { status: 201 });
@@ -92,7 +95,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.redirect(
         buildPublicUrl(
           request,
-          `/admin/projects?error=${encodeURIComponent(
+          `/admin/projects/new?error=${encodeURIComponent(
             error instanceof Error ? error.message : "Gagal membuat project.",
           )}`,
         ),

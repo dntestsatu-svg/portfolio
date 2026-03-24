@@ -4,8 +4,8 @@ import {
   auditEntityTypeOptions,
   getAdminAuditActionLabel,
   getAdminAuditEntityLabel,
-  getAuditLifecyclePolicy,
   getAdminAuditLogPage,
+  getAuditLifecyclePolicy,
 } from "@/lib/services/audit-log";
 
 type AdminAuditPageProps = {
@@ -85,43 +85,64 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
   });
 
   return (
-    <section className="space-y-6">
-      <article className="surface-panel rounded-[2rem] p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="eyebrow">Audit log</p>
-            <h2 className="mt-4 text-2xl font-semibold text-white">Observability aktivitas admin</h2>
-            <p className="copy-muted mt-3 max-w-3xl text-sm">
-              Viewer ini bersifat read-only, hanya memuat ringkasan event yang relevan untuk
-              operasional admin, dan tidak mengekspos body request, password, CSRF token, atau
-              payload sensitif lain.
-            </p>
-            <p className="copy-muted mt-3 max-w-3xl text-sm">
-              Retention aktif: {policy.retentionDays} hari. Export dibatasi sampai{" "}
-              {policy.exportMaxRows} baris untuk {policy.exportMaxDays} hari terakhir.
-            </p>
-          </div>
+    <section className="admin-page">
+      <header className="admin-panel admin-page-header">
+        <div>
+          <p className="admin-panel-label">Audit workspace</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-white">
+            Observability aktivitas admin
+          </h1>
+          <p className="admin-copy-muted mt-3 max-w-3xl text-sm">
+            Viewer ini bersifat read-only dan hanya menampilkan ringkasan event yang relevan untuk
+            operasional. Payload sensitif seperti body request, password, cookie, dan CSRF token
+            tetap tidak ditampilkan di sini.
+          </p>
+        </div>
+        <div className="admin-actions">
+          <Link href={exportHref} className="admin-button-secondary">
+            Export {policy.exportDefaultDays} hari
+          </Link>
+        </div>
+      </header>
 
-          <div className="flex flex-wrap gap-3">
-            <div className="rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-sm text-slate-200">
-              Total event tersimpan:{" "}
-              <span className="font-semibold text-white">{auditPage.totalCount}</span>
-            </div>
-            <Link href={exportHref} className="button-secondary">
-              Export {policy.exportDefaultDays} hari terakhir
-            </Link>
+      <section className="admin-stat-grid">
+        <article className="admin-stat-card">
+          <span className="admin-panel-label">Total event</span>
+          <strong className="admin-stat-value">{auditPage.totalCount}</strong>
+          <span className="admin-help">Jumlah event yang cocok dengan filter saat ini.</span>
+        </article>
+        <article className="admin-stat-card">
+          <span className="admin-panel-label">Retention</span>
+          <strong className="admin-stat-value">{policy.retentionDays}h</strong>
+          <span className="admin-help">Audit log lama akan dipangkas sesuai retention policy.</span>
+        </article>
+        <article className="admin-stat-card">
+          <span className="admin-panel-label">Export limit</span>
+          <strong className="admin-stat-value">{policy.exportMaxRows}</strong>
+          <span className="admin-help">
+            Maksimum baris untuk {policy.exportMaxDays} hari terakhir.
+          </span>
+        </article>
+      </section>
+
+      <section className="admin-panel">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="admin-panel-label">Filters</p>
+            <h2 className="mt-2 text-xl font-semibold text-white">Saring event audit</h2>
           </div>
+          <p className="admin-help">Gunakan filter untuk mempersempit observasi operasional.</p>
         </div>
 
-        <form method="get" className="mt-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+        <form method="get" className="admin-filter-grid mt-4">
           <div className="grid gap-2">
-            <label htmlFor="action" className="text-sm font-medium text-slate-200">
-              Filter action
+            <label htmlFor="action" className="admin-label">
+              Action
             </label>
             <select
               id="action"
               name="action"
-              className="field-select"
+              className="admin-select"
               defaultValue={auditPage.filters.action}
             >
               <option value="">Semua action</option>
@@ -134,13 +155,13 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
           </div>
 
           <div className="grid gap-2">
-            <label htmlFor="entityType" className="text-sm font-medium text-slate-200">
-              Filter entitas
+            <label htmlFor="entityType" className="admin-label">
+              Entitas
             </label>
             <select
               id="entityType"
               name="entityType"
-              className="field-select"
+              className="admin-select"
               defaultValue={auditPage.filters.entityType}
             >
               <option value="">Semua entitas</option>
@@ -152,79 +173,97 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
             </select>
           </div>
 
-          <div className="flex items-end gap-3">
-            <button type="submit" className="button-primary">
+          <div className="admin-actions admin-actions-end">
+            <button type="submit" className="admin-button-primary">
               Terapkan filter
             </button>
-            <Link href="/admin/audit" className="button-secondary">
+            <Link href="/admin/audit" className="admin-button-secondary">
               Reset
             </Link>
           </div>
         </form>
-      </article>
+      </section>
 
-      <div className="grid gap-4">
-        {auditPage.items.length > 0 ? (
-          auditPage.items.map((item) => (
-            <article key={item.id} className="surface-panel rounded-[2rem] p-6">
-              <div className="flex flex-wrap gap-2">
-                <span className="tag-chip-subtle">{getAdminAuditActionLabel(item.action)}</span>
-                <span className="tag-chip-subtle">{getAdminAuditEntityLabel(item.entityType)}</span>
-                <span className="tag-chip-subtle">{formatAuditTimestamp(item.createdAt)}</span>
-              </div>
-
-              <h3 className="mt-4 text-xl font-semibold text-white">
-                {item.entityLabel ?? "Peristiwa autentikasi admin"}
-              </h3>
-
-              <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
-                <div>
-                  <dt className="copy-muted">Actor / identifier</dt>
-                  <dd className="mt-1 text-slate-100">{item.actorEmail}</dd>
-                </div>
-
-                <div>
-                  <dt className="copy-muted">IP address</dt>
-                  <dd className="mt-1 text-slate-100">{item.ipAddress ?? "Tidak tersedia"}</dd>
-                </div>
-
-                {item.metadataSummary.length > 0 ? (
-                  <div className="md:col-span-2">
-                    <dt className="copy-muted">Metadata ringkas</dt>
-                    <dd className="mt-3 flex flex-wrap gap-2">
-                      {item.metadataSummary.map((entry) => (
-                        <span
-                          key={`${item.id}-${entry.label}-${entry.value}`}
-                          className="tag-chip-subtle"
-                        >
-                          {entry.label}: {entry.value}
-                        </span>
-                      ))}
-                    </dd>
-                  </div>
-                ) : null}
-              </dl>
-            </article>
-          ))
-        ) : (
-          <article className="surface-panel rounded-[2rem] p-6">
-            <p className="copy-muted text-sm">
-              Belum ada event audit yang cocok dengan filter saat ini.
+      {auditPage.items.length > 0 ? (
+        <section className="admin-panel">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="admin-panel-label">Audit events</p>
+              <h2 className="mt-2 text-xl font-semibold text-white">Daftar event</h2>
+            </div>
+            <p className="admin-help">
+              Halaman {auditPage.page} dari {auditPage.totalPages}, maksimal {auditPage.pageSize}{" "}
+              event per halaman.
             </p>
-          </article>
-        )}
-      </div>
+          </div>
 
-      <nav
-        aria-label="Pagination audit log"
-        className="surface-panel flex flex-col gap-4 rounded-[2rem] p-6 md:flex-row md:items-center md:justify-between"
-      >
-        <p className="copy-muted text-sm">
+          <div className="admin-list mt-4">
+            {auditPage.items.map((item) => (
+              <article key={item.id} className="admin-list-row">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap gap-2">
+                    <span className="admin-meta-chip">{getAdminAuditActionLabel(item.action)}</span>
+                    <span className="admin-meta-chip">
+                      {getAdminAuditEntityLabel(item.entityType)}
+                    </span>
+                    <span className="admin-meta-chip">{formatAuditTimestamp(item.createdAt)}</span>
+                  </div>
+
+                  <h3 className="admin-list-title mt-3">
+                    {item.entityLabel ?? "Peristiwa autentikasi admin"}
+                  </h3>
+
+                  <dl className="admin-key-value-grid mt-4">
+                    <div>
+                      <dt className="admin-key-label">Actor / identifier</dt>
+                      <dd className="admin-key-value">{item.actorEmail}</dd>
+                    </div>
+                    <div>
+                      <dt className="admin-key-label">IP address</dt>
+                      <dd className="admin-key-value">{item.ipAddress ?? "Tidak tersedia"}</dd>
+                    </div>
+                  </dl>
+
+                  {item.metadataSummary.length > 0 ? (
+                    <dl className="mt-4">
+                      <dt className="admin-key-label">Metadata ringkas</dt>
+                      <dd className="mt-3 flex flex-wrap gap-2">
+                        {item.metadataSummary.map((entry) => (
+                          <span
+                            key={`${item.id}-${entry.label}-${entry.value}`}
+                            className="admin-meta-chip"
+                          >
+                            {entry.label}: {entry.value}
+                          </span>
+                        ))}
+                      </dd>
+                    </dl>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section className="admin-empty-state">
+          <p className="admin-panel-label">Tidak ada hasil</p>
+          <h2 className="text-2xl font-semibold text-white">
+            Belum ada event yang cocok dengan filter
+          </h2>
+          <p className="admin-copy-muted max-w-2xl text-sm">
+            Coba longgarkan filter action atau entitas. Jika sistem masih baru, audit log memang
+            bisa terlihat kosong sampai ada aktivitas admin yang tercatat.
+          </p>
+        </section>
+      )}
+
+      <nav aria-label="Pagination audit log" className="admin-panel admin-pagination">
+        <p className="admin-help">
           Halaman {auditPage.page} dari {auditPage.totalPages}. Menampilkan hingga{" "}
           {auditPage.pageSize} event per halaman.
         </p>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="admin-actions">
           {auditPage.page > 1 ? (
             <Link
               href={buildAuditHref({
@@ -232,7 +271,7 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
                 action: auditPage.filters.action,
                 entityType: auditPage.filters.entityType,
               })}
-              className="button-secondary"
+              className="admin-button-secondary"
             >
               Halaman sebelumnya
             </Link>
@@ -245,7 +284,7 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
                 action: auditPage.filters.action,
                 entityType: auditPage.filters.entityType,
               })}
-              className="button-secondary"
+              className="admin-button-secondary"
             >
               Halaman berikutnya
             </Link>
