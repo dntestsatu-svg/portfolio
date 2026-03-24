@@ -90,7 +90,7 @@ function enrichProject(project: ProjectItem, index: number): ProjectCaseStudy {
       slug: slugify(stack),
     })),
     status,
-    technicalFocus: project.features.slice(0, 3),
+    technicalFocus: project.focusAreas ?? project.features.slice(0, 3),
   };
 }
 

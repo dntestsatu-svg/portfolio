@@ -97,6 +97,19 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     }),
   );
   const publicUrl = `${siteConfig.siteUrl}/projects/${project.slug}`;
+  const projectProblem = project.problemContext ?? project.description;
+  const projectSolution = project.solutionBuilt ?? project.summary;
+  const roleSummary =
+    project.roleSummary ??
+    "Fokus pengerjaan berada pada struktur data, alur delivery, dan keputusan implementasi yang menjaga sistem tetap jelas untuk dikembangkan lebih lanjut.";
+  const architectureHighlights =
+    project.architectureHighlights && project.architectureHighlights.length > 0
+      ? project.architectureHighlights
+      : project.technicalFocus;
+  const decisionNotes =
+    project.decisionNotes && project.decisionNotes.length > 0
+      ? project.decisionNotes
+      : project.features.slice(0, 3);
 
   return (
     <main id="main-content" className="section-space">
@@ -184,22 +197,18 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
               <div className="content-case-grid">
                 <section className="content-case-section">
-                  <h3>Problem context</h3>
-                  <p>{project.description}</p>
+                  <h3>Context operasional</h3>
+                  <p>{projectProblem}</p>
                 </section>
 
                 <section className="content-case-section">
                   <h3>Solution built</h3>
-                  <p>{project.summary}</p>
+                  <p>{projectSolution}</p>
                 </section>
 
                 <section className="content-case-section">
-                  <h3>Technical focus</h3>
-                  <ul>
-                    {project.technicalFocus.map((focus) => (
-                      <li key={focus}>{focus}</li>
-                    ))}
-                  </ul>
+                  <h3>Peran dan scope delivery</h3>
+                  <p>{roleSummary}</p>
                 </section>
               </div>
             </section>
@@ -215,8 +224,44 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 </p>
               </div>
 
+              <div className="content-case-grid mb-6">
+                <section className="content-case-section">
+                  <h3>Architecture highlights</h3>
+                  <ul>
+                    {architectureHighlights.map((highlight) => (
+                      <li key={highlight}>{highlight}</li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section className="content-case-section">
+                  <h3>Decision notes</h3>
+                  <ul>
+                    {decisionNotes.map((note) => (
+                      <li key={note}>{note}</li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+
               <MarkdownContent content={project.body ?? project.description} className="markdown-prose" />
             </section>
+
+            {project.lessonsLearned ? (
+              <section className="surface-panel rounded-[2rem] p-6 md:p-8">
+                <div className="content-section-heading">
+                  <h2 className="text-2xl font-semibold tracking-tight text-white">
+                    Lessons learned
+                  </h2>
+                  <p className="copy-muted text-sm">
+                    Insight ringkas yang merangkum apa yang paling penting dari studi kasus ini
+                    untuk delivery berikutnya.
+                  </p>
+                </div>
+
+                <p className="copy-muted text-base leading-8">{project.lessonsLearned}</p>
+              </section>
+            ) : null}
 
             {project.tutorial ? (
               <section className="surface-panel rounded-[2rem] p-6 md:p-8">
@@ -247,7 +292,11 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 </div>
                 <div className="grid gap-5 xl:grid-cols-2">
                   {relatedProjects.map((relatedProject) => (
-                    <ProjectCard key={relatedProject.slug} project={relatedProject} />
+                    <ProjectCard
+                      key={relatedProject.slug}
+                      project={relatedProject}
+                      variant="compact"
+                    />
                   ))}
                 </div>
               </section>
@@ -263,6 +312,12 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                     <dt>Status</dt>
                     <dd>{project.status.label}</dd>
                   </div>
+                  {project.roleLabel ? (
+                    <div>
+                      <dt>Peran</dt>
+                      <dd>{project.roleLabel}</dd>
+                    </div>
+                  ) : null}
                   <div>
                     <dt>Kategori</dt>
                     <dd>

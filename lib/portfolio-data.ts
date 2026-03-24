@@ -27,6 +27,14 @@ export type ProjectItem = {
   category: string;
   summary: string;
   description: string;
+  problemContext?: string;
+  solutionBuilt?: string;
+  roleLabel?: string;
+  roleSummary?: string;
+  focusAreas?: string[];
+  architectureHighlights?: string[];
+  decisionNotes?: string[];
+  lessonsLearned?: string;
   body?: string;
   tutorial?: string;
   thumbnail: string;
@@ -272,13 +280,37 @@ export const projects: ProjectItem[] = [
     name: "Operational Dashboard",
     category: "Seed studi kasus",
     summary:
-      "Struktur studi kasus untuk sistem operasional dengan dashboard, pelaporan, dan role-based workflow.",
+      "Dashboard operasional untuk memusatkan KPI harian, exception queue, approval lintas role, dan laporan yang harus dibaca tim setiap pagi.",
     description:
-      "Contoh format project ini disiapkan untuk menampilkan aplikasi operasional internal yang fokus pada kecepatan akses data, pelaporan yang rapi, dan alur kerja tim yang terstruktur.",
+      "Studi kasus ini memodelkan tim operasional yang sebelumnya mengandalkan spreadsheet terpisah, rekap manual, dan follow-up chat untuk memantau exception harian.",
+    problemContext:
+      "Masalah utamanya bukan sekadar tidak adanya dashboard, tetapi tidak adanya satu jalur kerja yang menyatukan snapshot KPI, antrean masalah yang perlu ditindak, dan histori approval yang bisa diaudit ketika angka laporan berubah.",
+    solutionBuilt:
+      "Saya menyusun dashboard modular yang menggabungkan ringkasan KPI, queue exception, approval berjenjang, dan export laporan harian tanpa memaksa user berpindah-pindah view hanya untuk memahami kondisi operasional saat itu juga.",
+    roleLabel: "Backend-focused fullstack",
+    roleSummary:
+      "Peran saya difokuskan pada perancangan schema inti, API dashboard dan reporting, cache KPI, serta pengalaman admin yang tetap cepat dipakai supervisor maupun operator.",
+    focusAreas: [
+      "Snapshot KPI harian yang cepat dimuat",
+      "Workflow approval dan audit perubahan angka",
+      "Ekspor laporan tanpa query berat berulang",
+    ],
+    architectureHighlights: [
+      "Modul transaksi, approval, dan reporting snapshot dipisah agar dashboard tidak membaca tabel operasional mentah setiap render.",
+      "Redis dipakai untuk cache KPI dan ringkasan antrean yang sering dibuka supervisor pada jam operasional sibuk.",
+      "Role-based access diterapkan di level route dan policy agar aksi sensitif tidak bercampur antara operator, reviewer, dan approver.",
+    ],
+    decisionNotes: [
+      "Pre-aggregation dipilih untuk KPI harian agar halaman utama tetap cepat saat volume data tumbuh.",
+      "Audit trail dibuat append-only supaya histori perubahan status dan angka laporan tetap bisa ditelusuri.",
+      "Filter laporan dibatasi ke kombinasi yang paling sering dipakai agar UX ekspor tetap ringan dan query tidak liar.",
+    ],
+    lessonsLearned:
+      "Dashboard internal yang efektif bukan soal jumlah widget, tetapi seberapa cepat user bisa tahu apa yang bermasalah hari ini, siapa yang harus menindaklanjuti, dan laporan apa yang perlu diekspor tanpa bantuan tim teknis.",
     body:
-      "Operational Dashboard dirancang sebagai studi kasus untuk aplikasi internal yang membutuhkan visibilitas data cepat, modul pelaporan yang jelas, dan kontrol akses sesuai peran. Struktur ini cocok untuk menunjukkan bagaimana backend, dashboard, dan alur validasi saling terhubung dalam satu sistem.\n\nPada implementasi nyata, tipe project seperti ini biasanya membutuhkan desain database yang rapi, struktur API yang konsisten, dan kontrol kualitas agar data operasional tidak mudah rusak ketika volume penggunaan meningkat.",
+      "## Ruang lingkup case study\n\nOperational Dashboard dirancang untuk skenario operasi harian yang bergerak cepat: user perlu melihat KPI, menemukan anomali, memeriksa item yang tertunda, lalu mengambil aksi tanpa pindah ke banyak halaman. Fokusnya adalah membuat halaman utama benar-benar menjadi workspace keputusan, bukan hanya layar statistik.\n\n## Keputusan arsitektur\n\nData transaksi detail tetap berada di modul sumber, sedangkan dashboard membaca snapshot dan agregasi yang disiapkan khusus untuk kebutuhan monitoring. Pendekatan ini menjaga halaman utama tetap cepat, mengurangi query berat berulang, dan membuat logika reporting lebih mudah diuji.\n\n## Fokus performa dan integritas\n\nExport laporan tidak mengambil semua transformasi dari sisi client. Format laporan dibangun dari endpoint yang sudah memiliki kontrak tetap, sehingga angka yang dilihat di dashboard dan angka yang diekspor tetap konsisten. Validasi input, approval trail, dan pembatasan akses per role juga dijadikan bagian dari struktur, bukan tambahan belakangan.",
     tutorial:
-      "Mulai dengan mendefinisikan modul inti, peran pengguna, serta alur data utama. Setelah itu, susun API dan dashboard berdasarkan kebutuhan pelaporan, bukan hanya tampilan. Pendekatan ini menjaga sistem tetap relevan terhadap operasi harian.",
+      "Mulai dari tiga hal: sumber data yang benar, KPI yang benar-benar dipakai tim, dan keputusan apa yang harus bisa diambil dari halaman utama. Setelah itu, susun snapshot reporting, queue exception, dan approval flow sebagai modul terpisah. Pendekatan ini membuat dashboard tetap cepat dipakai walau kebutuhan pelaporan terus bertambah.",
     thumbnail: "/projects/operational-dashboard.svg",
     thumbnailAlt: "Ilustrasi dashboard operasional bergaya dark premium",
     techStack: ["Laravel", "Next.js", "MySQL", "Redis"],
@@ -298,13 +330,37 @@ export const projects: ProjectItem[] = [
     name: "Service Management Suite",
     category: "Seed studi kasus",
     summary:
-      "Format portfolio untuk aplikasi layanan dengan pelacakan status, audit trail, dan alur kerja yang jelas.",
+      "Sistem layanan untuk intake request, assignment, SLA tracking, approval, dan audit trail yang tetap rapi saat volume tiket bertambah.",
     description:
-      "Template project ini cocok untuk menampilkan sistem yang mengelola request, approval, pelacakan progres, hingga dokumentasi aktivitas di sisi backend dan frontend.",
+      "Studi kasus ini mewakili operasi layanan internal yang sebelumnya sulit dilacak karena status, penugasan, dan histori perubahan tersebar di banyak kanal komunikasi.",
+    problemContext:
+      "Masalah utama di sistem layanan biasanya muncul ketika request masuk dari banyak arah, status dikelola secara longgar, dan setiap perubahan tidak punya konteks yang bisa diaudit. Akibatnya SLA sulit diukur dan tim support kehilangan visibilitas atas bottleneck.",
+    solutionBuilt:
+      "Saya merancang suite layanan yang memusatkan intake request, assignment, status transition yang eksplisit, SLA timer, dan histori aktivitas sehingga setiap tiket punya alur yang bisa dibaca ulang tanpa menebak-nebak.",
+    roleLabel: "Backend engineer",
+    roleSummary:
+      "Saya memfokuskan pekerjaan pada desain state machine layanan, kontrak API, schema PostgreSQL, audit trail, serta query list/detail yang tetap stabil untuk tim operasional.",
+    focusAreas: [
+      "State transition yang eksplisit",
+      "Audit trail untuk setiap perubahan layanan",
+      "Query list dan detail yang stabil untuk tim operasional",
+    ],
+    architectureHighlights: [
+      "Lifecycle request dipisah menjadi modul intake, assignment, execution, dan closure agar setiap transisi punya aturan yang jelas.",
+      "PostgreSQL dipakai untuk menjaga integritas data layanan, sedangkan GORM hanya membungkus operasi yang memang repetitif.",
+      "Riwayat aktivitas disimpan sebagai event terstruktur agar approval, reassign, dan reopening tiket tetap bisa ditelusuri.",
+    ],
+    decisionNotes: [
+      "Status dibuat eksplisit dan terbatas agar business rule tidak bocor ke banyak handler atau job terpisah.",
+      "Endpoint list dan detail dipisah supaya query tabel operasional tidak membebani halaman dengan kebutuhan agregasi berbeda.",
+      "Audit log dianggap bagian inti sistem, bukan pelengkap, karena tim service butuh histori yang bisa dipakai saat eskalasi.",
+    ],
+    lessonsLearned:
+      "Sistem layanan yang sehat membutuhkan bahasa status yang jelas. Begitu transisi dibuat eksplisit, backlog, SLA, dan bottleneck jauh lebih mudah dipantau dan diperbaiki.",
     body:
-      "Service Management Suite mewakili tipe aplikasi yang menuntut alur status yang tertib, catatan aktivitas yang akurat, dan API yang cukup modular untuk berkembang. Fokus utamanya bukan sekadar CRUD, tetapi memastikan setiap perubahan status punya konteks yang jelas dan bisa diaudit.\n\nProject seperti ini sangat cocok untuk menunjukkan kekuatan backend engineering, terutama pada desain state, pemisahan tanggung jawab, dan kontrol integritas data.",
+      "## Masalah yang diselesaikan\n\nService Management Suite tidak diposisikan sebagai aplikasi ticketing generik, tetapi sebagai studi kasus untuk operasi layanan yang butuh kontrol status yang ketat, jejak aktivitas yang utuh, dan antarmuka admin yang tetap nyaman dipakai saat volume request naik.\n\n## Arsitektur delivery\n\nUse case utama dibangun di sekitar aturan transisi status. Handler hanya menangani parsing request dan response, sedangkan rule seperti kapan tiket boleh di-approve, di-assign ulang, atau dibuka kembali diletakkan di service layer. Pola ini menjaga logika layanan tetap bisa diuji tanpa bergantung pada HTTP.\n\n## Integritas data dan audit\n\nSetiap perubahan penting memicu pencatatan aktivitas yang terstruktur. Ini membuat tim bisa menelusuri siapa yang mengubah tiket, kapan SLA terganggu, dan di titik mana request mulai macet. Untuk aplikasi layanan, kemampuan membaca ulang histori seperti ini sering jauh lebih penting daripada UI yang terlihat sibuk.",
     tutorial:
-      "Gunakan status yang eksplisit, audit trail yang konsisten, dan endpoint yang tidak ambigu. Hindari logika bisnis menyebar di terlalu banyak tempat agar alur layanan tetap mudah dilacak.",
+      "Mulai dari definisi lifecycle layanan: request masuk, diverifikasi, ditugaskan, dikerjakan, ditutup, atau dibuka ulang. Setelah itu, pastikan setiap transisi punya rule, actor yang jelas, dan event audit yang tercatat. Ini membuat alur layanan tetap dapat dijelaskan saat volume operasional meningkat.",
     thumbnail: "/projects/service-management-suite.svg",
     thumbnailAlt: "Ilustrasi sistem manajemen layanan dengan panel modern",
     techStack: ["Go", "Gin", "GORM", "PostgreSQL"],
@@ -324,13 +380,37 @@ export const projects: ProjectItem[] = [
     name: "Knowledge Base Portal",
     category: "Seed studi kasus",
     summary:
-      "Portal dokumentasi dan tutorial untuk membantu pengguna memahami fitur, alur, dan penggunaan project secara cepat.",
+      "Portal dokumentasi dan tutorial berslug yang membantu pengguna menemukan panduan, artikel terkait, dan jalur belajar tanpa mentok di satu halaman.",
     description:
-      "Disusun sebagai contoh format untuk project yang membutuhkan dokumentasi publik, artikel tutorial, kategori konten, dan struktur SEO-friendly.",
+      "Studi kasus ini memodelkan produk yang dokumentasinya tersebar di chat, PDF, dan catatan internal sehingga pengguna kesulitan menemukan jawaban yang konsisten.",
+    problemContext:
+      "Ketika dokumentasi tersebar di banyak kanal, tim support harus mengulang jawaban yang sama, pengguna kesulitan mencari topik yang tepat, dan halaman artikel yang ada tidak membentuk jalur eksplorasi yang rapi.",
+    solutionBuilt:
+      "Saya membangun struktur portal berbasis artikel, kategori, tag, search, dan related content agar dokumentasi terasa seperti sistem konten yang hidup, bukan kumpulan halaman statis yang berdiri sendiri.",
+    roleLabel: "Fullstack developer",
+    roleSummary:
+      "Fokus saya ada pada perancangan route App Router, metadata SEO, rendering markdown, modul discovery, dan admin workflow yang tetap nyaman dipakai untuk menambah artikel baru.",
+    focusAreas: [
+      "Routing dan taxonomy SEO-aware",
+      "Search discovery untuk artikel teknis",
+      "Rendering markdown yang konsisten antara preview dan publik",
+    ],
+    architectureHighlights: [
+      "Setiap artikel memiliki slug, metadata, dan internal linking agar jalur archive → detail → related content selalu hidup.",
+      "Taxonomy diperlakukan sebagai route publik yang nyata, bukan sekadar label visual di card artikel.",
+      "Renderer markdown, preview admin, dan halaman publik disatukan agar pengalaman authoring tetap konsisten.",
+    ],
+    decisionNotes: [
+      "Halaman search dibuat noindex agar tidak menghasilkan halaman tipis dengan query yang tidak stabil untuk crawler.",
+      "Related article diprioritaskan oleh kategori dan overlap tag supaya pembaca tetap berada di topik yang paling dekat.",
+      "Sidebar kanan dipakai untuk search, taxonomy, latest, dan TOC agar area itu menjadi alat navigasi, bukan dekorasi kosong.",
+    ],
+    lessonsLearned:
+      "Dokumentasi yang baik tidak hanya menjawab satu pertanyaan, tetapi juga membantu pembaca menemukan pertanyaan berikutnya tanpa harus kembali ke mesin pencari.",
     body:
-      "Knowledge Base Portal difokuskan untuk kasus ketika produk membutuhkan dokumentasi publik yang rapi, halaman artikel dengan struktur yang bisa diindeks crawler, dan navigasi konten yang memudahkan user mencari jawaban.\n\nDi sisi teknis, project ini memperlihatkan kombinasi routing berslug, metadata yang lengkap, dan struktur konten yang nyaman dikelola dalam jangka panjang.",
+      "## Tujuan sistem konten\n\nKnowledge Base Portal dirancang untuk konteks di mana dokumentasi bukan lagi pelengkap, tetapi bagian dari pengalaman produk. Pengguna datang dari hasil pencarian, dari link di dashboard, atau dari artikel lain, sehingga setiap halaman harus mampu berdiri sendiri sekaligus mengarahkan pembaca ke topik berikutnya.\n\n## Struktur discovery\n\nArchive, taxonomy, search, related posts, dan prev/next navigation disusun sebagai satu sistem discovery. Ini penting karena nilai dokumentasi teknis sering muncul bukan hanya dari satu artikel, tetapi dari kemampuan pengguna menjelajahi topik yang berkaitan secara cepat.\n\n## Konsistensi rendering\n\nMarkdown dipilih karena sederhana untuk authoring dan stabil untuk versioning. Namun nilai utamanya muncul ketika preview admin dan public rendering memakai pipeline yang sama. Dengan begitu, editor tahu persis bagaimana heading, code block, list, dan internal link akan muncul saat dipublikasikan.",
     tutorial:
-      "Pisahkan artikel ringkas, tutorial langkah demi langkah, dan referensi teknis. Struktur konten yang jelas lebih membantu pengguna daripada satu halaman dokumentasi yang terlalu padat.",
+      "Mulai dari taxonomy yang masuk akal, lalu susun archive, related content, dan search sebagai jalur yang saling menguatkan. Hindari menggabungkan semua dokumentasi ke satu halaman panjang. Konten akan jauh lebih mudah dijelajahi ketika setiap artikel punya fokus tunggal dan internal linking yang jelas.",
     thumbnail: "/projects/knowledge-base-portal.svg",
     thumbnailAlt: "Ilustrasi portal dokumentasi dengan layout editorial modern",
     techStack: ["Next.js", "TypeScript", "MDX-ready", "SEO metadata"],
@@ -350,13 +430,37 @@ export const projects: ProjectItem[] = [
     name: "Analytics Reporting Workbench",
     category: "Seed studi kasus",
     summary:
-      "Contoh project untuk analitik, tabel data, dan keluaran laporan yang akurat dan siap dipakai tim operasional.",
+      "Workbench analitik untuk merangkum data operasional menjadi laporan yang bisa diverifikasi, diekspor, dan dipakai mengambil keputusan lebih cepat.",
     description:
-      "Format ini mewakili tipe aplikasi yang menggabungkan pengolahan data, dashboard, dan ringkasan kinerja untuk pengambilan keputusan yang lebih cepat.",
+      "Studi kasus ini mewakili kebutuhan reporting ketika tim masih menggabungkan data dari beberapa sumber secara manual sebelum menyusun laporan mingguan atau bulanan.",
+    problemContext:
+      "Masalah utama reporting biasanya muncul ketika definisi metrik tidak seragam, data mentah perlu dibersihkan manual, dan export spreadsheet tidak selalu selaras dengan angka yang dilihat di dashboard.",
+    solutionBuilt:
+      "Saya merancang workbench yang memusatkan agregasi metrik, validasi data, tabel eksplorasi, dan export laporan sehingga tim operasional bisa memverifikasi angka sebelum membagikannya ke stakeholder lain.",
+    roleLabel: "Backend & data workflow",
+    roleSummary:
+      "Pekerjaan saya berfokus pada desain struktur data reporting, endpoint agregasi, workflow validasi, dan keluaran spreadsheet yang tetap konsisten dengan source of truth di backend.",
+    focusAreas: [
+      "Pipeline agregasi dan validasi data",
+      "Ekspor spreadsheet yang konsisten",
+      "Ringkasan KPI yang mudah diverifikasi tim non-teknis",
+    ],
+    architectureHighlights: [
+      "Layer agregasi dipisahkan dari tabel sumber agar rumus reporting tidak tersebar di banyak endpoint.",
+      "Spreadsheet export dibangun dari dataset yang sama dengan dashboard untuk mencegah selisih angka antar-output.",
+      "Workflow validasi disusun sebelum data dipublish ke ringkasan utama agar tim bisa menandai anomali lebih awal.",
+    ],
+    decisionNotes: [
+      "Definisi metrik dibuat eksplisit agar perubahan rumus tidak diam-diam memengaruhi laporan historis.",
+      "Tampilan tabel dioptimalkan untuk scan cepat, sedangkan perhitungan berat dipindahkan ke backend.",
+      "Integrasi spreadsheet dipertahankan karena ini format kerja tim operasional, tetapi sumber kebenaran tetap berada di aplikasi.",
+    ],
+    lessonsLearned:
+      "Sistem reporting yang dipercaya user lahir dari definisi data yang konsisten, bukan dari visualisasi yang paling ramai.",
     body:
-      "Analytics Reporting Workbench mewakili aplikasi yang banyak berinteraksi dengan tabel, kalkulasi, dan presentasi data. Ini relevan untuk menunjukkan pengalaman pada workflow reporting, ekspor data, dan kebutuhan ringkasan performa yang tetap mudah dipahami.\n\nTipe project ini juga menonjolkan kemampuan spreadsheet, integrasi backend, dan kebiasaan memikirkan kualitas data sebelum fokus pada visualisasi.",
+      "## Fokus studi kasus\n\nAnalytics Reporting Workbench dibangun untuk skenario saat tim perlu berpindah dari reporting manual menuju workflow yang lebih repeatable. Hal paling penting bukan sekadar menampilkan chart, tetapi memastikan angka yang dipakai tim operasional, finance, atau stakeholder lain berasal dari definisi yang sama.\n\n## Pendekatan teknis\n\nData mentah dibersihkan dan diringkas lebih dulu sebelum dipakai di dashboard. Ini membuat query halaman lebih stabil dan mengurangi risiko rumus yang berbeda-beda antara satu tampilan dengan export. Untuk sistem reporting, konsistensi antar-output sering lebih penting daripada jumlah grafik yang tersedia.\n\n## Kualitas data sebelum visualisasi\n\nSalah satu keputusan penting di studi kasus ini adalah menempatkan validasi dan verifikasi data sebagai bagian eksplisit dari workflow. Dengan begitu, user tidak hanya menerima angka, tetapi juga punya jalur untuk mengecek apakah sumbernya sudah lengkap dan layak dipakai untuk pengambilan keputusan.",
     tutorial:
-      "Mulai dari definisi metrik dan kualitas sumber data. Setelah itu barulah susun tampilan laporan, ekspor, dan agregasi agar hasil analitik tetap konsisten serta bisa dipercaya.",
+      "Mulai dari definisi metrik, sumber data, dan aturan validasi yang dipakai tim. Setelah itu baru susun agregasi, dashboard, dan export. Reporting yang baik selalu dibangun dari definisi data yang stabil, bukan dari chart yang dibuat paling akhir.",
     thumbnail: "/projects/analytics-reporting-workbench.svg",
     thumbnailAlt: "Ilustrasi workspace analitik dan reporting dengan nuansa premium",
     techStack: ["PHP", "Spreadsheet", "MySQL", "REST API"],

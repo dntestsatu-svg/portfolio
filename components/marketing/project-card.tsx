@@ -13,11 +13,33 @@ type ProjectCardProps = {
     technicalFocus?: string[];
     stackDetailed?: Array<{ label: string; slug: string }>;
   };
+  variant?: "default" | "compact";
 };
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, variant = "default" }: ProjectCardProps) {
+  const isCompact = variant === "compact";
+  const stackItems =
+    project.stackDetailed ??
+    project.techStack.map((item) => ({ label: item, slug: slugify(item) }));
+  const visibleStacks = isCompact ? stackItems.slice(0, 4) : stackItems;
+  const hiddenStackCount = Math.max(stackItems.length - visibleStacks.length, 0);
+  const focusItems = (project.technicalFocus ?? project.features.slice(0, 3)).slice(
+    0,
+    isCompact ? 2 : 3,
+  );
+  const supportingLinks = [
+    project.demoUrl ? { href: project.demoUrl, label: "Live demo" } : null,
+    project.repoUrl ? { href: project.repoUrl, label: "Repository" } : null,
+    project.tutorialUrl ? { href: project.tutorialUrl, label: "Tutorial" } : null,
+  ].filter((item): item is { href: string; label: string } => Boolean(item));
+
   return (
-    <article id={project.slug} className="content-card content-card--project">
+    <article
+      id={project.slug}
+      className={`content-card content-card--project${
+        isCompact ? " content-card--project-compact" : ""
+      }`}
+    >
       <div className="relative aspect-[16/10] overflow-hidden border-b border-white/8">
         <Image
           src={project.thumbnail}
@@ -46,18 +68,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-5 p-6">
-        <div className="space-y-3">
+      <div className={`flex flex-1 flex-col ${isCompact ? "gap-4 p-5" : "gap-5 p-6"}`}>
+        <div className={isCompact ? "space-y-2.5" : "space-y-3"}>
           <h3 className="content-card-title">
             <Link href={`/projects/${project.slug}`}>{project.name}</Link>
           </h3>
           <p className="content-card-summary">{project.summary}</p>
-          <p className="copy-muted text-sm">{project.description}</p>
+          {!isCompact ? <p className="copy-muted text-sm">{project.description}</p> : null}
         </div>
 
         <div className="content-chip-row">
-          {(project.stackDetailed ??
-            project.techStack.map((item) => ({ label: item, slug: slugify(item) }))).map((item) => (
+          {visibleStacks.map((item) => (
             <Link
               key={item.slug}
               href={`/projects?stack=${item.slug}`}
@@ -66,14 +87,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
               {item.label}
             </Link>
           ))}
+          {hiddenStackCount > 0 ? (
+            <span className="tag-chip-subtle" aria-label={`${hiddenStackCount} stack tambahan`}>
+              +{hiddenStackCount}
+            </span>
+          ) : null}
         </div>
 
-        <div className="space-y-2">
+        <div className={isCompact ? "space-y-2" : "space-y-2"}>
           <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
-            Fokus teknis
+            {isCompact ? "Fokus utama" : "Fokus teknis"}
           </h4>
-          <ul className="grid gap-2 text-sm text-slate-300">
-            {(project.technicalFocus ?? project.features.slice(0, 3)).map((focus) => (
+          <ul className={isCompact ? "content-card-focus-list" : "grid gap-2 text-sm text-slate-300"}>
+            {focusItems.map((focus) => (
               <li key={focus} className="flex items-start gap-2">
                 <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
                 <span>{focus}</span>
@@ -82,42 +108,58 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </ul>
         </div>
 
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
-            Feature highlights
-          </h4>
-          <ul className="grid gap-2 text-sm text-slate-300">
-            {project.features.slice(0, 4).map((feature) => (
-              <li key={feature} className="flex items-start gap-2">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {!isCompact ? (
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
+              Feature highlights
+            </h4>
+            <ul className="grid gap-2 text-sm text-slate-300">
+              {project.features.slice(0, 4).map((feature) => (
+                <li key={feature} className="flex items-start gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
-        <div className="mt-auto flex flex-wrap gap-3 pt-2">
+        <div className={`mt-auto flex flex-wrap ${isCompact ? "items-center gap-2.5 pt-1" : "gap-3 pt-2"}`}>
           <Link href={`/projects/${project.slug}`} className="button-primary">
             Lihat case study
           </Link>
 
-          {project.demoUrl ? (
-            <Link href={project.demoUrl} className="button-secondary">
-              Live demo
-            </Link>
-          ) : null}
+          {isCompact ? (
+            supportingLinks.length > 0 ? (
+              <div className="content-card-link-row">
+                {supportingLinks.map((item) => (
+                  <Link key={`${project.slug}-${item.label}`} href={item.href}>
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null
+          ) : (
+            <>
+              {project.demoUrl ? (
+                <Link href={project.demoUrl} className="button-secondary">
+                  Live demo
+                </Link>
+              ) : null}
 
-          {project.repoUrl ? (
-            <Link href={project.repoUrl} className="button-secondary">
-              Repository
-            </Link>
-          ) : null}
+              {project.repoUrl ? (
+                <Link href={project.repoUrl} className="button-secondary">
+                  Repository
+                </Link>
+              ) : null}
 
-          {project.tutorialUrl ? (
-            <Link href={project.tutorialUrl} className="button-secondary">
-              Tutorial
-            </Link>
-          ) : null}
+              {project.tutorialUrl ? (
+                <Link href={project.tutorialUrl} className="button-secondary">
+                  Tutorial
+                </Link>
+              ) : null}
+            </>
+          )}
         </div>
       </div>
     </article>

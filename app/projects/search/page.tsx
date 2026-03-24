@@ -135,7 +135,7 @@ export default async function ProjectSearchPage({ searchParams }: ProjectSearchP
 
                 <div className="grid gap-5 xl:grid-cols-2">
                   {searchResults.items.map((project) => (
-                    <ProjectCard key={project.slug} project={project} />
+                    <ProjectCard key={project.slug} project={project} variant="compact" />
                   ))}
                 </div>
 

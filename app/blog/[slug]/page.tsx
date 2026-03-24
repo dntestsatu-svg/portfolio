@@ -170,6 +170,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               ) : null}
             </article>
 
+            {article.headings.length > 0 ? (
+              <section className="surface-panel content-mobile-only rounded-[2rem] p-5">
+                <Toc headings={article.headings} variant="mobile" />
+              </section>
+            ) : null}
+
             <article className="surface-panel rounded-[2rem] p-6 md:p-8">
               <div className="content-article-meta-banner">
                 <div>
@@ -263,7 +269,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 </dl>
               </section>
 
-              <section className="content-sidebar-card">
+              <section className="content-sidebar-card content-desktop-only">
                 <Toc headings={article.headings} />
               </section>
 

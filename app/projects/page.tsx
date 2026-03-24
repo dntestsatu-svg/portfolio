@@ -160,7 +160,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                 </div>
                 <div className="grid gap-5 xl:grid-cols-2">
                   {archive.featuredProjects.map((project) => (
-                    <ProjectCard key={project.slug} project={project} />
+                    <ProjectCard key={project.slug} project={project} variant="compact" />
                   ))}
                 </div>
               </section>
@@ -184,7 +184,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
 
                 <div className="grid gap-5 xl:grid-cols-2">
                   {archive.items.map((project) => (
-                    <ProjectCard key={project.slug} project={project} />
+                    <ProjectCard key={project.slug} project={project} variant="compact" />
                   ))}
                 </div>
 
