@@ -89,9 +89,9 @@ export default async function Home() {
             </div>
           </div>
 
-          <aside className="surface-panel hero-reveal rounded-[2rem] p-6" data-delay="2">
+          <aside className="surface-panel hero-reveal rounded-4xl p-6" data-delay="2">
             <div className="space-y-3">
-              <p className="text-sm font-semibold tracking-[0.24em] text-[var(--color-accent)] uppercase">
+              <p className="text-sm font-semibold tracking-[0.24em] text-(--color-accent) uppercase">
                 Ringkasan profesional
               </p>
               <p className="copy-muted text-sm">
@@ -113,15 +113,15 @@ export default async function Home() {
               ))}
             </div>
 
-            <div className="mt-8 rounded-2xl border border-[rgba(201,165,106,0.24)] bg-[rgba(201,165,106,0.08)] p-4">
-              <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--color-accent)]">
+            <div className="mt-8 rounded-2xl border border-(--color-accent)/24 bg-(--color-accent)/8 p-4">
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-(--color-accent)">
                 Core metrics
               </p>
               <div className="mt-4 grid gap-3">
                 {skillMetrics.map((skill) => (
                   <div key={skill.name} className="flex items-center justify-between gap-4 text-sm">
                     <span className="text-slate-200">{skill.name}</span>
-                    <span className="font-mono text-[var(--color-accent)]">{skill.level}%</span>
+                    <span className="font-mono text-(--color-accent)">{skill.level}%</span>
                   </div>
                 ))}
               </div>
@@ -147,7 +147,7 @@ export default async function Home() {
               ))}
             </div>
 
-            <div className="surface-panel rounded-[2rem] p-6">
+            <div className="surface-panel rounded-4xl p-6">
               <h3 className="text-xl font-semibold text-white">Perjalanan belajar</h3>
               <p className="copy-muted mt-4 text-sm md:text-base">
                 {educationNarrative}
@@ -156,7 +156,7 @@ export default async function Home() {
           </div>
 
           <div className="space-y-4">
-            <div className="surface-panel rounded-[2rem] p-6">
+            <div className="surface-panel rounded-4xl p-6">
               <h3 className="text-xl font-semibold text-white">Riwayat pendidikan</h3>
               <div className="mt-6 grid gap-4">
                 {educationTimeline.map((item) => (
@@ -164,7 +164,7 @@ export default async function Home() {
                     key={item.school}
                     className="rounded-2xl border border-white/8 bg-white/4 p-5"
                   >
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-(--color-accent)">
                       {item.level}
                     </p>
                     <h4 className="mt-3 text-lg font-semibold text-white">{item.school}</h4>
@@ -174,7 +174,7 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="surface-panel rounded-[2rem] p-6">
+            <div className="surface-panel rounded-4xl p-6">
               <h3 className="text-xl font-semibold text-white">Fokus saat ini</h3>
               <p className="copy-muted mt-4 text-sm">
                 Saya menempatkan backend sebagai fondasi utama, lalu melengkapi
@@ -202,13 +202,13 @@ export default async function Home() {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
             {skillGroups.map((group) => (
-              <article key={group.title} className="surface-panel rounded-[2rem] p-5">
+              <article key={group.title} className="surface-panel rounded-4xl p-5">
                 <h3 className="text-lg font-semibold text-white">{group.title}</h3>
                 <p className="copy-muted mt-3 text-sm">{group.description}</p>
                 <ul className="mt-5 grid gap-2 text-sm text-slate-200">
                   {group.items.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-(--color-accent)" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -229,7 +229,7 @@ export default async function Home() {
 
           <div className="grid gap-5 md:grid-cols-2">
             {stackGroups.map((group) => (
-              <article key={group.title} className="surface-panel rounded-[2rem] p-6">
+              <article key={group.title} className="surface-panel rounded-4xl p-6">
                 <h3 className="text-xl font-semibold text-white">{group.title}</h3>
                 <p className="copy-muted mt-3 text-sm">{group.description}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
@@ -294,7 +294,7 @@ export default async function Home() {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
             {workflowSteps.map((step) => (
-              <article key={step.title} className="surface-panel rounded-[2rem] p-5">
+              <article key={step.title} className="surface-panel rounded-4xl p-5">
                 <h3 className="text-lg font-semibold text-white">{step.title}</h3>
                 <p className="copy-muted mt-3 text-sm">{step.description}</p>
               </article>
@@ -313,7 +313,7 @@ export default async function Home() {
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {reasonsToWorkWithMe.map((reason) => (
-              <article key={reason.title} className="surface-panel rounded-[2rem] p-5">
+              <article key={reason.title} className="surface-panel rounded-4xl p-5">
                 <h3 className="text-lg font-semibold text-white">{reason.title}</h3>
                 <p className="copy-muted mt-3 text-sm">{reason.description}</p>
               </article>
@@ -352,7 +352,7 @@ export default async function Home() {
               description="Jika Anda membutuhkan developer yang kuat di backend, paham alur fullstack, dan terbiasa memikirkan kualitas implementasi sejak awal, saya siap berdiskusi lebih lanjut."
             />
 
-            <div className="surface-panel rounded-[2rem] p-6">
+            <div className="surface-panel rounded-4xl p-6">
               <h3 className="text-xl font-semibold text-white">Titik kontak cepat</h3>
               {contactLinks.length > 0 ? (
                 <div className="mt-5 flex flex-wrap gap-3">
@@ -391,7 +391,7 @@ export default async function Home() {
           </div>
 
           <form
-            className="surface-panel rounded-[2rem] p-6"
+            className="surface-panel rounded-4xl p-6"
             action="/api/contact"
             method="post"
             aria-describedby="contact-note"
@@ -475,7 +475,7 @@ export default async function Home() {
                 Kirim pesan
               </button>
               <p id="contact-note" className="copy-muted text-sm">
-                Form ini terhubung ke `/api/contact` dan dapat dipantau dari dashboard admin.
+                Developer akan cepat memberikan response melalui gmail yang anda input di form.
               </p>
             </div>
           </form>
@@ -484,3 +484,4 @@ export default async function Home() {
     </main>
   );
 }
+
