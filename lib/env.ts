@@ -16,6 +16,10 @@ const envSchema = z.object({
   NEXT_PUBLIC_CONTACT_EMAIL: z.string().email().optional(),
   NEXT_PUBLIC_GITHUB_URL: z.string().url().optional(),
   NEXT_PUBLIC_LINKEDIN_URL: z.string().url().optional(),
+  API_GOQR_ENDPOINT: z.string().url().optional(),
+  API_GOQR_TOKONAME: z.string().min(2).optional(),
+  API_GOQR_TOKEN: z.string().min(1).optional(),
+  API_GOQR_WEBHOOK_SECRET: z.union([z.literal(""), z.string().min(1)]).optional(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -42,10 +46,17 @@ export const appEnv = {
   contactEmail: env.NEXT_PUBLIC_CONTACT_EMAIL,
   githubUrl: env.NEXT_PUBLIC_GITHUB_URL,
   linkedinUrl: env.NEXT_PUBLIC_LINKEDIN_URL,
+  goqrEndpoint: env.API_GOQR_ENDPOINT,
+  goqrTokoName: env.API_GOQR_TOKONAME,
+  goqrToken: env.API_GOQR_TOKEN,
+  goqrWebhookSecret: env.API_GOQR_WEBHOOK_SECRET,
 };
 
 export const hasDatabaseConfig = Boolean(appEnv.databaseUrl);
 export const hasAuthSecret = Boolean(appEnv.authSecret);
 export const hasUpstashRedisConfig = Boolean(
   appEnv.upstashRedisRestUrl && appEnv.upstashRedisRestToken,
+);
+export const hasGoqrConfig = Boolean(
+  appEnv.goqrEndpoint && appEnv.goqrTokoName && appEnv.goqrToken,
 );

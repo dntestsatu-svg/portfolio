@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SUPPORT_MAX_AMOUNT, SUPPORT_MIN_AMOUNT } from "@/lib/support-shared";
 
 const urlField = z
   .union([z.literal(""), z.string().url("URL tidak valid."), z.undefined(), z.null()])
@@ -81,7 +82,36 @@ export const blogInputSchema = z.object({
   published: publishBoolean,
 });
 
+export const supportGenerateSchema = z.object({
+  amount: z.coerce
+    .number()
+    .int("Nominal harus bilangan bulat.")
+    .min(SUPPORT_MIN_AMOUNT, "Nominal minimal Rp10.000.")
+    .max(SUPPORT_MAX_AMOUNT, "Nominal maksimal Rp10.000.000."),
+});
+
+export const goqrWebhookSchema = z.object({
+  amount: z.coerce.number().int().positive("Amount wajib lebih dari 0."),
+  terminal_id: z.string().trim().min(1, "terminal_id wajib diisi."),
+  merchant_id: z.string().trim().min(1, "merchant_id wajib diisi."),
+  trx_id: z.string().trim().min(1, "trx_id wajib diisi."),
+  rrn: z.string().trim().optional().default(""),
+  custom_ref: z.string().trim().optional().default(""),
+  vendor: z.string().trim().optional().default(""),
+  status: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .refine((value) => ["success", "failed", "expired", "pending"].includes(value), {
+      message: "Status webhook tidak dikenali.",
+    }),
+  created_at: z.string().trim().optional().default(""),
+  finish_at: z.string().trim().optional().default(""),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;
 export type ProjectInput = z.output<typeof projectInputSchema>;
 export type BlogInput = z.output<typeof blogInputSchema>;
+export type SupportGenerateInput = z.output<typeof supportGenerateSchema>;
+export type GoqrWebhookInput = z.output<typeof goqrWebhookSchema>;

@@ -17,5 +17,6 @@ export const publicNavigation = [
   { label: "Tech Stack", href: "/#stack" },
   { label: "Project", href: "/projects" },
   { label: "Blog", href: "/blog" },
+  { label: "Dukungan", href: "/beri-dukungan" },
   { label: "Kontak", href: "/#contact" },
 ] as const;
