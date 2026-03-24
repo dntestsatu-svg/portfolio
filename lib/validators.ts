@@ -88,6 +88,19 @@ export const supportGenerateSchema = z.object({
     .int("Nominal harus bilangan bulat.")
     .min(SUPPORT_MIN_AMOUNT, "Nominal minimal Rp10.000.")
     .max(SUPPORT_MAX_AMOUNT, "Nominal maksimal Rp10.000.000."),
+  supporterName: z
+    .string()
+    .trim()
+    .min(2, "Nama tampilan minimal 2 karakter.")
+    .max(80, "Nama tampilan maksimal 80 karakter."),
+  isAnonymous: z.boolean().optional().default(false),
+  message: z
+    .string()
+    .trim()
+    .max(180, "Pesan dukungan maksimal 180 karakter.")
+    .optional()
+    .default(""),
+  showOnLeaderboard: z.boolean().optional().default(false),
 });
 
 export const goqrWebhookSchema = z.object({

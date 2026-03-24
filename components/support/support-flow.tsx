@@ -58,8 +58,40 @@ function deriveDisplayTransaction(
   return transaction;
 }
 
+function getVisibilityLabel(transaction: SupportTransactionSnapshot | null) {
+  if (!transaction) {
+    return "Privat";
+  }
+
+  if (!transaction.donor.showOnLeaderboard) {
+    return "Privat";
+  }
+
+  return transaction.donor.isAnonymous ? "Publik · Anonim" : "Publik · Nama tampil";
+}
+
+function getVisibilityDescription(options: {
+  showOnLeaderboard: boolean;
+  isAnonymous: boolean;
+  supporterName: string;
+}) {
+  if (!options.showOnLeaderboard) {
+    return "Dukungan ini tetap privat dan tidak masuk ke leaderboard publik.";
+  }
+
+  if (options.isAnonymous) {
+    return "Dukungan akan masuk ke ranking publik sebagai Anonim setelah pembayaran sukses.";
+  }
+
+  return `Nama ${options.supporterName || "Anda"} akan tampil di ranking publik setelah pembayaran sukses.`;
+}
+
 export function SupportFlow() {
   const [amountDigits, setAmountDigits] = useState(String(SUPPORT_MIN_AMOUNT));
+  const [supporterName, setSupporterName] = useState("");
+  const [message, setMessage] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [showOnLeaderboard, setShowOnLeaderboard] = useState(false);
   const [transaction, setTransaction] = useState<SupportTransactionSnapshot | null>(null);
   const [qrisImageDataUrl, setQrisImageDataUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,6 +104,12 @@ export function SupportFlow() {
   const displayTransaction = deriveDisplayTransaction(transaction, remainingMs);
   const formattedAmountInput = formatAmountInput(amountDigits);
   const countdownLabel = formatCountdown(remainingMs);
+  const messageLength = message.trim().length;
+  const visibilityDescription = getVisibilityDescription({
+    showOnLeaderboard,
+    isAnonymous,
+    supporterName: supporterName.trim(),
+  });
 
   const phase = isSubmitting
     ? "loading"
@@ -140,6 +178,11 @@ export function SupportFlow() {
       return;
     }
 
+    if (supporterName.trim().length < 2) {
+      setErrorMessage("Nama tampilan minimal 2 karakter.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -150,6 +193,10 @@ export function SupportFlow() {
         },
         body: JSON.stringify({
           amount: amountValue,
+          supporterName,
+          isAnonymous,
+          message,
+          showOnLeaderboard,
         }),
       });
 
@@ -194,12 +241,12 @@ export function SupportFlow() {
           <div className="support-header">
             <span className="eyebrow">Beri dukungan</span>
             <h1 className="section-title max-w-3xl">
-              Dukungan sederhana yang langsung masuk ke alur QRIS yang rapi dan aman.
+              Dukungan sukarela yang diproses rapi, jelas, dan cukup sopan untuk dipublikasikan bila
+              Anda mengizinkannya.
             </h1>
             <p className="copy-muted max-w-2xl text-base md:text-lg">
               Jika tulisan, studi kasus, atau sistem yang saya bangun terasa membantu, Anda bisa
-              memberi dukungan secara sukarela. Prosesnya dibuat ringkas, jelas, dan langsung
-              diverifikasi melalui webhook.
+              memberi dukungan via QRIS. Nama Anda hanya tampil di leaderboard jika Anda memilihnya.
             </p>
           </div>
 
@@ -210,36 +257,120 @@ export function SupportFlow() {
                   <div className="support-card-copy">
                     <p className="support-panel-label">Dukungan via QRIS</p>
                     <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
-                      Masukkan nominal yang ingin Anda kirim.
+                      Atur nominal, nama tampilan, dan preferensi publik Anda.
                     </h2>
                     <p className="copy-muted text-sm md:text-base">
-                      Nominal minimum {formatCurrency(SUPPORT_MIN_AMOUNT)}. QR akan aktif selama{" "}
+                      Nominal minimum {formatCurrency(SUPPORT_MIN_AMOUNT)}. QR aktif selama{" "}
                       {Math.floor(SUPPORT_EXPIRE_SECONDS / 60)} menit setelah dibuat.
                     </p>
                   </div>
 
                   <form className="support-form" onSubmit={handleSubmit}>
+                    <div className="support-form-grid">
+                      <div className="grid gap-2">
+                        <label
+                          htmlFor="support-amount"
+                          className="text-sm font-medium text-slate-200"
+                        >
+                          Nominal dukungan
+                        </label>
+                        <input
+                          id="support-amount"
+                          name="amount"
+                          inputMode="numeric"
+                          autoComplete="off"
+                          className="field-input support-amount-input"
+                          placeholder="Rp10.000"
+                          value={formattedAmountInput}
+                          onChange={(event) => {
+                            setAmountDigits(event.target.value.replace(/\D/g, ""));
+                          }}
+                          aria-describedby="support-amount-note"
+                        />
+                        <p id="support-amount-note" className="copy-muted text-sm">
+                          Sistem hanya menerima nominal bulat dalam rupiah. Tidak ada biaya tambahan
+                          dari sisi aplikasi ini.
+                        </p>
+                      </div>
+
+                      <div className="grid gap-2">
+                        <label
+                          htmlFor="support-name"
+                          className="text-sm font-medium text-slate-200"
+                        >
+                          Nama tampilan
+                        </label>
+                        <input
+                          id="support-name"
+                          name="supporterName"
+                          autoComplete="name"
+                          className="field-input"
+                          placeholder="Mis. Rodex Supporter"
+                          value={supporterName}
+                          onChange={(event) => setSupporterName(event.target.value)}
+                        />
+                        <p className="copy-muted text-sm">
+                          Dipakai untuk apresiasi publik hanya jika Anda memilih tampil di ranking.
+                        </p>
+                      </div>
+                    </div>
+
                     <div className="grid gap-2">
-                      <label htmlFor="support-amount" className="text-sm font-medium text-slate-200">
-                        Nominal dukungan
+                      <label htmlFor="support-message" className="text-sm font-medium text-slate-200">
+                        Pesan singkat dukungan <span className="text-slate-500">(opsional)</span>
                       </label>
-                      <input
-                        id="support-amount"
-                        name="amount"
-                        inputMode="numeric"
-                        autoComplete="off"
-                        className="field-input support-amount-input"
-                        placeholder="Rp10.000"
-                        value={formattedAmountInput}
-                        onChange={(event) => {
-                          setAmountDigits(event.target.value.replace(/\D/g, ""));
-                        }}
-                        aria-describedby="support-amount-note"
+                      <textarea
+                        id="support-message"
+                        name="message"
+                        rows={3}
+                        maxLength={180}
+                        className="field-input support-message-input"
+                        placeholder="Terima kasih, saya menikmati tulisan dan studi kasus yang Anda bagikan."
+                        value={message}
+                        onChange={(event) => setMessage(event.target.value)}
                       />
-                      <p id="support-amount-note" className="copy-muted text-sm">
-                        Sistem hanya menerima nominal bulat dalam rupiah. Tidak ada biaya tambahan
-                        dari sisi aplikasi ini.
-                      </p>
+                      <div className="support-inline-meta">
+                        <p className="copy-muted text-sm">
+                          Pesan disimpan bersama transaksi dukungan, tetapi belum ditampilkan di
+                          leaderboard publik.
+                        </p>
+                        <span>{messageLength}/180</span>
+                      </div>
+                    </div>
+
+                    <div className="support-preference-stack">
+                      <label className="support-checkbox-card">
+                        <input
+                          type="checkbox"
+                          checked={showOnLeaderboard}
+                          onChange={(event) => setShowOnLeaderboard(event.target.checked)}
+                        />
+                        <span>
+                          <strong>Tampilkan di leaderboard publik</strong>
+                          <small>
+                            Hanya transaksi sukses yang akan masuk ke ranking dukungan publik.
+                          </small>
+                        </span>
+                      </label>
+
+                      <label className="support-checkbox-card">
+                        <input
+                          type="checkbox"
+                          checked={isAnonymous}
+                          onChange={(event) => setIsAnonymous(event.target.checked)}
+                        />
+                        <span>
+                          <strong>Tampilkan sebagai anonim</strong>
+                          <small>
+                            Jika diaktifkan, ranking publik hanya akan menampilkan label Anonim.
+                          </small>
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="support-privacy-card">
+                      <p className="support-state-title">Mode publik saat ini</p>
+                      <p>{visibilityDescription}</p>
                     </div>
 
                     {errorMessage ? (
@@ -253,7 +384,12 @@ export function SupportFlow() {
                       <button type="submit" className="button-primary">
                         Lanjutkan
                       </button>
-                      <span className="support-inline-note">Dukungan diproses aman melalui QRIS.</span>
+                      <Link href="/dukungan/ranking" className="button-secondary">
+                        Lihat ranking dukungan
+                      </Link>
+                      <span className="support-inline-note">
+                        Dukungan diproses aman melalui QRIS dan diverifikasi via webhook.
+                      </span>
                     </div>
                   </form>
                 </div>
@@ -270,7 +406,7 @@ export function SupportFlow() {
                       </h2>
                       <p className="copy-muted text-sm md:text-base">
                         Tunggu sebentar. Sistem sedang meminta QRIS ke gateway dan menyimpan
-                        transaksi dukungan Anda secara aman.
+                        preferensi dukungan Anda secara aman.
                       </p>
                     </div>
                   </div>
@@ -329,12 +465,20 @@ export function SupportFlow() {
                           <dt>Status</dt>
                           <dd>{displayTransaction.statusLabel}</dd>
                         </div>
+                        <div>
+                          <dt>Nama tampil</dt>
+                          <dd>{displayTransaction.donor.displayName}</dd>
+                        </div>
+                        <div>
+                          <dt>Mode publik</dt>
+                          <dd>{getVisibilityLabel(displayTransaction)}</dd>
+                        </div>
                       </dl>
 
                       <div className="support-summary-note">
                         Jangan tutup halaman ini jika Anda ingin melihat perubahan status secara
                         otomatis. Bila QR habis masa berlaku, Anda bisa membuat QR baru tanpa
-                        mengulang proses dari awal.
+                        mengulang preferensi donatur dari awal.
                       </div>
                     </div>
                   </div>
@@ -353,8 +497,8 @@ export function SupportFlow() {
                     </h2>
                     <p className="copy-muted text-sm md:text-base">
                       Dukungan sebesar {displayTransaction.amountLabel} sudah terkonfirmasi. Apresiasi
-                      ini membantu saya menjaga tulisan dan studi kasus di portfolio tetap aktif dan
-                      terus berkembang.
+                      ini membantu saya menjaga tulisan, studi kasus, dan sistem portfolio tetap aktif
+                      dan terus berkembang.
                     </p>
                   </div>
 
@@ -373,18 +517,26 @@ export function SupportFlow() {
                         <dd>{displayTransaction.statusLabel}</dd>
                       </div>
                       <div>
-                        <dt>QRIS</dt>
-                        <dd>{displayTransaction.finishedAtISO ? "Tervalidasi" : "Diproses"}</dd>
+                        <dt>Mode publik</dt>
+                        <dd>{getVisibilityLabel(displayTransaction)}</dd>
                       </div>
                     </dl>
+
+                    <div className="support-summary-note">
+                      {displayTransaction.donor.showOnLeaderboard
+                        ? displayTransaction.donor.isAnonymous
+                          ? "Dukungan ini akan masuk ke ranking publik sebagai Anonim setelah status sukses tercatat."
+                          : `Dukungan ini akan masuk ke ranking publik atas nama ${displayTransaction.donor.displayName}.`
+                        : "Dukungan ini tetap tersimpan privat dan tidak akan tampil di leaderboard publik."}
+                    </div>
                   </div>
 
                   <div className="support-form-actions support-form-actions-center">
                     <button type="button" className="button-primary" onClick={handleReset}>
                       Kirim dukungan lagi
                     </button>
-                    <Link href="/blog" className="button-secondary">
-                      Kembali ke blog
+                    <Link href="/dukungan/ranking" className="button-secondary">
+                      Lihat ranking dukungan
                     </Link>
                   </div>
                 </div>
@@ -392,7 +544,10 @@ export function SupportFlow() {
 
               {(phase === "failed" || phase === "expired") && displayTransaction ? (
                 <div className="support-card-stack">
-                  <div className={`support-confirmation-mark ${phase === "failed" ? "tone-danger" : "tone-muted"}`} aria-hidden="true">
+                  <div
+                    className={`support-confirmation-mark ${phase === "failed" ? "tone-danger" : "tone-muted"}`}
+                    aria-hidden="true"
+                  >
                     {phase === "failed" ? "!" : "×"}
                   </div>
                   <div className="support-card-copy text-center">
@@ -407,7 +562,7 @@ export function SupportFlow() {
                     <p className="copy-muted text-sm md:text-base">
                       {phase === "failed"
                         ? "Silakan buat QR baru bila Anda masih ingin melanjutkan dukungan. Jika saldo atau kanal pembayaran sedang bermasalah, coba beberapa saat lagi."
-                        : "Untuk alasan keamanan, QRIS hanya aktif dalam jangka waktu terbatas. Anda bisa membuat QR baru dengan nominal yang sama."}
+                        : "Untuk alasan keamanan, QRIS hanya aktif dalam jangka waktu terbatas. Anda bisa membuat QR baru dengan nominal dan preferensi publik yang sama."}
                     </p>
                   </div>
 
@@ -426,8 +581,8 @@ export function SupportFlow() {
                         <dd>{displayTransaction.statusLabel}</dd>
                       </div>
                       <div>
-                        <dt>Durasi</dt>
-                        <dd>{Math.floor(SUPPORT_EXPIRE_SECONDS / 60)} menit</dd>
+                        <dt>Mode publik</dt>
+                        <dd>{getVisibilityLabel(displayTransaction)}</dd>
                       </div>
                     </dl>
                   </div>
@@ -436,8 +591,8 @@ export function SupportFlow() {
                     <button type="button" className="button-primary" onClick={handleReset}>
                       Buat QR baru
                     </button>
-                    <Link href="/projects" className="button-secondary">
-                      Lihat project
+                    <Link href="/dukungan/ranking" className="button-secondary">
+                      Lihat ranking dukungan
                     </Link>
                   </div>
                 </div>

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { SupportLeaderboardPreview } from "@/components/support/support-leaderboard-preview";
 import { SupportFlow } from "@/components/support/support-flow";
+import { getSupportLeaderboardPreview } from "@/lib/services/support";
 import { getWebPageStructuredData, toStructuredDataJson } from "@/lib/structured-data";
 
 const pageTitle = "Beri Dukungan";
 const pageDescription =
-  "Halaman dukungan via QRIS untuk pembaca yang ingin memberi apresiasi secara sukarela dengan proses yang jelas, aman, dan terverifikasi.";
+  "Halaman dukungan via QRIS untuk pembaca yang ingin memberi apresiasi secara sukarela dengan proses yang jelas, aman, terverifikasi, dan bisa tampil elegan di leaderboard publik jika diizinkan.";
 const structuredDataJson = toStructuredDataJson(
   getWebPageStructuredData({
     path: "/beri-dukungan",
@@ -34,7 +36,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SupportPage() {
+export default async function SupportPage() {
+  const leaderboard = await getSupportLeaderboardPreview();
+
   return (
     <main id="main-content">
       <script
@@ -44,6 +48,7 @@ export default function SupportPage() {
         }}
       />
       <SupportFlow />
+      <SupportLeaderboardPreview leaderboard={leaderboard} />
     </main>
   );
 }

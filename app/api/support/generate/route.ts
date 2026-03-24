@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     });
 
     const input = supportGenerateSchema.parse(await request.json());
-    const result = await generateSupportTransaction(input.amount);
+    const result = await generateSupportTransaction(input);
 
     return NextResponse.json(result, {
       status: 201,
