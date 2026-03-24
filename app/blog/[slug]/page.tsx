@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getPublicArticleBySlug, getPublicArticles } from "@/lib/services/content";
 
 type BlogDetailPageProps = {
@@ -82,8 +85,21 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_320px]">
           <article className="surface-panel rounded-[2rem] p-8">
             <h2 className="text-2xl font-semibold text-white">Isi artikel</h2>
-            <div className="mt-5 whitespace-pre-line text-sm leading-8 text-slate-200">
-              {article.content ?? article.summary}
+            {article.coverImage ? (
+              <div className="relative mt-5 aspect-[16/9] overflow-hidden rounded-[1.5rem] border border-white/8">
+                <Image
+                  src={article.coverImage}
+                  alt={`Cover ${article.title}`}
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 70vw, 100vw"
+                />
+              </div>
+            ) : null}
+            <div className="markdown-prose mt-6">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {article.content ?? article.summary}
+              </ReactMarkdown>
             </div>
           </article>
 

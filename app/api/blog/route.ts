@@ -80,9 +80,12 @@ export async function POST(request: NextRequest) {
     });
 
     if (formSubmission) {
-      return NextResponse.redirect(buildPublicUrl(request, "/admin/blog?status=created"), {
-        status: 303,
-      });
+      return NextResponse.redirect(
+        buildPublicUrl(request, `/admin/blog/${article.id}?status=created`),
+        {
+          status: 303,
+        },
+      );
     }
 
     return NextResponse.json(article, { status: 201 });
@@ -91,7 +94,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.redirect(
         buildPublicUrl(
           request,
-          `/admin/blog?error=${encodeURIComponent(
+          `/admin/blog/new?error=${encodeURIComponent(
             error instanceof Error ? error.message : "Gagal membuat artikel.",
           )}`,
         ),

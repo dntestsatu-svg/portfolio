@@ -30,55 +30,57 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   const query = await searchParams;
 
   return (
-    <main id="main-content" className="section-space">
+    <main id="main-content" className="admin-workspace" data-admin-shell="true">
       <CsrfTokenBridge />
-      <div className="site-shell max-w-xl">
-        <section className="surface-panel rounded-[2rem] p-8">
-          <p className="eyebrow">Admin access</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white">
+      <div className="site-shell max-w-2xl">
+        <section className="admin-panel p-6 md:p-8">
+          <p className="admin-panel-label">Admin access</p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
             Login dashboard admin
           </h1>
-          <p className="copy-muted mt-4 text-sm">
+          <p className="admin-copy-muted mt-3 max-w-xl text-sm">
             Gunakan kredensial admin untuk mengelola project, blog, dan pesan
             kontak. Session disimpan melalui cookie HttpOnly berbasis JWT.
           </p>
 
-          <div className="mt-6">
+          <div className="mt-5">
             <StatusAlert error={query.error} />
           </div>
 
-          <form action="/api/auth/login" method="post" className="mt-6 grid gap-5">
+          <form action="/api/auth/login" method="post" className="mt-5 grid gap-4">
             <CsrfTokenInput />
 
             <div className="grid gap-2">
-              <label htmlFor="email" className="text-sm font-medium text-slate-200">
+              <label htmlFor="email" className="admin-label">
                 Email
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                className="field-input"
+                className="admin-field"
                 placeholder="admin@domain.com"
+                autoComplete="email"
                 required
               />
             </div>
 
             <div className="grid gap-2">
-              <label htmlFor="password" className="text-sm font-medium text-slate-200">
+              <label htmlFor="password" className="admin-label">
                 Password
               </label>
               <input
                 id="password"
                 name="password"
                 type="password"
-                className="field-input"
+                className="admin-field"
                 placeholder="Password admin"
+                autoComplete="current-password"
                 required
               />
             </div>
 
-            <button type="submit" className="button-primary">
+            <button type="submit" className="admin-button-primary">
               Masuk ke dashboard
             </button>
           </form>

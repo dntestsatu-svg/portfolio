@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { CsrfTokenBridge } from "@/components/admin/csrf-token-bridge";
 import { CsrfTokenInput } from "@/components/admin/csrf-token-input";
@@ -21,44 +22,65 @@ export default async function AdminProtectedLayout({
   const session = await requireAdminSession();
 
   return (
-    <main id="main-content" className="section-space">
+    <main id="main-content" className="admin-workspace" data-admin-shell="true">
       <CsrfTokenBridge />
-      <div className="site-shell space-y-6">
-        <section className="surface-panel rounded-[2rem] p-6">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="eyebrow">Admin dashboard</p>
-              <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white">
-                Kontrol konten portfolio
-              </h1>
-              <p className="copy-muted mt-3 text-sm">
-                Login sebagai {session.email}. Dashboard ini dilindungi cookie
-                session berbasis JWT dan verifikasi server-side pada route admin
-                maupun API.
+      <div className="site-shell">
+        <div className="admin-shell">
+          <aside className="admin-sidebar">
+            <section className="admin-sidebar-panel">
+              <Link href="/admin" className="admin-brand" aria-label="Kembali ke dashboard admin">
+                <span className="admin-brand-mark">RC</span>
+                <span>
+                  <span className="admin-panel-label">Admin workspace</span>
+                  <span className="mt-2 block text-base font-semibold text-white">
+                    Portfolio control room
+                  </span>
+                </span>
+              </Link>
+
+              <p className="admin-sidebar-copy mt-4 text-sm">
+                Ruang kerja internal untuk mengelola project, artikel, pesan, dan jejak audit
+                dengan fokus pada kecepatan operasional.
               </p>
-            </div>
 
-            <form action="/api/auth/logout" method="post">
-              <CsrfTokenInput />
-              <button type="submit" className="button-secondary">
-                Logout
-              </button>
-            </form>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-4">
-            {!hasDatabaseConfig ? (
-              <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-                DATABASE_URL belum diisi. Data dashboard tidak dapat dimuat
-                secara penuh dan operasi CRUD akan gagal sampai koneksi MySQL
-                tersedia.
+              <div className="mt-4 rounded-2xl border border-white/8 bg-black/20 px-3 py-3">
+                <p className="admin-panel-label">Session aktif</p>
+                <p className="mt-2 text-sm font-medium text-white">{session.email}</p>
+                <p className="admin-help mt-1">
+                  Cookie JWT dan CSRF validation tetap aktif pada seluruh operasi admin.
+                </p>
               </div>
-            ) : null}
-            <AdminNav />
-          </div>
-        </section>
+            </section>
 
-        {children}
+            {!hasDatabaseConfig ? (
+              <section className="admin-sidebar-panel border-amber-400/25 bg-amber-500/8">
+                <p className="admin-panel-label text-amber-200">Database</p>
+                <p className="mt-2 text-sm text-amber-100">
+                  DATABASE_URL belum diisi. Operasi CRUD akan gagal sampai koneksi MySQL tersedia.
+                </p>
+              </section>
+            ) : null}
+
+            <section className="admin-sidebar-panel">
+              <p className="admin-panel-label">Navigasi</p>
+              <div className="mt-3">
+                <AdminNav />
+              </div>
+            </section>
+
+            <section className="admin-sidebar-panel">
+              <p className="admin-panel-label">Session control</p>
+              <form action="/api/auth/logout" method="post" className="mt-3">
+                <CsrfTokenInput />
+                <button type="submit" className="admin-button-secondary admin-button-block">
+                  Logout
+                </button>
+              </form>
+            </section>
+          </aside>
+
+          <div className="admin-content">{children}</div>
+        </div>
       </div>
     </main>
   );
