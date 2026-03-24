@@ -1,23 +1,24 @@
-import crypto from "node:crypto";
 import type { NextConfig } from "next";
-import { getHomeStructuredDataJson } from "./lib/structured-data";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const homeStructuredDataHash = crypto
-  .createHash("sha256")
-  .update(getHomeStructuredDataJson())
-  .digest("base64");
+const siteOrigin = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").origin;
+const formActionOrigins = new Set(["'self'", siteOrigin]);
+
+if (siteOrigin === "http://localhost:3000" || siteOrigin === "http://127.0.0.1:3000") {
+  formActionOrigins.add("http://localhost:3000");
+  formActionOrigins.add("http://127.0.0.1:3000");
+}
+
 const scriptSrc = isDevelopment
   ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-  : `script-src 'self' 'sha256-${homeStructuredDataHash}'`;
-const styleSrc = isDevelopment ? "style-src 'self' 'unsafe-inline'" : "style-src 'self'";
+  : "script-src 'self' 'unsafe-inline'";
+const styleSrc = "style-src 'self' 'unsafe-inline'";
 
 const contentSecurityPolicy = [
   "default-src 'self'",
   scriptSrc,
   "script-src-attr 'none'",
   styleSrc,
-  "style-src-attr 'none'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
   "connect-src 'self'",
@@ -27,7 +28,7 @@ const contentSecurityPolicy = [
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "object-src 'none'",
-  "form-action 'self'",
+  `form-action ${Array.from(formActionOrigins).join(" ")}`,
   ...(isDevelopment ? [] : ["upgrade-insecure-requests"]),
 ].join("; ");
 
