@@ -121,7 +121,7 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
             <select
               id="action"
               name="action"
-              className="field-input"
+              className="field-select"
               defaultValue={auditPage.filters.action}
             >
               <option value="">Semua action</option>
@@ -140,7 +140,7 @@ export default async function AdminAuditPage({ searchParams }: AdminAuditPagePro
             <select
               id="entityType"
               name="entityType"
-              className="field-input"
+              className="field-select"
               defaultValue={auditPage.filters.entityType}
             >
               <option value="">Semua entitas</option>
