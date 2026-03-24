@@ -14,18 +14,41 @@ function parseOrigin(value: string | null) {
   }
 }
 
+function getForwardedHeaderValue(request: NextRequest, name: string) {
+  const value = request.headers.get(name)?.split(",")[0]?.trim();
+  return value && value.length > 0 ? value : null;
+}
+
+function getForwardedOrigin(request: NextRequest) {
+  const forwardedHost = getForwardedHeaderValue(request, "x-forwarded-host");
+  const forwardedProto = getForwardedHeaderValue(request, "x-forwarded-proto");
+
+  if (!forwardedHost || !forwardedProto) {
+    return null;
+  }
+
+  return `${forwardedProto}://${forwardedHost}`;
+}
+
+export function getPublicRequestOrigin(request: NextRequest) {
+  return (
+    getForwardedOrigin(request) ??
+    parseOrigin(appEnv.siteUrl) ??
+    request.nextUrl.origin
+  );
+}
+
 function getAllowedOrigins(request: NextRequest) {
-  const allowedOrigins = new Set<string>([request.nextUrl.origin]);
+  const allowedOrigins = new Set<string>([request.nextUrl.origin, getPublicRequestOrigin(request)]);
 
   const configuredSiteOrigin = parseOrigin(appEnv.siteUrl);
   if (configuredSiteOrigin) {
     allowedOrigins.add(configuredSiteOrigin);
   }
 
-  const forwardedHost = request.headers.get("x-forwarded-host");
-  const forwardedProto = request.headers.get("x-forwarded-proto");
-  if (forwardedHost && forwardedProto) {
-    allowedOrigins.add(`${forwardedProto}://${forwardedHost}`);
+  const forwardedOrigin = getForwardedOrigin(request);
+  if (forwardedOrigin) {
+    allowedOrigins.add(forwardedOrigin);
   }
 
   return allowedOrigins;

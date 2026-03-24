@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminSession, getSessionCookieOptions } from "@/lib/auth/session";
+import { buildPublicUrl } from "@/lib/request";
 import { assertAdminMutationRequest, getCsrfCookieOptions } from "@/lib/security/csrf";
 import { SecurityError } from "@/lib/security/security-error";
 import { recordAdminAuditLogSafely } from "@/lib/services/audit-log";
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const response = NextResponse.redirect(new URL("/admin/login", request.url), {
+    const response = NextResponse.redirect(buildPublicUrl(request, "/admin/login"), {
       status: 303,
     });
 
@@ -41,12 +42,12 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof SecurityError) {
       return NextResponse.redirect(
-        new URL(`/admin?error=${encodeURIComponent(error.message)}`, request.url),
+        buildPublicUrl(request, `/admin?error=${encodeURIComponent(error.message)}`),
         { status: 303 },
       );
     }
 
-    return NextResponse.redirect(new URL("/admin?error=Logout%20gagal", request.url), {
+    return NextResponse.redirect(buildPublicUrl(request, "/admin?error=Logout%20gagal"), {
       status: 303,
     });
   }

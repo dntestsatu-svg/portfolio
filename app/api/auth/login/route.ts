@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authenticateAdmin } from "@/lib/services/admin-auth";
-import { formDataToObject, isFormRequest, redirectWithSearch } from "@/lib/request";
+import { buildPublicUrl, formDataToObject, isFormRequest, redirectWithSearch } from "@/lib/request";
 import { getSessionCookieOptions, signAdminSession } from "@/lib/auth/session";
 import { assertAdminMutationRequest } from "@/lib/security/csrf";
 import { assertRateLimit, getClientIp, hashRateLimitKey } from "@/lib/security/rate-limit";
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (formSubmission) {
-      const response = NextResponse.redirect(new URL("/admin", request.url), {
+      const response = NextResponse.redirect(buildPublicUrl(request, "/admin"), {
         status: 303,
       });
 

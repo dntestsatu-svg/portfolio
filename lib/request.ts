@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getPublicRequestOrigin } from "@/lib/security/origin";
 
 export function isFormRequest(request: Request) {
   const contentType = request.headers.get("content-type") ?? "";
@@ -21,12 +22,16 @@ export function formDataToObject(formData: FormData) {
   return result;
 }
 
+export function buildPublicUrl(request: NextRequest, pathname: string) {
+  return new URL(pathname, getPublicRequestOrigin(request));
+}
+
 export function redirectWithSearch(
   request: NextRequest,
   pathname: string,
   params: Record<string, string>,
 ) {
-  const url = new URL(pathname, request.url);
+  const url = buildPublicUrl(request, pathname);
 
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.set(key, value);

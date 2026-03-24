@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/constants";
 import { CSRF_COOKIE_NAME, CSRF_HEADER_NAME, getCsrfCookieOptions, generateCsrfToken } from "@/lib/security/csrf";
+import { buildPublicUrl } from "@/lib/request";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -13,7 +14,7 @@ export function proxy(request: NextRequest) {
     const hasSessionCookie = Boolean(request.cookies.get(SESSION_COOKIE_NAME)?.value);
 
     if (!hasSessionCookie) {
-      const response = NextResponse.redirect(new URL("/admin/login", request.url));
+      const response = NextResponse.redirect(buildPublicUrl(request, "/admin/login"));
 
       if (!request.cookies.get(CSRF_COOKIE_NAME)?.value) {
         response.cookies.set({

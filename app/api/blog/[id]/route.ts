@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/session";
-import { formDataToObject } from "@/lib/request";
+import { buildPublicUrl, formDataToObject } from "@/lib/request";
 import { revalidatePortfolioContent } from "@/lib/revalidate";
 import { assertAdminMutationRequest } from "@/lib/security/csrf";
 import { SecurityError } from "@/lib/security/security-error";
@@ -48,11 +48,11 @@ export async function POST(request: NextRequest, { params }: Params) {
     method = String(formData.get("_method") ?? "POST").toUpperCase();
   } catch (error) {
     return NextResponse.redirect(
-      new URL(
+      buildPublicUrl(
+        request,
         `/admin/blog?error=${encodeURIComponent(
           error instanceof Error ? error.message : "Request tidak valid.",
         )}`,
-        request.url,
       ),
       { status: 303 },
     );
@@ -81,16 +81,16 @@ export async function POST(request: NextRequest, { params }: Params) {
           },
         });
       }
-      return NextResponse.redirect(new URL("/admin/blog?status=deleted", request.url), {
+      return NextResponse.redirect(buildPublicUrl(request, "/admin/blog?status=deleted"), {
         status: 303,
       });
     } catch (error) {
       return NextResponse.redirect(
-        new URL(
+        buildPublicUrl(
+          request,
           `/admin/blog?error=${encodeURIComponent(
             error instanceof Error ? error.message : "Gagal menghapus artikel.",
           )}`,
-          request.url,
         ),
         { status: 303 },
       );
@@ -122,16 +122,16 @@ export async function POST(request: NextRequest, { params }: Params) {
         previousSlug: current?.slug ?? null,
       },
     });
-    return NextResponse.redirect(new URL(`/admin/blog/${id}?status=saved`, request.url), {
+    return NextResponse.redirect(buildPublicUrl(request, `/admin/blog/${id}?status=saved`), {
       status: 303,
     });
   } catch (error) {
     return NextResponse.redirect(
-      new URL(
+      buildPublicUrl(
+        request,
         `/admin/blog/${id}?error=${encodeURIComponent(
           error instanceof Error ? error.message : "Gagal memperbarui artikel.",
         )}`,
-        request.url,
       ),
       { status: 303 },
     );

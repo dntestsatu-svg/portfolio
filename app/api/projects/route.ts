@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/session";
-import { formDataToObject, isFormRequest } from "@/lib/request";
+import { buildPublicUrl, formDataToObject, isFormRequest } from "@/lib/request";
 import { revalidatePortfolioContent } from "@/lib/revalidate";
 import { createProject, getAdminProjects, getPublicProjects } from "@/lib/services/content";
 import { assertAdminMutationRequest } from "@/lib/security/csrf";
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (formSubmission) {
-      return NextResponse.redirect(new URL("/admin/projects?status=created", request.url), {
+      return NextResponse.redirect(buildPublicUrl(request, "/admin/projects?status=created"), {
         status: 303,
       });
     }
@@ -90,11 +90,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (formSubmission) {
       return NextResponse.redirect(
-        new URL(
+        buildPublicUrl(
+          request,
           `/admin/projects?error=${encodeURIComponent(
             error instanceof Error ? error.message : "Gagal membuat project.",
           )}`,
-          request.url,
         ),
         { status: 303 },
       );

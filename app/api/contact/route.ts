@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth/session";
-import { formDataToObject, isFormRequest } from "@/lib/request";
+import { buildPublicUrl, formDataToObject, isFormRequest } from "@/lib/request";
 import { createContactMessage, getContactMessages } from "@/lib/services/content";
 import { assertTrustedOrigin } from "@/lib/security/origin";
 import { assertRateLimit, getClientIp } from "@/lib/security/rate-limit";
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     const message = await createContactMessage(input);
 
     if (formSubmission) {
-      return NextResponse.redirect(new URL("/?contact=success#contact", request.url), {
+      return NextResponse.redirect(buildPublicUrl(request, "/?contact=success#contact"), {
         status: 303,
       });
     }
@@ -54,11 +54,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (formSubmission) {
       return NextResponse.redirect(
-        new URL(
+        buildPublicUrl(
+          request,
           `/?contact=error&message=${encodeURIComponent(
             error instanceof Error ? error.message : "Pesan gagal dikirim.",
           )}#contact`,
-          request.url,
         ),
         { status: 303 },
       );
