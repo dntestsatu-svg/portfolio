@@ -20,9 +20,29 @@ bun run build
 bun run prisma:generate -- --config prisma.config.ts
 bun run db:push -- --config prisma.config.ts
 bun run db:seed
+bun run db:reset:clean -- --yes
 bun run audit:prune:dry-run
 bun run audit:prune
 ```
+
+Reset bersih untuk local/staging:
+
+```bash
+bun run db:reset:clean -- --yes
+bun run db:reset:clean -- --yes --keep-uploads
+```
+
+Perintah ini akan:
+
+- menghapus seluruh data app
+- menyisakan 1 admin dari `ADMIN_EMAIL` / `ADMIN_PASSWORD`
+- menyisakan 1 artikel: `Membangun Portfolio Content System dengan Next.js App Router`
+- secara default menghapus `public/uploads`
+
+Catatan:
+
+- script ini memang destruktif, jadi wajib memakai `--yes`
+- jika tabel `Project` kosong, halaman publik project masih akan fallback ke seed content
 
 ## Audit Operations
 

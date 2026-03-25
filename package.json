@@ -12,6 +12,7 @@
     "prisma:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "bun prisma/seed.mjs",
+    "db:reset:clean": "bun scripts/reset-clean.mts",
     "audit:prune": "bun scripts/prune-audit-logs.mts",
     "audit:prune:dry-run": "bun scripts/prune-audit-logs.mts --dry-run"
   },
