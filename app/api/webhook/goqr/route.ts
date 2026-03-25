@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     if (isGoqrIntegrationCheckPayload(payload)) {
       return NextResponse.json(
         {
+          success: true,
           status: true,
           message: "GOQR webhook integration check acknowledged.",
         },

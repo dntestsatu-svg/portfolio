@@ -579,5 +579,20 @@ export async function applyGoqrWebhook(payload: GoqrWebhookInput): Promise<Apply
 }
 
 export function isGoqrIntegrationCheckPayload(payload: unknown) {
-  return Boolean(payload && typeof payload === "object" && Object.keys(payload).length === 0);
+  if (!payload || typeof payload !== "object") {
+    return false;
+  }
+
+  const record = payload as Record<string, unknown>;
+  const keys = Object.keys(record);
+
+  if (keys.length === 0) {
+    return true;
+  }
+
+  return (
+    record.type === "integration_check" &&
+    typeof record.timestamp === "string" &&
+    typeof record.source === "string"
+  );
 }
