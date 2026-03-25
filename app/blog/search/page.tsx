@@ -26,7 +26,7 @@ export async function generateMetadata({
   return {
     title: query ? `Cari: ${query}` : "Cari artikel",
     description: query
-      ? `Hasil pencarian artikel untuk kata kunci "${query}" di blog Rodex Castello.`
+      ? `Hasil pencarian artikel untuk kata kunci "${query}" di blog Mugiew Castello.`
       : "Cari artikel teknis berdasarkan topik, stack, atau kata kunci implementasi.",
     alternates: {
       canonical: query ? `/blog/search?q=${encodeURIComponent(query)}` : "/blog/search",

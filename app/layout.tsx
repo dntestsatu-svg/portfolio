@@ -29,10 +29,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
     default: siteConfig.title,
-    template: "%s | Rodex Castello",
+    template: "%s | Mugiew Castello",
   },
   description: siteConfig.description,
-  applicationName: "Rodex Castello Portfolio",
+  applicationName: "Mugiew Castello Portfolio",
   alternates: {
     canonical: "/",
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   publisher: siteConfig.name,
   category: "technology",
   keywords: [
-    "Rodex Castello",
+    "Mugiew Castello",
     "portfolio developer",
     "backend engineer",
     "fullstack developer",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Preview portfolio Rodex Castello",
+        alt: "Preview portfolio Mugiew Castello",
       },
     ],
   },

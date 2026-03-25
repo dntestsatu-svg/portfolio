@@ -1,10 +1,11 @@
 export const siteConfig = {
-  name: "Rodex Castello",
-  shortName: "Rodex",
+  name: "Mugiew Castello",
+  shortName: "Mugiew",
+  brandWordmark: "mugiew",
   role: "Backend-Focused Fullstack Developer",
-  title: "Rodex Castello | Fullstack Developer",
+  title: "Mugiew Castello | Fullstack Developer",
   description:
-    "Portfolio Rodex Castello, backend-focused fullstack developer yang membangun aplikasi web modern, dashboard operasional, dan dokumentasi teknis yang rapi.",
+    "Portfolio Mugiew Castello, backend-focused fullstack developer yang membangun aplikasi web modern, dashboard operasional, dan dokumentasi teknis yang rapi.",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
   githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL,

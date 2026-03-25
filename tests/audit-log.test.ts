@@ -9,16 +9,16 @@ import {
 
 describe("audit log helpers", () => {
   test("normalizes and masks failed-login identifiers", () => {
-    expect(normalizeAuditIdentifier("  Rodex.Castello@Example.COM  ")).toBe(
-      "rodex.castello@example.com",
+    expect(normalizeAuditIdentifier("  Mugiew.Castello@Example.COM  ")).toBe(
+      "Mugiew.castello@example.com",
     );
-    expect(maskAuditIdentifier("rodex.castello@example.com")).toBe("ro***@e***.com");
+    expect(maskAuditIdentifier("Mugiew.castello@example.com")).toBe("ro***@e***.com");
     expect(maskAuditIdentifier("unknown")).toBe("unknown");
   });
 
   test("hashes failed-login identifiers deterministically", () => {
-    expect(hashAuditIdentifier("rodex.castello@example.com")).toBe(
-      hashAuditIdentifier("  RODEX.CASTELLO@example.com "),
+    expect(hashAuditIdentifier("Mugiew.castello@example.com")).toBe(
+      hashAuditIdentifier("  Mugiew.CASTELLO@example.com "),
     );
     expect(hashAuditIdentifier("unknown")).toBeNull();
   });

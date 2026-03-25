@@ -55,11 +55,11 @@ export async function generateMetadata({ params }: BlogTagPageProps): Promise<Me
     openGraph: {
       type: "website",
       url: `/blog/tag/${tagPage.taxonomy.slug}`,
-      title: `Tag ${tagPage.taxonomy.label} | Blog Rodex Castello`,
+      title: `Tag ${tagPage.taxonomy.label} | Blog Mugiew Castello`,
       description: tagPage.description,
     },
     twitter: {
-      title: `Tag ${tagPage.taxonomy.label} | Blog Rodex Castello`,
+      title: `Tag ${tagPage.taxonomy.label} | Blog Mugiew Castello`,
       description: tagPage.description,
     },
   };
@@ -87,7 +87,7 @@ export default async function BlogTagPage({ params, searchParams }: BlogTagPageP
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: `/blog/tag/${tagPage.taxonomy.slug}`,
-      title: `Tag ${tagPage.taxonomy.label} | Blog Rodex Castello`,
+      title: `Tag ${tagPage.taxonomy.label} | Blog Mugiew Castello`,
       description: tagPage.description,
     }),
   );

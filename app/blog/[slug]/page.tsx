@@ -53,7 +53,7 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       url: `/blog/${article.slug}`,
-      title: `${article.title} | Rodex Castello`,
+      title: `${article.title} | Mugiew Castello`,
       description: article.summary,
       publishedTime: article.publishedAtISO,
       modifiedTime: article.updatedAtISO,
@@ -62,7 +62,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${article.title} | Rodex Castello`,
+      title: `${article.title} | Mugiew Castello`,
       description: article.summary,
       images: article.coverImage ? [article.coverImage] : undefined,
     },

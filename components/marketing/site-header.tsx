@@ -103,13 +103,15 @@ export function SiteHeader() {
         <div className="site-shell flex items-center justify-between gap-4 py-4 px-2">
           <Link
             href="/"
-            className="flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-white uppercase"
+            className="site-brand-link"
             aria-label="Kembali ke beranda"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-white/6 text-xs text-(--color-accent) sm:h-10 sm:w-10">
-              RC
+            <span className="site-wordmark" aria-hidden="true">
+              <span className="site-wordmark-line" />
+              <span className="site-wordmark-text">{siteConfig.brandWordmark}</span>
+              <span className="site-wordmark-dot" />
             </span>
-            <span className="hidden sm:inline">{siteConfig.shortName}</span>
+            <span className="sr-only">{siteConfig.name}</span>
           </Link>
 
           <nav aria-label="Navigasi utama" className="hidden items-center gap-6 md:flex">
@@ -157,4 +159,3 @@ export function SiteHeader() {
     </>
   );
 }
-

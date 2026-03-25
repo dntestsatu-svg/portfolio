@@ -13,21 +13,21 @@ import {
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Archive studi kasus project Rodex Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
+    "Archive studi kasus project Mugiew Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
   alternates: {
     canonical: "/projects",
   },
   openGraph: {
     type: "website",
     url: "/projects",
-    title: "Projects | Rodex Castello",
+    title: "Projects | Mugiew Castello",
     description:
-      "Archive studi kasus project Rodex Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
+      "Archive studi kasus project Mugiew Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
   },
   twitter: {
-    title: "Projects | Rodex Castello",
+    title: "Projects | Mugiew Castello",
     description:
-      "Archive studi kasus project Rodex Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
+      "Archive studi kasus project Mugiew Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
   },
 };
 
@@ -91,7 +91,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: "/projects",
-      title: "Projects | Rodex Castello",
+      title: "Projects | Mugiew Castello",
       description:
         "Archive studi kasus project yang membantu pengunjung menjelajahi sistem backend, dashboard, integrasi, dan produk berbasis konten secara lebih terarah.",
     }),

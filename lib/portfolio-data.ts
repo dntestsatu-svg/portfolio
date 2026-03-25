@@ -102,7 +102,7 @@ export const heroStats = [
 ] as const;
 
 export const profileParagraphs = [
-  "Saya Rodex Castello, 27 tahun, seorang backend-focused fullstack developer yang terbiasa menerjemahkan kebutuhan operasional menjadi aplikasi web yang rapi, efisien, dan siap dikembangkan.",
+  "Saya Mugiew Castello, 27 tahun, seorang backend-focused fullstack developer yang terbiasa menerjemahkan kebutuhan operasional menjadi aplikasi web yang rapi, efisien, dan siap dikembangkan.",
   "Fokus utama saya berada pada backend engineering: merancang alur aplikasi, struktur database, integrasi API, keamanan dasar aplikasi, serta kualitas implementasi yang stabil di lingkungan nyata.",
   "Di sisi lain, saya tetap nyaman menangani frontend sebagai pelengkap agar produk yang dibangun terasa utuh, responsif, mudah dipahami, dan tetap konsisten dari sisi pengalaman pengguna.",
 ];

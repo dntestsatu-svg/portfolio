@@ -52,13 +52,13 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       url: `/projects/${project.slug}`,
-      title: `${project.name} | Rodex Castello`,
+      title: `${project.name} | Mugiew Castello`,
       description: project.summary,
       images: project.thumbnail ? [project.thumbnail] : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${project.name} | Rodex Castello`,
+      title: `${project.name} | Mugiew Castello`,
       description: project.summary,
       images: project.thumbnail ? [project.thumbnail] : undefined,
     },
@@ -93,7 +93,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   const pageJson = toStructuredDataJson(
     getWebPageStructuredData({
       path: `/projects/${project.slug}`,
-      title: `${project.name} | Rodex Castello`,
+      title: `${project.name} | Mugiew Castello`,
       description: project.summary,
     }),
   );

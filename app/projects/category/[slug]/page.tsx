@@ -65,11 +65,11 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       url: `/projects/category/${categoryPage.taxonomy.slug}`,
-      title: `${categoryPage.taxonomy.label} | Projects Rodex Castello`,
+      title: `${categoryPage.taxonomy.label} | Projects Mugiew Castello`,
       description: categoryPage.description,
     },
     twitter: {
-      title: `${categoryPage.taxonomy.label} | Projects Rodex Castello`,
+      title: `${categoryPage.taxonomy.label} | Projects Mugiew Castello`,
       description: categoryPage.description,
     },
   };
@@ -105,7 +105,7 @@ export default async function ProjectCategoryPage({
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: `/projects/category/${categoryPage.taxonomy.slug}`,
-      title: `Kategori ${categoryPage.taxonomy.label} | Projects Rodex Castello`,
+      title: `Kategori ${categoryPage.taxonomy.label} | Projects Mugiew Castello`,
       description: categoryPage.description,
     }),
   );

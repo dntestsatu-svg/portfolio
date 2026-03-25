@@ -13,21 +13,21 @@ import {
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Archive artikel teknis Rodex Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
+    "Archive artikel teknis Mugiew Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
   alternates: {
     canonical: "/blog",
   },
   openGraph: {
     type: "website",
     url: "/blog",
-    title: "Blog | Rodex Castello",
+    title: "Blog | Mugiew Castello",
     description:
-      "Archive artikel teknis Rodex Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
+      "Archive artikel teknis Mugiew Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
   },
   twitter: {
-    title: "Blog | Rodex Castello",
+    title: "Blog | Mugiew Castello",
     description:
-      "Archive artikel teknis Rodex Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
+      "Archive artikel teknis Mugiew Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
   },
 };
 
@@ -86,7 +86,7 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: "/blog",
-      title: "Blog | Rodex Castello",
+      title: "Blog | Mugiew Castello",
       description:
         "Archive artikel teknis yang memudahkan pengunjung menemukan tutorial, catatan implementasi, dan eksplorasi engineering dari berbagai kategori.",
     }),

@@ -10,7 +10,7 @@ const pageDescription =
 const structuredDataJson = toStructuredDataJson(
   getWebPageStructuredData({
     path: "/beri-dukungan",
-    title: `${pageTitle} | Rodex Castello`,
+    title: `${pageTitle} | Mugiew Castello`,
     description: pageDescription,
   }),
 );
@@ -24,13 +24,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/beri-dukungan",
-    title: `${pageTitle} | Rodex Castello`,
+    title: `${pageTitle} | Mugiew Castello`,
     description: pageDescription,
     images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${pageTitle} | Rodex Castello`,
+    title: `${pageTitle} | Mugiew Castello`,
     description: pageDescription,
     images: ["/opengraph-image"],
   },

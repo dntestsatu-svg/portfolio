@@ -26,7 +26,7 @@ export async function generateMetadata({
   return {
     title: query ? `Cari project: ${query}` : "Cari project",
     description: query
-      ? `Hasil pencarian project untuk kata kunci "${query}" di archive projects Rodex Castello.`
+      ? `Hasil pencarian project untuk kata kunci "${query}" di archive projects Mugiew Castello.`
       : "Cari project berdasarkan nama, deskripsi, stack, atau kategori.",
     alternates: {
       canonical: query

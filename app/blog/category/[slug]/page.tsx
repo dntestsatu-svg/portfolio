@@ -59,11 +59,11 @@ export async function generateMetadata({ params }: BlogCategoryPageProps): Promi
     openGraph: {
       type: "website",
       url: `/blog/category/${categoryPage.taxonomy.slug}`,
-      title: `${categoryPage.taxonomy.label} | Blog Rodex Castello`,
+      title: `${categoryPage.taxonomy.label} | Blog Mugiew Castello`,
       description: categoryPage.description,
     },
     twitter: {
-      title: `${categoryPage.taxonomy.label} | Blog Rodex Castello`,
+      title: `${categoryPage.taxonomy.label} | Blog Mugiew Castello`,
       description: categoryPage.description,
     },
   };
@@ -100,7 +100,7 @@ export default async function BlogCategoryPage({
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: `/blog/category/${categoryPage.taxonomy.slug}`,
-      title: `Kategori ${categoryPage.taxonomy.label} | Blog Rodex Castello`,
+      title: `Kategori ${categoryPage.taxonomy.label} | Blog Mugiew Castello`,
       description: categoryPage.description,
     }),
   );

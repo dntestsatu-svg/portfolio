@@ -338,7 +338,7 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                           name="supporterName"
                           autoComplete="name"
                           className="field-input"
-                          placeholder="Mis. Rodex Supporter"
+                          placeholder="Mis. Mugiew Supporter"
                           value={supporterName}
                           onChange={(event) => setSupporterName(event.target.value)}
                         />

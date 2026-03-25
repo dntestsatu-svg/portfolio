@@ -208,6 +208,47 @@ textarea {
   color: white;
 }
 
+.site-brand-link {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  color: white;
+}
+
+.site-wordmark {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.site-wordmark-line {
+  display: inline-block;
+  width: 1.05rem;
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(201, 165, 106, 0.88), rgba(201, 165, 106, 0.16));
+}
+
+.site-wordmark-text {
+  color: #f8fbff;
+  font-size: 1.06rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.08em;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.site-wordmark-dot {
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(201, 165, 106, 0.98), rgba(173, 137, 77, 0.96));
+  box-shadow: 0 0 0 0.18rem rgba(201, 165, 106, 0.12);
+}
+
 .button-primary:hover,
 .button-secondary:hover {
   transform: translateY(-1px);
@@ -2826,6 +2867,25 @@ body:has([data-admin-shell="true"]) > footer {
   .site-mobile-menu-title {
     font-size: 1.45rem;
     line-height: 1.1;
+  }
+
+  .site-wordmark {
+    gap: 0.38rem;
+    min-height: 1.55rem;
+  }
+
+  .site-wordmark-line {
+    width: 0.82rem;
+  }
+
+  .site-wordmark-text {
+    font-size: 0.96rem;
+    letter-spacing: -0.07em;
+  }
+
+  .site-wordmark-dot {
+    width: 0.34rem;
+    height: 0.34rem;
   }
 
   .markdown-prose p,

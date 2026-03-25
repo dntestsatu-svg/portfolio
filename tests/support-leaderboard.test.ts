@@ -7,8 +7,8 @@ import {
 
 describe("support leaderboard helpers", () => {
   test("hashes supporter identity deterministically", () => {
-    expect(hashSupporterIdentity("  Rodex Supporter  ")).toBe(
-      hashSupporterIdentity("rodex   supporter"),
+    expect(hashSupporterIdentity("  Mugiew Supporter  ")).toBe(
+      hashSupporterIdentity("Mugiew   supporter"),
     );
     expect(hashSupporterIdentity("")).toBeNull();
   });
@@ -16,17 +16,17 @@ describe("support leaderboard helpers", () => {
   test("masks anonymous supporters at display layer", () => {
     expect(
       getPublicSupporterDisplayName({
-        supporterName: "Rodex Supporter",
+        supporterName: "Mugiew Supporter",
         isAnonymous: true,
       }),
     ).toBe("Anonim");
 
     expect(
       getPublicSupporterDisplayName({
-        supporterName: "Rodex Supporter",
+        supporterName: "Mugiew Supporter",
         isAnonymous: false,
       }),
-    ).toBe("Rodex Supporter");
+    ).toBe("Mugiew Supporter");
   });
 
   test("sorts leaderboard entries by total, then count, then latest support", () => {
