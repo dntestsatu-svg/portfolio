@@ -2301,10 +2301,6 @@ body:has([data-admin-shell="true"]) > footer {
   line-height: 1.65;
 }
 
-.site-mobile-menu {
-  position: relative;
-}
-
 .site-mobile-menu-trigger {
   display: inline-flex;
   min-height: 2.9rem;
@@ -2317,30 +2313,69 @@ body:has([data-admin-shell="true"]) > footer {
   padding: 0.72rem 1rem;
   font-size: 0.88rem;
   font-weight: 600;
-  list-style: none;
+  cursor: pointer;
 }
 
-.site-mobile-menu-trigger::-webkit-details-marker {
-  display: none;
+.site-mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  justify-content: flex-end;
+  isolation: isolate;
 }
 
-.site-mobile-menu[open] .site-mobile-menu-trigger {
-  border-color: rgba(201, 165, 106, 0.28);
-  background: rgba(201, 165, 106, 0.1);
-}
-
-.site-mobile-menu-panel {
+.site-mobile-menu-backdrop {
   position: absolute;
-  right: 0;
-  top: calc(100% + 0.75rem);
-  z-index: 30;
-  width: min(22rem, calc(100vw - 1rem));
-  border-radius: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(12, 17, 24, 0.98), rgba(8, 11, 16, 0.98));
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-  padding: 0.85rem;
-  backdrop-filter: blur(18px);
+  inset: 0;
+  border: 0;
+  background: rgba(4, 6, 10, 0.84);
+  backdrop-filter: blur(14px);
+}
+
+.site-mobile-menu-sheet {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  width: min(24rem, calc(100vw - 0.75rem));
+  flex-direction: column;
+  gap: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(12, 17, 24, 0.99), rgba(7, 10, 15, 0.99));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.site-mobile-menu-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-mobile-menu-title {
+  margin: 0;
+  max-width: 14rem;
+  color: #f8fbff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.site-mobile-menu-close {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ecf3fb;
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
 }
 
 .site-mobile-menu-list {
