@@ -15,8 +15,7 @@ export function SupportLeaderboardPreview({ leaderboard }: SupportLeaderboardPre
             <div className="support-card-copy">
               <span className="eyebrow">Apresiasi publik</span>
               <h2 className="section-title max-w-3xl">
-                Supporter yang memilih tampil di publik saya tempatkan dengan hormat, bukan dengan
-                gaya yang berisik.
+                Supporter yang memilih tampil di publik saya tempatkan dengan penuh rasa hormat.
               </h2>
               <p className="copy-muted max-w-2xl text-base md:text-lg">
                 Ranking ini hanya menghitung dukungan sukses yang benar-benar diizinkan tampil.
