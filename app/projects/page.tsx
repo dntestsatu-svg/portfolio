@@ -96,6 +96,10 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         "Archive studi kasus project yang membantu pengunjung menjelajahi sistem backend, dashboard, integrasi, dan produk berbasis konten secara lebih terarah.",
     }),
   );
+  const leadFeaturedProject = !stack && page === 1 ? archive.featuredProjects[0] : null;
+  const secondaryFeaturedProjects = leadFeaturedProject
+    ? archive.featuredProjects.slice(1)
+    : archive.featuredProjects;
 
   return (
     <main id="main-content" className="section-space">
@@ -148,6 +152,70 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               )}
             </div>
 
+            <section className="surface-panel content-mobile-only rounded-4xl p-5">
+              <div className="content-section-heading">
+                <h2 className="text-xl font-semibold tracking-tight text-white">
+                  Cari jalur yang paling relevan
+                </h2>
+                <p className="copy-muted text-sm">
+                  Gunakan pencarian atau filter stack terlebih dulu. Ini lebih cepat daripada
+                  membaca semua case study satu per satu di layar kecil.
+                </p>
+              </div>
+
+              <form action="/projects/search" method="get" className="content-search-form mt-5">
+                <label className="sr-only" htmlFor="project-search-input-mobile">
+                  Cari project
+                </label>
+                <input
+                  id="project-search-input-mobile"
+                  type="search"
+                  name="q"
+                  className="field-input"
+                  placeholder="Cari API, dashboard, CMS..."
+                />
+                <button type="submit" className="button-primary">
+                  Cari project
+                </button>
+              </form>
+
+              <div className="mt-5 space-y-4">
+                <div>
+                  <p className="content-sidebar-title">Filter stack</p>
+                  <div className="content-chip-row mt-3">
+                    {archive.stacks.slice(0, 8).map((stackItem) => (
+                      <Link
+                        key={stackItem.slug}
+                        href={`/projects?stack=${stackItem.slug}`}
+                        prefetch={false}
+                        className={
+                          archive.activeStack === stackItem.slug ? "tag-chip" : "tag-chip-subtle"
+                        }
+                      >
+                        {stackItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="content-sidebar-title">Kategori cepat</p>
+                  <div className="content-chip-row mt-3">
+                    {archive.categories.slice(0, 5).map((category) => (
+                      <Link
+                        key={category.slug}
+                        href={`/projects/category/${category.slug}`}
+                        prefetch={false}
+                        className="tag-chip-subtle"
+                      >
+                        {category.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {!stack && page === 1 && archive.featuredProjects.length > 0 ? (
               <section className="space-y-5">
                 <div className="content-section-heading">
@@ -159,11 +227,54 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                     dan jalur implementasi yang paling representatif.
                   </p>
                 </div>
-                <div className="grid gap-5 xl:grid-cols-2">
-                  {archive.featuredProjects.map((project) => (
-                    <ProjectCard key={project.slug} project={project} variant="compact" />
-                  ))}
-                </div>
+
+                {leadFeaturedProject ? (
+                  <article className="content-feature-card">
+                    <div className="content-feature-copy">
+                      <span className="tag-chip">Mulai dari sini</span>
+                      <div className="content-feature-meta">
+                        <span>{leadFeaturedProject.category}</span>
+                        <span>{leadFeaturedProject.status.label}</span>
+                        <span>Update {leadFeaturedProject.updatedAtLabel}</span>
+                      </div>
+                      <h3 className="content-feature-title">{leadFeaturedProject.name}</h3>
+                      <p className="content-feature-summary">{leadFeaturedProject.summary}</p>
+                      <div className="content-chip-row">
+                        {leadFeaturedProject.technicalFocus.slice(0, 3).map((focus) => (
+                          <span key={focus} className="tag-chip-subtle">
+                            {focus}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="content-feature-actions">
+                        <Link
+                          href={leadFeaturedProject.href}
+                          prefetch={false}
+                          className="button-primary"
+                        >
+                          Buka case study utama
+                        </Link>
+                        {leadFeaturedProject.tutorialUrl ? (
+                          <Link
+                            href={leadFeaturedProject.tutorialUrl}
+                            prefetch={false}
+                            className="button-secondary"
+                          >
+                            Lanjut ke tutorial
+                          </Link>
+                        ) : null}
+                      </div>
+                    </div>
+                  </article>
+                ) : null}
+
+                {secondaryFeaturedProjects.length > 0 ? (
+                  <div className="grid gap-5 xl:grid-cols-2">
+                    {secondaryFeaturedProjects.map((project) => (
+                      <ProjectCard key={project.slug} project={project} variant="compact" />
+                    ))}
+                  </div>
+                ) : null}
               </section>
             ) : null}
 
@@ -225,7 +336,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
             )}
           </div>
 
-          <aside className="content-sidebar-column">
+          <aside className="content-sidebar-column content-desktop-only">
             <div className="content-sidebar-stack">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Cari project</h2>

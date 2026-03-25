@@ -3,12 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
-import type { SupportTransactionSnapshot } from "@/lib/support-shared";
+import type {
+  SupportLeaderboardSummary,
+  SupportTransactionSnapshot,
+} from "@/lib/support-shared";
 import { SUPPORT_EXPIRE_SECONDS, SUPPORT_MIN_AMOUNT } from "@/lib/support-shared";
 
 type GenerateSupportResponse = {
   transaction: SupportTransactionSnapshot;
   qrisImageDataUrl: string;
+};
+
+type SupportFlowProps = {
+  leaderboardSummary?: SupportLeaderboardSummary;
 };
 
 function formatCurrency(amount: number) {
@@ -86,7 +93,7 @@ function getVisibilityDescription(options: {
   return `Nama ${options.supporterName || "Anda"} akan tampil di ranking publik setelah pembayaran sukses.`;
 }
 
-export function SupportFlow() {
+export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
   const [amountDigits, setAmountDigits] = useState(String(SUPPORT_MIN_AMOUNT));
   const [supporterName, setSupporterName] = useState("");
   const [message, setMessage] = useState("");
@@ -110,6 +117,7 @@ export function SupportFlow() {
     isAnonymous,
     supporterName: supporterName.trim(),
   });
+  const hasPublicSupporters = Boolean(leaderboardSummary && leaderboardSummary.totalSupporters > 0);
 
   const phase = isSubmitting
     ? "loading"
@@ -248,6 +256,31 @@ export function SupportFlow() {
               Jika tulisan, studi kasus, atau sistem yang saya bangun terasa membantu, Anda bisa
               memberi dukungan via QRIS. Nama Anda hanya tampil di leaderboard jika Anda memilihnya.
             </p>
+
+            {leaderboardSummary ? (
+              <div className="support-proof-grid">
+                <article className="support-proof-card">
+                  <span>Supporter publik</span>
+                  <strong>{leaderboardSummary.totalSupportersLabel}</strong>
+                </article>
+                <article className="support-proof-card">
+                  <span>Total dukungan sukses</span>
+                  <strong>{leaderboardSummary.totalAmountLabel}</strong>
+                </article>
+                <article className="support-proof-card">
+                  <span>Dukungan terakhir</span>
+                  <strong>{leaderboardSummary.latestSupportLabel ?? "Belum ada"}</strong>
+                </article>
+              </div>
+            ) : null}
+
+            <div className="support-soft-prompt">
+              <p>
+                {hasPublicSupporters
+                  ? "Supporter yang memilih tampil akan masuk ke leaderboard publik secara elegan setelah pembayaran sukses."
+                  : "Belum banyak supporter yang memilih tampil publik. Jika karya ini terasa membantu, Anda bisa menjadi salah satu pendukung awal tanpa harus kehilangan opsi anonim atau tetap privat."}
+              </p>
+            </div>
           </div>
 
           <div className="support-center-shell">

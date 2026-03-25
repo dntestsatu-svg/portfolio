@@ -111,6 +111,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     project.decisionNotes && project.decisionNotes.length > 0
       ? project.decisionNotes
       : project.features.slice(0, 3);
+  const impactHighlights = project.impactHighlights ?? [];
 
   return (
     <main id="main-content" className="section-space">
@@ -189,6 +190,66 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               </div>
             </section>
 
+            <section className="surface-panel content-mobile-only rounded-4xl p-5">
+              <div className="content-section-heading">
+                <h2 className="text-xl font-semibold tracking-tight text-white">
+                  Quick facts & links
+                </h2>
+                <p className="copy-muted text-sm">
+                  Ringkasan ringkas untuk membantu pembaca mobile memahami konteks utama tanpa
+                  turun ke bagian sidebar desktop.
+                </p>
+              </div>
+
+              <dl className="content-definition-list">
+                <div>
+                  <dt>Status</dt>
+                  <dd>{project.status.label}</dd>
+                </div>
+                {project.roleLabel ? (
+                  <div>
+                    <dt>Peran</dt>
+                    <dd>{project.roleLabel}</dd>
+                  </div>
+                ) : null}
+                <div>
+                  <dt>Update terakhir</dt>
+                  <dd>{project.updatedAtLabel}</dd>
+                </div>
+                <div>
+                  <dt>Fokus</dt>
+                  <dd>{project.technicalFocus[0] ?? "Case study"}</dd>
+                </div>
+              </dl>
+
+              {(project.demoUrl || project.repoUrl || project.tutorialUrl) ? (
+                <div className="content-compact-list mt-5">
+                  {project.demoUrl ? (
+                    <Link href={project.demoUrl} className="content-compact-link">
+                      <span className="content-compact-title">Live demo</span>
+                      <span className="content-compact-meta">Versi publik project</span>
+                    </Link>
+                  ) : null}
+                  {project.repoUrl ? (
+                    <Link href={project.repoUrl} className="content-compact-link">
+                      <span className="content-compact-title">Repository</span>
+                      <span className="content-compact-meta">
+                        Kode sumber atau referensi implementasi
+                      </span>
+                    </Link>
+                  ) : null}
+                  {project.tutorialUrl ? (
+                    <Link href={project.tutorialUrl} className="content-compact-link">
+                      <span className="content-compact-title">Tutorial terkait</span>
+                      <span className="content-compact-meta">
+                        Panduan penggunaan atau implementasi
+                      </span>
+                    </Link>
+                  ) : null}
+                </div>
+              ) : null}
+            </section>
+
             <section className="surface-panel rounded-4xl p-6 md:p-8">
               <div className="content-section-heading">
                 <h2 className="text-2xl font-semibold tracking-tight text-white">
@@ -217,6 +278,30 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 </section>
               </div>
             </section>
+
+            {impactHighlights.length > 0 ? (
+              <section className="surface-panel rounded-4xl p-6 md:p-8">
+                <div className="content-section-heading">
+                  <h2 className="text-2xl font-semibold tracking-tight text-white">
+                    Impact dan hasil yang terasa
+                  </h2>
+                  <p className="copy-muted text-sm">
+                    Bagian ini merangkum apa yang benar-benar membaik setelah struktur, workflow,
+                    atau delivery di project ini dirapikan.
+                  </p>
+                </div>
+
+                <div className="content-impact-grid mt-6">
+                  {impactHighlights.map((item) => (
+                    <article key={`${item.label}-${item.value}`} className="content-impact-card">
+                      <p className="content-impact-label">{item.label}</p>
+                      <h3 className="content-impact-value">{item.value}</h3>
+                      <p className="copy-muted text-sm">{item.detail}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
             <section className="surface-panel rounded-4xl p-6 md:p-8">
               <div className="content-section-heading">
@@ -284,6 +369,29 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               </section>
             ) : null}
 
+            {relatedArticles.length > 0 ? (
+              <section className="surface-panel content-mobile-only rounded-4xl p-5">
+                <div className="content-section-heading">
+                  <h2 className="text-xl font-semibold tracking-tight text-white">
+                    Bacaan terkait
+                  </h2>
+                  <p className="copy-muted text-sm">
+                    Jalur lanjutan untuk pembaca yang ingin masuk ke tutorial atau pembahasan yang
+                    paling dekat dengan case study ini.
+                  </p>
+                </div>
+
+                <div className="content-compact-list mt-5">
+                  {relatedArticles.map((article) => (
+                    <Link key={article.slug} href={article.href} className="content-compact-link">
+                      <span className="content-compact-title">{article.title}</span>
+                      <span className="content-compact-meta">{article.category}</span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             {relatedProjects.length > 0 ? (
               <section className="space-y-5">
                 <div className="content-section-heading">
@@ -308,7 +416,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             ) : null}
           </div>
 
-          <aside className="content-sidebar-column">
+          <aside className="content-sidebar-column content-desktop-only">
             <div className="content-sidebar-stack is-sticky">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Quick facts</h2>

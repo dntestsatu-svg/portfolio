@@ -47,7 +47,7 @@ export default async function SupportPage() {
           __html: structuredDataJson,
         }}
       />
-      <SupportFlow />
+      <SupportFlow leaderboardSummary={leaderboard.summary} />
       <SupportLeaderboardPreview leaderboard={leaderboard} />
     </main>
   );

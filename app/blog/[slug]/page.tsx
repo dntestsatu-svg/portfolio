@@ -107,6 +107,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     }),
   );
   const publicUrl = `${siteConfig.siteUrl}/blog/${article.slug}`;
+  const leadRelatedArticle = relatedArticles[0] ?? null;
 
   return (
     <main id="main-content" className="section-space">
@@ -170,6 +171,41 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 </div>
               ) : null}
             </article>
+
+            <section className="surface-panel rounded-4xl p-5 md:p-6">
+              <div className="content-section-heading">
+                <h2 className="text-xl font-semibold tracking-tight text-white">TL;DR</h2>
+                <p className="copy-muted text-sm">
+                  Ringkasan tercepat sebelum Anda masuk ke detail, contoh, dan code block.
+                </p>
+              </div>
+
+              <div className="content-tldr-grid mt-5">
+                <p className="content-tldr-summary">{article.summary}</p>
+
+                <div className="content-chip-row">
+                  <Link href={`/blog/category/${article.categorySlug}`} className="tag-chip-subtle">
+                    {article.category}
+                  </Link>
+                  <span className="tag-chip-subtle">{article.readingTime} menit baca</span>
+                  {article.updatedAtISO !== article.publishedAtISO ? (
+                    <span className="tag-chip-subtle">Update {article.updatedAtLabel}</span>
+                  ) : null}
+                </div>
+
+                {leadRelatedArticle ? (
+                  <div className="content-tldr-next">
+                    <p className="content-sidebar-title">Lanjut setelah artikel ini</p>
+                    <Link href={leadRelatedArticle.href} className="content-compact-link mt-3">
+                      <span className="content-compact-title">{leadRelatedArticle.title}</span>
+                      <span className="content-compact-meta">
+                        {leadRelatedArticle.category} · {leadRelatedArticle.readingTime} menit baca
+                      </span>
+                    </Link>
+                  </div>
+                ) : null}
+              </div>
+            </section>
 
             {article.headings.length > 0 ? (
               <section className="surface-panel content-mobile-only rounded-4xl p-5">
@@ -248,7 +284,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             </section>
           </div>
 
-          <aside className="content-sidebar-column">
+          <aside className="content-sidebar-column content-desktop-only">
             <div className="content-sidebar-stack is-sticky">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Ringkasan artikel</h2>

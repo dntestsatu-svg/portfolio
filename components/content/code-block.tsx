@@ -28,9 +28,11 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
           {copied ? "Tersalin" : "Copy"}
         </button>
       </div>
-      <pre>
-        <code>{code}</code>
-      </pre>
+      <div className="content-code-scroll" data-code-scroll>
+        <pre>
+          <code>{code}</code>
+        </pre>
+      </div>
     </div>
   );
 }

@@ -91,6 +91,7 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
         "Archive artikel teknis yang memudahkan pengunjung menemukan tutorial, catatan implementasi, dan eksplorasi engineering dari berbagai kategori.",
     }),
   );
+  const mobileFeaturedTags = archive.tags.slice(0, 8);
 
   return (
     <main id="main-content" className="section-space">
@@ -132,6 +133,62 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
                 Kembali ke beranda
               </Link>
             </div>
+
+            <section className="surface-panel content-mobile-only rounded-4xl p-5">
+              <div className="content-section-heading">
+                <h2 className="text-xl font-semibold tracking-tight text-white">Mulai dari sini</h2>
+                <p className="copy-muted text-sm">
+                  Cari topik, pilih kategori, lalu lanjut ke artikel yang paling relevan tanpa harus
+                  scroll panjang ke bagian bawah.
+                </p>
+              </div>
+
+              <form action="/blog/search" method="get" className="content-search-form mt-5">
+                <label className="sr-only" htmlFor="blog-search-input-mobile">
+                  Cari artikel
+                </label>
+                <input
+                  id="blog-search-input-mobile"
+                  type="search"
+                  name="q"
+                  className="field-input"
+                  placeholder="Cari Next.js, PHP, keamanan..."
+                />
+                <button type="submit" className="button-primary">
+                  Cari artikel
+                </button>
+              </form>
+
+              <div className="mt-5 space-y-4">
+                <div>
+                  <p className="content-sidebar-title">Kategori cepat</p>
+                  <div className="content-chip-row mt-3">
+                    {archive.categories.slice(0, 5).map((category) => (
+                      <Link
+                        key={category.slug}
+                        href={`/blog/category/${category.slug}`}
+                        className="tag-chip-subtle"
+                      >
+                        {category.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {mobileFeaturedTags.length > 0 ? (
+                  <div>
+                    <p className="content-sidebar-title">Topik populer</p>
+                    <div className="content-chip-row mt-3">
+                      {mobileFeaturedTags.map((tag) => (
+                        <Link key={tag.slug} href={`/blog/tag/${tag.slug}`} className="tag-chip-subtle">
+                          #{tag.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </section>
 
             {page === 1 && archive.featuredArticle ? (
               <article className="content-feature-card">
@@ -226,7 +283,7 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
             )}
           </div>
 
-          <aside className="content-sidebar-column">
+          <aside className="content-sidebar-column content-desktop-only">
             <div className="content-sidebar-stack">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Cari artikel</h2>

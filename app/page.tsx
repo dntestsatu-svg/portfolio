@@ -38,6 +38,8 @@ export const revalidate = 300;
 export default async function Home() {
   const [projects, articles] = await Promise.all([getPublicProjects(), getPublicArticles()]);
   const featuredProjects = projects.filter((project) => project.featured);
+  const primaryFeaturedProject = featuredProjects[0];
+  const secondaryFeaturedProjects = featuredProjects.slice(1, 4);
 
   return (
     <main id="main-content">
@@ -49,79 +51,92 @@ export default async function Home() {
       />
 
       <section className="section-space pt-16 md:pt-24">
-        <div className="site-shell grid items-start gap-8 lg:grid-cols-[minmax(0,1.18fr)_400px] lg:gap-10">
-          <div className="hero-reveal space-y-7">
-            <span className="eyebrow">Portfolio developer · production-minded</span>
+        <div className="site-shell home-hero-grid grid items-start gap-8 lg:grid-cols-[minmax(0,1.18fr)_400px] lg:gap-10">
+          <div className="hero-reveal home-hero-copy space-y-7">
+            <span className="eyebrow">Rodex Castello · Backend-focused fullstack developer</span>
             <div className="space-y-5">
-              <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-white md:text-7xl">
-                Rodex Castello
+              <h1 className="home-hero-title max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-white md:text-7xl">
+                Saya membangun backend, content system, dan internal tools yang siap dipakai di
+                dunia nyata.
               </h1>
-              <p className="max-w-3xl text-xl leading-9 text-slate-200 md:text-2xl">
-                Backend-focused fullstack developer yang membangun aplikasi web
-                cepat, terstruktur, dan relevan untuk kebutuhan bisnis nyata.
+              <p className="home-hero-lead max-w-3xl text-xl leading-9 text-slate-200 md:text-2xl">
+                Fokus saya adalah membuat produk terasa jelas sejak layar pertama: alur backend
+                rapi, struktur data sehat, dan discovery publik yang tidak mentok di satu halaman.
               </p>
               <p className="copy-muted max-w-3xl text-base md:text-lg">
-                Saya fokus pada backend engineering, arsitektur aplikasi,
-                struktur data, integrasi API, dan praktik implementasi yang
-                menjaga kualitas produk tetap stabil. Frontend saya gunakan
-                sebagai pelengkap agar delivery tetap utuh dari ujung ke ujung.
+                Saya bekerja di titik temu antara engineering dan product clarity: merancang
+                aplikasi operasional, case study system, dan blog teknis yang tetap nyaman dipakai
+                sekaligus mudah dipercaya.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="home-hero-actions flex flex-wrap gap-3">
               <Link href="/projects" className="button-primary">
-                Lihat Project
-              </Link>
-              <Link href="/#contact" className="button-secondary">
-                Hubungi Saya
+                Jelajahi case study
               </Link>
               <Link href="/blog" className="button-secondary">
-                Baca Blog
+                Baca artikel teknis
+              </Link>
+              <Link href="/#contact" className="button-secondary">
+                Diskusikan kebutuhan
               </Link>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              {heroHighlights.map((item) => (
-                <span key={item} className="tag-chip-subtle">
-                  {item}
-                </span>
+            <div className="home-hero-stat-grid grid gap-3 sm:grid-cols-3">
+              {heroStats.map((item) => (
+                <article key={item.title} className="home-hero-stat-card">
+                  <p className="home-hero-stat-label">{item.title}</p>
+                  <p className="home-hero-stat-value">{item.value}</p>
+                  <p className="copy-muted text-sm">{item.description}</p>
+                </article>
               ))}
             </div>
           </div>
 
-          <aside className="surface-panel hero-reveal rounded-4xl p-6" data-delay="2">
+          <aside className="surface-panel hero-reveal home-hero-aside rounded-4xl p-6" data-delay="2">
             <div className="space-y-3">
               <p className="text-sm font-semibold tracking-[0.24em] text-(--color-accent) uppercase">
-                Ringkasan profesional
+                Mulai dari jalur ini
               </p>
               <p className="copy-muted text-sm">
-                Positioning saya jelas: backend engineering sebagai kekuatan
-                utama, dengan kemampuan frontend yang cukup matang untuk
-                membangun produk fullstack end-to-end.
+                Jika Anda ingin menilai cara saya bekerja dengan cepat, mulai dari tiga entry point
+                yang paling representatif ini.
               </p>
             </div>
 
             <div className="mt-6 grid gap-4">
-              {heroStats.map((item) => (
-                <article key={item.title} className="rounded-2xl border border-white/8 bg-white/4 p-4">
-                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                    {item.title}
-                  </p>
-                  <p className="mt-2 text-lg font-semibold text-white">{item.value}</p>
-                  <p className="copy-muted mt-2 text-sm">{item.description}</p>
-                </article>
-              ))}
+              <Link href="/projects/portfolio-content-platform" className="content-compact-link">
+                <span className="content-compact-title">Case study paling representatif</span>
+                <span className="content-compact-meta">
+                  Lihat bagaimana portfolio ini berkembang menjadi content system production-minded.
+                </span>
+              </Link>
+              <Link
+                href="/blog/membangun-portfolio-content-system-dengan-nextjs-app-router"
+                className="content-compact-link"
+              >
+                <span className="content-compact-title">Masuk lewat artikel teknis</span>
+                <span className="content-compact-meta">
+                  Baca cara saya menjelaskan arsitektur, discovery, dan keputusan implementasi.
+                </span>
+              </Link>
+              <Link href="/beri-dukungan" className="content-compact-link">
+                <span className="content-compact-title">Beri dukungan bila karya ini membantu</span>
+                <span className="content-compact-meta">
+                  Flow QRIS-nya ringkas, profesional, dan tetap menjaga privasi supporter.
+                </span>
+              </Link>
             </div>
 
             <div className="mt-8 rounded-2xl border border-(--color-accent)/24 bg-(--color-accent)/8 p-4">
               <p className="font-mono text-xs uppercase tracking-[0.24em] text-(--color-accent)">
-                Core metrics
+                Signal yang bisa dipindai cepat
               </p>
-              <div className="mt-4 grid gap-3">
-                {skillMetrics.map((skill) => (
-                  <div key={skill.name} className="flex items-center justify-between gap-4 text-sm">
-                    <span className="text-slate-200">{skill.name}</span>
-                    <span className="font-mono text-(--color-accent)">{skill.level}%</span>
+              <div className="mt-4 grid gap-2.5">
+                {heroHighlights.map((item) => (
+                  <div key={item} className="flex items-start gap-3 text-sm text-slate-200">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-(--color-accent)" />
+                    <span>{item}</span>
                   </div>
                 ))}
               </div>
@@ -250,8 +265,8 @@ export default async function Home() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
               eyebrow="Featured projects"
-              title="Highlight project yang paling tepat untuk mewakili cara saya bekerja"
-              description="Saya sengaja menyiapkan struktur studi kasus yang mudah dipindai recruiter, client, dan pengunjung umum. Setiap kartu dirancang untuk menampilkan konteks, stack, dan fokus implementasi secara singkat."
+              title="Mulai dari studi kasus yang paling cepat menjelaskan cara saya berpikir"
+              description="Bagian ini saya susun untuk menjawab pertanyaan paling penting lebih cepat: problem apa yang saya pilih, bagaimana solusi dibentuk, dan kenapa implementasinya layak dibuka lebih lanjut."
             />
             <Link href="/projects" className="button-secondary">
               Lihat semua project
@@ -260,11 +275,46 @@ export default async function Home() {
 
           <p className="copy-muted max-w-4xl text-sm">{seedContentNote}</p>
 
-          <div className="grid gap-5 xl:grid-cols-3">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.slug} project={project} />
-            ))}
-          </div>
+          {primaryFeaturedProject ? (
+            <article className="content-feature-card">
+              <div className="content-feature-copy">
+                <span className="tag-chip">Start here</span>
+                <div className="content-feature-meta">
+                  <span>{primaryFeaturedProject.category}</span>
+                  <span>{primaryFeaturedProject.techStack.slice(0, 2).join(" · ")}</span>
+                </div>
+                <h2 className="content-feature-title">{primaryFeaturedProject.name}</h2>
+                <p className="content-feature-summary">{primaryFeaturedProject.summary}</p>
+                <div className="content-chip-row">
+                  {(primaryFeaturedProject.focusAreas ?? primaryFeaturedProject.features.slice(0, 3)).map(
+                    (focus) => (
+                      <span key={focus} className="tag-chip-subtle">
+                        {focus}
+                      </span>
+                    ),
+                  )}
+                </div>
+                <div className="content-feature-actions">
+                  <Link href={`/projects/${primaryFeaturedProject.slug}`} className="button-primary">
+                    Buka case study utama
+                  </Link>
+                  {primaryFeaturedProject.tutorialUrl ? (
+                    <Link href={primaryFeaturedProject.tutorialUrl} className="button-secondary">
+                      Lanjut ke tutorial
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
+            </article>
+          ) : null}
+
+          {secondaryFeaturedProjects.length > 0 ? (
+            <div className="grid gap-5 xl:grid-cols-3">
+              {secondaryFeaturedProjects.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -484,4 +534,3 @@ export default async function Home() {
     </main>
   );
 }
-

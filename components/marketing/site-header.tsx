@@ -56,7 +56,7 @@ export function SiteHeader() {
               <div className="site-mobile-menu-header">
                 <div className="space-y-2">
                   <span className="eyebrow">Navigasi</span>
-                  <h2 className="site-mobile-menu-title">Beri arah yang jelas sebelum lanjut membaca</h2>
+                  <h2 className="site-mobile-menu-title">Pilih jalur berikutnya tanpa kehilangan konteks</h2>
                 </div>
                 <button
                   ref={closeButtonRef}
@@ -106,7 +106,7 @@ export function SiteHeader() {
             className="flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-white uppercase"
             aria-label="Kembali ke beranda"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/6 text-xs text-(--color-accent)">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 bg-white/6 text-xs text-(--color-accent) sm:h-10 sm:w-10">
               RC
             </span>
             <span className="hidden sm:inline">{siteConfig.shortName}</span>
@@ -139,12 +139,16 @@ export function SiteHeader() {
               Menu
             </button>
 
-            <Link href="/blog" className="button-secondary hidden sm:inline-flex">
-              Baca Blog
-            </Link>
-            <Link href="/projects" className="button-primary">
-              Lihat Project
-            </Link>
+            <div className="hidden md:block">
+              <Link href="/blog" className="button-secondary">
+                Baca Blog
+              </Link>
+            </div>
+            <div className="hidden md:block">
+              <Link href="/projects" className="button-primary">
+                Lihat Project
+              </Link>
+            </div>
           </div>
         </div>
       </header>

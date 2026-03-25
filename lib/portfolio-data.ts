@@ -20,6 +20,12 @@ export type ValuePoint = {
   description: string;
 };
 
+export type ProjectImpactHighlight = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
 export type ProjectItem = {
   id?: string;
   slug: string;
@@ -32,6 +38,7 @@ export type ProjectItem = {
   roleLabel?: string;
   roleSummary?: string;
   focusAreas?: string[];
+  impactHighlights?: ProjectImpactHighlight[];
   architectureHighlights?: string[];
   decisionNotes?: string[];
   lessonsLearned?: string;
@@ -295,6 +302,26 @@ export const projects: ProjectItem[] = [
       "Admin workspace yang efisien untuk authoring dan audit",
       "SEO, security, dan operasional production dalam satu codebase",
     ],
+    impactHighlights: [
+      {
+        label: "Discovery",
+        value: "Archive ke detail tidak lagi buntu",
+        detail:
+          "Blog dan projects sekarang punya taxonomy, search, related content, dan prev/next navigation yang membuat pengunjung terus menemukan konteks berikutnya.",
+      },
+      {
+        label: "Workflow",
+        value: "Satu admin workspace untuk authoring dan audit",
+        detail:
+          "Konten bisa ditulis, dipreview, dipublish, dan diaudit tanpa berpindah ke banyak panel terpisah yang membingungkan.",
+      },
+      {
+        label: "Operasional",
+        value: "SEO dan security menjadi bagian fondasi",
+        detail:
+          "Canonical, sitemap, JSON-LD, CSRF, rate limiting, audit log, dan revalidation dibangun sebagai bagian inti sistem, bukan tempelan belakangan.",
+      },
+    ],
     architectureHighlights: [
       "Public site dan admin dipisah dengan shell yang berbeda, tetapi berbagi service layer untuk content, rendering, SEO, dan cache invalidation.",
       "Blog dan project discovery dibangun dengan service modular untuk archive, taxonomy, search, related content, dan pagination agar query tetap rapi dan siap ditingkatkan.",
@@ -346,6 +373,26 @@ export const projects: ProjectItem[] = [
       "Workflow approval dan audit perubahan angka",
       "Ekspor laporan tanpa query berat berulang",
     ],
+    impactHighlights: [
+      {
+        label: "Keputusan harian",
+        value: "Supervisor bisa membaca prioritas lebih cepat",
+        detail:
+          "Snapshot KPI dan queue exception diletakkan dalam satu workspace agar tim tidak perlu membuka spreadsheet, chat, dan dashboard terpisah hanya untuk mulai bekerja.",
+      },
+      {
+        label: "Konsistensi data",
+        value: "Angka dashboard dan export tetap sejalan",
+        detail:
+          "Laporan dibangun dari kontrak data yang sama, sehingga user tidak melihat angka berbeda antara layar monitoring dan file yang mereka kirim ke stakeholder.",
+      },
+      {
+        label: "Kontrol operasional",
+        value: "Approval trail menjadi lebih jelas",
+        detail:
+          "Perubahan status atau override angka bisa ditelusuri tanpa menebak-nebak siapa yang mengubah apa dan kapan itu terjadi.",
+      },
+    ],
     architectureHighlights: [
       "Modul transaksi, approval, dan reporting snapshot dipisah agar dashboard tidak membaca tabel operasional mentah setiap render.",
       "Redis dipakai untuk cache KPI dan ringkasan antrean yang sering dibuka supervisor pada jam operasional sibuk.",
@@ -395,6 +442,26 @@ export const projects: ProjectItem[] = [
       "State transition yang eksplisit",
       "Audit trail untuk setiap perubahan layanan",
       "Query list dan detail yang stabil untuk tim operasional",
+    ],
+    impactHighlights: [
+      {
+        label: "Lifecycle layanan",
+        value: "Status lebih mudah dipahami dan diaudit",
+        detail:
+          "Setiap tiket punya jalur perubahan yang eksplisit, sehingga backlog dan SLA tidak tenggelam di status yang terlalu generik.",
+      },
+      {
+        label: "Visibilitas tim",
+        value: "Bottleneck lebih cepat terlihat",
+        detail:
+          "Audit trail dan event terstruktur membantu tim membaca titik macet, tiket yang sering dibuka ulang, dan eskalasi yang berulang.",
+      },
+      {
+        label: "Maintainability",
+        value: "Business rule tidak bocor ke controller",
+        detail:
+          "Aturan transisi ditempatkan di service layer agar perubahan lifecycle tetap bisa diuji dan dikembangkan tanpa merusak delivery layer.",
+      },
     ],
     architectureHighlights: [
       "Lifecycle request dipisah menjadi modul intake, assignment, execution, dan closure agar setiap transisi punya aturan yang jelas.",
@@ -446,6 +513,26 @@ export const projects: ProjectItem[] = [
       "Search discovery untuk artikel teknis",
       "Rendering markdown yang konsisten antara preview dan publik",
     ],
+    impactHighlights: [
+      {
+        label: "Support load",
+        value: "Jawaban berulang bisa dialihkan ke sistem konten",
+        detail:
+          "Pengguna tidak harus selalu kembali ke chat atau support karena artikel, taxonomy, dan related content membantu mereka menemukan jawaban lanjutan sendiri.",
+      },
+      {
+        label: "Findability",
+        value: "Pencarian dan internal linking bekerja bersama",
+        detail:
+          "Archive, tag, category, search, dan related posts memberi lebih dari satu jalur masuk ke topik yang sama.",
+      },
+      {
+        label: "Authoring",
+        value: "Preview dan public rendering tetap konsisten",
+        detail:
+          "Editor markdown, preview admin, dan halaman publik memakai pipeline yang sama sehingga author tidak menebak-nebak hasil akhir setelah publish.",
+      },
+    ],
     architectureHighlights: [
       "Setiap artikel memiliki slug, metadata, dan internal linking agar jalur archive → detail → related content selalu hidup.",
       "Taxonomy diperlakukan sebagai route publik yang nyata, bukan sekadar label visual di card artikel.",
@@ -495,6 +582,26 @@ export const projects: ProjectItem[] = [
       "Pipeline agregasi dan validasi data",
       "Ekspor spreadsheet yang konsisten",
       "Ringkasan KPI yang mudah diverifikasi tim non-teknis",
+    ],
+    impactHighlights: [
+      {
+        label: "Kepercayaan data",
+        value: "Tim melihat angka yang sama di dashboard dan export",
+        detail:
+          "Dataset agregasi dipakai ulang lintas tampilan sehingga stakeholder tidak menerima dua versi metrik untuk periode yang sama.",
+      },
+      {
+        label: "Waktu analisis",
+        value: "Validasi dilakukan sebelum laporan dibagikan",
+        detail:
+          "Workflow verifikasi membuat anomali lebih mudah ditemukan sebelum angka dipakai untuk keputusan mingguan atau bulanan.",
+      },
+      {
+        label: "Kualitas pelaporan",
+        value: "Metrik lebih stabil dan mudah dijelaskan",
+        detail:
+          "Definisi rumus dibuat eksplisit agar perubahan business rule tidak diam-diam mengubah interpretasi laporan historis.",
+      },
     ],
     architectureHighlights: [
       "Layer agregasi dipisahkan dari tabel sumber agar rumus reporting tidak tersebar di banyak endpoint.",
