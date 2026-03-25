@@ -2548,6 +2548,10 @@ body:has([data-admin-shell="true"]) > footer {
   gap: 0.35rem;
 }
 
+.support-summary-item-reference {
+  grid-column: 1 / -1;
+}
+
 .support-summary-grid dt {
   font-size: 0.75rem;
   font-weight: 700;
@@ -2561,6 +2565,27 @@ body:has([data-admin-shell="true"]) > footer {
   color: #f8fafc;
   font-size: 0.98rem;
   line-height: 1.7;
+}
+
+.support-summary-reference {
+  display: block;
+  max-width: 100%;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.7rem 0.8rem;
+  font-family:
+    "Geist Mono",
+    "JetBrains Mono",
+    "SFMono-Regular",
+    ui-monospace,
+    monospace;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  letter-spacing: 0.04em;
+  color: #dbe7f5;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .support-summary-note {

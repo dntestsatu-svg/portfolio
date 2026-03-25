@@ -491,9 +491,14 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                           <dt>Kedaluwarsa</dt>
                           <dd>{countdownLabel}</dd>
                         </div>
-                        <div>
+                        <div className="support-summary-item-reference">
                           <dt>Referensi</dt>
-                          <dd>{displayTransaction.customRef}</dd>
+                          <dd
+                            className="support-summary-reference"
+                            title={displayTransaction.customRef}
+                          >
+                            {displayTransaction.customRef}
+                          </dd>
                         </div>
                         <div>
                           <dt>Status</dt>
@@ -542,9 +547,14 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                         <dt>Nominal</dt>
                         <dd>{displayTransaction.amountLabel}</dd>
                       </div>
-                      <div>
+                      <div className="support-summary-item-reference">
                         <dt>Referensi</dt>
-                        <dd>{displayTransaction.customRef}</dd>
+                        <dd
+                          className="support-summary-reference"
+                          title={displayTransaction.customRef}
+                        >
+                          {displayTransaction.customRef}
+                        </dd>
                       </div>
                       <div>
                         <dt>Status</dt>
@@ -606,9 +616,14 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                         <dt>Nominal</dt>
                         <dd>{displayTransaction.amountLabel}</dd>
                       </div>
-                      <div>
+                      <div className="support-summary-item-reference">
                         <dt>Referensi</dt>
-                        <dd>{displayTransaction.customRef}</dd>
+                        <dd
+                          className="support-summary-reference"
+                          title={displayTransaction.customRef}
+                        >
+                          {displayTransaction.customRef}
+                        </dd>
                       </div>
                       <div>
                         <dt>Status</dt>
