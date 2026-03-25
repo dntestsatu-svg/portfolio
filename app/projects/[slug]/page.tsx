@@ -174,6 +174,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 </div>
               </div>
 
+              <div className="content-mobile-only mt-6">
+                <SupportContextCta context="project" layout="inline" />
+              </div>
+
               <div className="content-hero-image mt-8">
                 <Image
                   src={project.thumbnail}
@@ -279,10 +283,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 <MarkdownContent content={project.tutorial} className="markdown-prose" />
               </section>
             ) : null}
-
-            <div className="content-mobile-only">
-              <SupportContextCta context="project" layout="inline" />
-            </div>
 
             {relatedProjects.length > 0 ? (
               <section className="space-y-5">
