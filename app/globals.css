@@ -2074,12 +2074,14 @@ body:has([data-admin-shell="true"]) > footer {
   padding-left: 0;
 }
 
-.markdown-prose ul > li {
+.markdown-prose ul > li,
+.markdown-prose ol > li {
   position: relative;
   padding-left: 1.45rem;
 }
 
-.markdown-prose ul > li::before {
+.markdown-prose ul > li::before,
+.markdown-prose ol > li::before {
   content: "";
   position: absolute;
   left: 0;
