@@ -13,7 +13,7 @@ type ArticleCardProps = {
 
 export function ArticleCard({ article, showAction = true }: ArticleCardProps) {
   return (
-    <article className="content-card content-card--article">
+    <article className="content-card content-card--article group">
       <div className="content-card-meta">
         <Link
           href={

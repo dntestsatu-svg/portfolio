@@ -24,7 +24,13 @@ export function CodeBlock({ code, language }: CodeBlockProps) {
     <div className="content-code-block">
       <div className="content-code-header">
         <span className="content-code-language">{language || "code"}</span>
-        <button type="button" className="content-copy-button" onClick={handleCopy}>
+        <button
+          type="button"
+          className="content-copy-button"
+          data-copied={copied}
+          aria-live="polite"
+          onClick={handleCopy}
+        >
           {copied ? "Tersalin" : "Copy"}
         </button>
       </div>

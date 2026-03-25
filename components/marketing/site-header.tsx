@@ -121,8 +121,8 @@ export function SiteHeader() {
                 href={item.href}
                 className={
                   item.href === "/beri-dukungan"
-                    ? "text-sm text-slate-100 transition hover:text-white"
-                    : "text-sm text-slate-300 transition hover:text-white"
+                    ? "site-nav-link is-support"
+                    : "site-nav-link"
                 }
               >
                 {item.label}

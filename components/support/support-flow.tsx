@@ -298,7 +298,7 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                     </p>
                   </div>
 
-                  <form className="support-form" onSubmit={handleSubmit}>
+                  <form className="support-form" aria-busy={isSubmitting} onSubmit={handleSubmit}>
                     <div className="support-form-grid">
                       <div className="grid gap-2">
                         <label
@@ -337,6 +337,7 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                           id="support-name"
                           name="supporterName"
                           autoComplete="name"
+                          maxLength={60}
                           className="field-input"
                           placeholder="Mis. Mugiew Supporter"
                           value={supporterName}
@@ -407,7 +408,7 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
                     </div>
 
                     {errorMessage ? (
-                      <div className="support-state-card tone-danger">
+                      <div className="support-state-card tone-danger" role="alert">
                         <p className="support-state-title">Gateway sedang terganggu</p>
                         <p>{errorMessage}</p>
                       </div>
@@ -430,7 +431,7 @@ export function SupportFlow({ leaderboardSummary }: SupportFlowProps) {
 
               {phase === "loading" ? (
                 <div className="support-card-stack">
-                  <div className="support-loading-block">
+                  <div className="support-loading-block" role="status" aria-live="polite">
                     <div className="support-loading-orb" aria-hidden="true" />
                     <div className="space-y-3 text-center">
                       <p className="support-panel-label">Menyiapkan QRIS</p>

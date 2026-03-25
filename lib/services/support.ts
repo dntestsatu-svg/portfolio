@@ -326,33 +326,42 @@ async function fetchSupportLeaderboard(page: number, pageSize: number): Promise<
 
   const baseWhere = getLeaderboardBaseWhere();
   const offset = (safePage - 1) * safePageSize;
-  const [countRows, summaryRows, aggregateRows] = await Promise.all([
-    db.$queryRaw<LeaderboardCountRow[]>(Prisma.sql`
-      SELECT COUNT(DISTINCT supporter_identity_hash) AS totalEntries
-      FROM support_transactions
-      WHERE ${baseWhere}
-    `),
-    db.$queryRaw<LeaderboardSummaryRow[]>(Prisma.sql`
-      SELECT
-        COALESCE(SUM(amount), 0) AS totalAmount,
-        COUNT(DISTINCT supporter_identity_hash) AS totalSupporters,
-        MAX(COALESCE(finished_at, updated_at, created_at)) AS latestSupportAt
-      FROM support_transactions
-      WHERE ${baseWhere}
-    `),
-    db.$queryRaw<LeaderboardAggregateRow[]>(Prisma.sql`
-      SELECT
-        supporter_identity_hash AS supporterIdentityHash,
-        SUM(amount) AS totalAmount,
-        COUNT(*) AS supportCount,
-        MAX(COALESCE(finished_at, updated_at, created_at)) AS lastSupportAt
-      FROM support_transactions
-      WHERE ${baseWhere}
-      GROUP BY supporter_identity_hash
-      ORDER BY totalAmount DESC, supportCount DESC, lastSupportAt DESC
-      LIMIT ${safePageSize} OFFSET ${offset}
-    `),
-  ]);
+  let countRows: LeaderboardCountRow[];
+  let summaryRows: LeaderboardSummaryRow[];
+  let aggregateRows: LeaderboardAggregateRow[];
+
+  try {
+    [countRows, summaryRows, aggregateRows] = await Promise.all([
+      db.$queryRaw<LeaderboardCountRow[]>(Prisma.sql`
+        SELECT COUNT(DISTINCT supporter_identity_hash) AS totalEntries
+        FROM support_transactions
+        WHERE ${baseWhere}
+      `),
+      db.$queryRaw<LeaderboardSummaryRow[]>(Prisma.sql`
+        SELECT
+          COALESCE(SUM(amount), 0) AS totalAmount,
+          COUNT(DISTINCT supporter_identity_hash) AS totalSupporters,
+          MAX(COALESCE(finished_at, updated_at, created_at)) AS latestSupportAt
+        FROM support_transactions
+        WHERE ${baseWhere}
+      `),
+      db.$queryRaw<LeaderboardAggregateRow[]>(Prisma.sql`
+        SELECT
+          supporter_identity_hash AS supporterIdentityHash,
+          SUM(amount) AS totalAmount,
+          COUNT(*) AS supportCount,
+          MAX(COALESCE(finished_at, updated_at, created_at)) AS lastSupportAt
+        FROM support_transactions
+        WHERE ${baseWhere}
+        GROUP BY supporter_identity_hash
+        ORDER BY totalAmount DESC, supportCount DESC, lastSupportAt DESC
+        LIMIT ${safePageSize} OFFSET ${offset}
+      `),
+    ]);
+  } catch (error) {
+    console.error("[support] leaderboard query failed", error);
+    return buildEmptyLeaderboard(safePage, safePageSize);
+  }
 
   const totalEntries = toSafeNumber(countRows[0]?.totalEntries);
   if (totalEntries === 0) {

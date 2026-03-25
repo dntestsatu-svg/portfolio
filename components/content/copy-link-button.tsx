@@ -20,7 +20,13 @@ export function CopyLinkButton({ url }: CopyLinkButtonProps) {
   }
 
   return (
-    <button type="button" className="content-share-button" onClick={handleClick}>
+    <button
+      type="button"
+      className="content-share-button"
+      data-copied={copied}
+      aria-live="polite"
+      onClick={handleClick}
+    >
       {copied ? "Link tersalin" : "Copy link"}
     </button>
   );

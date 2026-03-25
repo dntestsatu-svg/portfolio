@@ -38,7 +38,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
       id={project.slug}
       className={`content-card content-card--project${
         isCompact ? " content-card--project-compact" : ""
-      }`}
+      } group`}
     >
       <div className="relative aspect-16/10 overflow-hidden border-b border-white/8">
         <Image
@@ -46,7 +46,7 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
           alt={project.thumbnailAlt}
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-          className="object-cover"
+          className="content-card-media-image object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/25 to-transparent" />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
@@ -173,4 +173,3 @@ export function ProjectCard({ project, variant = "default" }: ProjectCardProps) 
     </article>
   );
 }
-

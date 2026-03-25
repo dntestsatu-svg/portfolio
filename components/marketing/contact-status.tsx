@@ -9,16 +9,20 @@ export function ContactStatus() {
 
   if (contact === "success") {
     return (
-      <div className="mt-6 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
-        Pesan berhasil dikirim dan tercatat ke sistem.
+      <div className="site-feedback-card is-success mt-6" role="status" aria-live="polite">
+        <p className="site-feedback-title">Pesan terkirim</p>
+        <p className="site-feedback-copy">
+          Pesan berhasil dikirim dan tercatat ke sistem.
+        </p>
       </div>
     );
   }
 
   if (contact === "error") {
     return (
-      <div className="mt-6 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-        {message ?? "Pesan gagal dikirim."}
+      <div className="site-feedback-card is-error mt-6" role="alert">
+        <p className="site-feedback-title">Pengiriman gagal</p>
+        <p className="site-feedback-copy">{message ?? "Pesan gagal dikirim."}</p>
       </div>
     );
   }
