@@ -21,7 +21,11 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm text-slate-300 transition hover:text-white"
+              className={
+                item.href === "/beri-dukungan"
+                  ? "text-sm text-slate-100 transition hover:text-white"
+                  : "text-sm text-slate-300 transition hover:text-white"
+              }
             >
               {item.label}
             </Link>
@@ -29,6 +33,28 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <details className="site-mobile-menu md:hidden">
+            <summary className="site-mobile-menu-trigger">Menu</summary>
+            <div className="site-mobile-menu-panel">
+              <nav aria-label="Navigasi mobile" className="site-mobile-menu-list">
+                {publicNavigation.map((item) => (
+                  <Link key={item.href} href={item.href} className="site-mobile-menu-link">
+                    <span>{item.label}</span>
+                    {item.href === "/beri-dukungan" ? (
+                      <span className="tag-chip-subtle">QRIS</span>
+                    ) : null}
+                  </Link>
+                ))}
+              </nav>
+              <div className="site-mobile-menu-footer">
+                <p className="copy-muted text-sm">
+                  Baca artikel, lihat case study, atau beri dukungan ketika karya ini terasa
+                  bermanfaat.
+                </p>
+              </div>
+            </div>
+          </details>
+
           <Link href="/blog" className="button-secondary hidden sm:inline-flex">
             Baca Blog
           </Link>

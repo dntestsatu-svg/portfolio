@@ -2271,6 +2271,108 @@ body:has([data-admin-shell="true"]) > footer {
   gap: 1rem;
 }
 
+.support-context-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.support-context-copy {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.support-context-title {
+  margin: 0;
+  color: white;
+  font-size: 1.35rem;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+.support-context-actions {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.support-context-note {
+  margin: 0;
+  color: #9fb0c1;
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.site-mobile-menu {
+  position: relative;
+}
+
+.site-mobile-menu-trigger {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  padding: 0.72rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.site-mobile-menu-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.site-mobile-menu[open] .site-mobile-menu-trigger {
+  border-color: rgba(201, 165, 106, 0.28);
+  background: rgba(201, 165, 106, 0.1);
+}
+
+.site-mobile-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.75rem);
+  z-index: 30;
+  width: min(22rem, calc(100vw - 1rem));
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(12, 17, 24, 0.98), rgba(8, 11, 16, 0.98));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  padding: 0.85rem;
+  backdrop-filter: blur(18px);
+}
+
+.site-mobile-menu-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.site-mobile-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.85rem 0.9rem;
+  color: #ecf3fb;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.site-mobile-menu-link:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.site-mobile-menu-footer {
+  margin-top: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.8rem;
+}
+
 .honeypot-field {
   position: absolute;
   left: -100vw;
@@ -2346,6 +2448,10 @@ body:has([data-admin-shell="true"]) > footer {
   .support-leaderboard-footer .button-secondary,
   .support-form-actions .button-primary,
   .support-form-actions .button-secondary {
+    width: 100%;
+  }
+
+  .support-context-actions .button-primary {
     width: 100%;
   }
 }

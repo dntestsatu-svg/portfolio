@@ -6,6 +6,7 @@ import { ProjectCard } from "@/components/marketing/project-card";
 import { Breadcrumbs } from "@/components/content/breadcrumbs";
 import { CopyLinkButton } from "@/components/content/copy-link-button";
 import { MarkdownContent } from "@/components/content/markdown-content";
+import { SupportContextCta } from "@/components/support/support-context-cta";
 import {
   getProjectBySlug,
   getProjectSlugs,
@@ -279,6 +280,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
               </section>
             ) : null}
 
+            <div className="content-mobile-only">
+              <SupportContextCta context="project" layout="inline" />
+            </div>
+
             {relatedProjects.length > 0 ? (
               <section className="space-y-5">
                 <div className="content-section-heading">
@@ -373,6 +378,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                   ) : null}
                 </div>
               </section>
+
+              <div className="content-desktop-only">
+                <SupportContextCta context="project" layout="sidebar" />
+              </div>
 
               {relatedArticles.length > 0 ? (
                 <section className="content-sidebar-card">

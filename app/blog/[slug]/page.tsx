@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/content/breadcrumbs";
 import { CopyLinkButton } from "@/components/content/copy-link-button";
 import { MarkdownContent } from "@/components/content/markdown-content";
 import { Toc } from "@/components/content/toc";
+import { SupportContextCta } from "@/components/support/support-context-cta";
 import {
   getAdjacentArticles,
   getBlogArticleBySlug,
@@ -192,6 +193,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <MarkdownContent content={article.preparedContent} className="markdown-prose" />
             </article>
 
+            <div className="content-mobile-only">
+              <SupportContextCta context="blog" layout="inline" />
+            </div>
+
             {relatedArticles.length > 0 ? (
               <section className="space-y-5">
                 <div className="content-section-heading">
@@ -272,6 +277,10 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <section className="content-sidebar-card content-desktop-only">
                 <Toc headings={article.headings} />
               </section>
+
+              <div className="content-desktop-only">
+                <SupportContextCta context="blog" layout="sidebar" />
+              </div>
 
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Lanjut baca</h2>
