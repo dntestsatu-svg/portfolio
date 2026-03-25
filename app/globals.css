@@ -1792,6 +1792,8 @@ body:has([data-admin-shell="true"]) > footer {
   color: #ecd19d;
   text-decoration: underline;
   text-decoration-color: rgba(201, 165, 106, 0.5);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .markdown-prose > pre {
