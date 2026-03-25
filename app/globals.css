@@ -1766,9 +1766,38 @@ body:has([data-admin-shell="true"]) > footer {
   color: #d8e1ea;
 }
 
-.markdown-prose ul,
 .markdown-prose ol {
   padding-left: 1.35rem;
+}
+
+.markdown-prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.markdown-prose ul > li {
+  position: relative;
+  padding-left: 1.45rem;
+}
+
+.markdown-prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.9rem;
+  height: 0.42rem;
+  width: 0.42rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(201, 165, 106, 0.96), rgba(173, 137, 77, 0.96));
+  box-shadow: 0 0 0 0.2rem rgba(201, 165, 106, 0.12);
+  transform: translateY(-50%);
+}
+
+.markdown-prose ul ul > li::before {
+  height: 0.34rem;
+  width: 0.34rem;
+  background: rgba(201, 165, 106, 0.72);
+  box-shadow: 0 0 0 0.16rem rgba(201, 165, 106, 0.1);
 }
 
 .markdown-prose ul ul,
