@@ -99,8 +99,8 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-[70] border-b border-white/8 bg-[rgba(7,9,13,0.78)] backdrop-blur-xl">
-        <div className="site-shell flex items-center justify-between gap-4 py-4">
+      <header className="sticky top-0 z-70 border-b border-white/8 bg-[rgba(7,9,13,0.78)] backdrop-blur-xl">
+        <div className="site-shell flex items-center justify-between gap-4 py-4 px-2">
           <Link
             href="/"
             className="flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-white uppercase"
