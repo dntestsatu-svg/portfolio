@@ -92,7 +92,7 @@ export const supportGenerateSchema = z.object({
     .string()
     .trim()
     .min(2, "Nama tampilan minimal 2 karakter.")
-    .max(80, "Nama tampilan maksimal 80 karakter."),
+    .max(60, "Nama tampilan maksimal 60 karakter."),
   isAnonymous: z.boolean().optional().default(false),
   message: z
     .string()

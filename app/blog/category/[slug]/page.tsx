@@ -59,11 +59,11 @@ export async function generateMetadata({ params }: BlogCategoryPageProps): Promi
     openGraph: {
       type: "website",
       url: `/blog/category/${categoryPage.taxonomy.slug}`,
-      title: `${categoryPage.taxonomy.label} | Blog Mugiew Castello`,
+      title: `${categoryPage.taxonomy.label} | Blog Mugiew`,
       description: categoryPage.description,
     },
     twitter: {
-      title: `${categoryPage.taxonomy.label} | Blog Mugiew Castello`,
+      title: `${categoryPage.taxonomy.label} | Blog Mugiew`,
       description: categoryPage.description,
     },
   };
@@ -100,7 +100,7 @@ export default async function BlogCategoryPage({
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: `/blog/category/${categoryPage.taxonomy.slug}`,
-      title: `Kategori ${categoryPage.taxonomy.label} | Blog Mugiew Castello`,
+      title: `Kategori ${categoryPage.taxonomy.label} | Blog Mugiew`,
       description: categoryPage.description,
     }),
   );
@@ -163,7 +163,7 @@ export default async function BlogCategoryPage({
             <div className="content-sidebar-stack">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Cari di blog</h2>
-                <form action="/blog/search" method="get" className="content-search-form">
+                <form action="/blog/search" method="get" data-route-progress="search" className="content-search-form">
                   <label className="sr-only" htmlFor="blog-category-search-input">
                     Cari artikel
                   </label>
@@ -214,4 +214,3 @@ export default async function BlogCategoryPage({
     </main>
   );
 }
-

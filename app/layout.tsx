@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Manrope } from "next/font/google";
+import { Suspense } from "react";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { SiteRouteProgress } from "@/components/marketing/site-route-progress";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -29,10 +31,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
     default: siteConfig.title,
-    template: "%s | Mugiew Castello",
+    template: "%s | Mugiew",
   },
   description: siteConfig.description,
-  applicationName: "Mugiew Castello Portfolio",
+  applicationName: "Mugiew Portfolio",
   alternates: {
     canonical: "/",
   },
@@ -41,7 +43,8 @@ export const metadata: Metadata = {
   publisher: siteConfig.name,
   category: "technology",
   keywords: [
-    "Mugiew Castello",
+    "Mugiew",
+    "Mugi Nurul Ihksani",
     "portfolio developer",
     "backend engineer",
     "fullstack developer",
@@ -74,7 +77,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Preview portfolio Mugiew Castello",
+        alt: "Preview portfolio Mugiew",
       },
     ],
   },
@@ -94,6 +97,9 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${manrope.variable} ${ibmPlexMono.variable}`}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <Suspense fallback={null}>
+          <SiteRouteProgress />
+        </Suspense>
         <a href="#main-content" className="skip-link">
           Lewati ke konten utama
         </a>
@@ -104,4 +110,3 @@ export default function RootLayout({
     </html>
   );
 }
-

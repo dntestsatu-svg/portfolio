@@ -31,24 +31,23 @@ function getForwardedOrigin(request: NextRequest) {
 }
 
 export function getPublicRequestOrigin(request: NextRequest) {
-  return (
-    getForwardedOrigin(request) ??
-    parseOrigin(appEnv.siteUrl) ??
-    request.nextUrl.origin
-  );
+  return parseOrigin(appEnv.siteUrl) ?? getForwardedOrigin(request) ?? request.nextUrl.origin;
 }
 
 function getAllowedOrigins(request: NextRequest) {
-  const allowedOrigins = new Set<string>([request.nextUrl.origin, getPublicRequestOrigin(request)]);
-
   const configuredSiteOrigin = parseOrigin(appEnv.siteUrl);
+  const allowedOrigins = new Set<string>([request.nextUrl.origin]);
+  const forwardedOrigin = !configuredSiteOrigin ? getForwardedOrigin(request) : null;
+
   if (configuredSiteOrigin) {
     allowedOrigins.add(configuredSiteOrigin);
+  } else if (forwardedOrigin) {
+    allowedOrigins.add(forwardedOrigin);
   }
 
-  const forwardedOrigin = getForwardedOrigin(request);
-  if (forwardedOrigin) {
-    allowedOrigins.add(forwardedOrigin);
+  const publicOrigin = getPublicRequestOrigin(request);
+  if (publicOrigin) {
+    allowedOrigins.add(publicOrigin);
   }
 
   return allowedOrigins;

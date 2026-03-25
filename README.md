@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project configured to run with [Bun](https://bun.sh).
+Portfolio fullstack modern berbasis Next.js App Router, Bun, Prisma, MySQL, dan fokus pada delivery production-minded untuk website publik, blog teknis, case study, admin workspace, audit log, serta flow dukungan via QRIS.
 
 ## Getting Started
 
@@ -23,8 +23,6 @@ bun run db:seed
 bun run audit:prune:dry-run
 bun run audit:prune
 ```
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Audit Operations
 
@@ -123,6 +121,63 @@ Komponen operasional penting:
 - Audit log mencatat login, logout, create, update, delete, publish state, failed login, dan alert threshold dengan payload yang sudah diminimalkan.
 - Public cache memakai ISR + `revalidatePath()` setelah mutation agar slug lama dan baru sama-sama ter-refresh.
 
+## Route Overview
+
+Public routes utama:
+
+- `/`
+- `/blog`
+- `/blog/[slug]`
+- `/blog/category/[slug]`
+- `/blog/tag/[slug]`
+- `/blog/search?q=`
+- `/projects`
+- `/projects/[slug]`
+- `/projects/category/[slug]`
+- `/projects/search?q=`
+- `/beri-dukungan`
+- `/dukungan/ranking`
+
+Admin dan internal routes:
+
+- `/admin/login`
+- `/admin`
+- `/admin/projects`
+- `/admin/blog`
+- `/admin/messages`
+- `/admin/audit`
+- `/admin/audit/export`
+- `/api/auth/*`
+- `/api/projects*`
+- `/api/blog*`
+- `/api/contact`
+- `/api/support/generate`
+- `/api/support/[customRef]`
+- `/api/webhook/goqr`
+
+## Environment Variables Penting
+
+Minimal untuk runtime production yang sehat:
+
+- `DATABASE_URL`
+- `AUTH_SECRET`
+- `NEXT_PUBLIC_SITE_URL`
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+
+Opsional tetapi penting bila flow dukungan QRIS dipakai:
+
+- `API_GOQR_ENDPOINT`
+- `API_GOQR_TOKONAME`
+- `API_GOQR_TOKEN`
+- `API_GOQR_WEBHOOK_SECRET`
+
+Catatan operasional:
+
+- `AUTH_SECRET` placeholder dianggap tidak valid.
+- `NEXT_PUBLIC_SITE_URL` harus berupa origin final production, bukan `localhost` atau `example.com`.
+- Pada production, endpoint yang dilindungi rate limit akan menolak request bila Upstash tidak dikonfigurasi.
+
 ## Production Readiness Checklist
 
 Checklist ini merefleksikan implementasi dan verifikasi saat ini:
@@ -146,19 +201,18 @@ Hal yang tetap perlu dipastikan di environment produksi:
 - Pantau kapasitas tabel `ContactMessage` terpisah karena retention saat ini difokuskan ke audit log, bukan inbox kontak.
 - Jika memakai beberapa instance, samakan env dan secret pada seluruh node.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Security Notes
 
-## Learn More
+- Semua mutation admin membutuhkan session JWT + origin validation + CSRF token.
+- Failed login dicatat dalam audit log dengan identifier yang sudah dimasking dan di-hash.
+- Upload image divalidasi lewat MIME, magic bytes, ukuran file, dan dibatasi input pixel.
+- Webhook GOQR mendukung shared secret tambahan via `API_GOQR_WEBHOOK_SECRET`.
+- Support leaderboard hanya menghitung transaksi `success` yang memang diizinkan tampil publik.
+- Snapshot transaksi dukungan yang dikirim ke client sudah diminimalkan dan tidak membawa field internal sensitif seperti `merchant_id`.
 
-To learn more about Next.js, take a look at the following resources:
+## Residual Tradeoffs
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Search blog/project masih memakai strategi scoring sederhana in-memory; cukup untuk skala konten kecil-menengah, tetapi bukan full-text engine.
+- Fallback seed content tetap tersedia ketika database publik kosong; ini membantu local/dev, tetapi production idealnya selalu mengandalkan data nyata di database.
+- Retention terjadwal saat ini difokuskan ke audit log; inbox contact belum memiliki lifecycle prune terpisah.
+- Flow QRIS tetap bergantung pada API eksternal. Timeout, validasi webhook, dan update idempotent sudah ada, tetapi availability akhir tetap mengikuti gateway.

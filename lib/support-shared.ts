@@ -10,22 +10,17 @@ export type SupportDonorSnapshot = {
   displayName: string;
   isAnonymous: boolean;
   showOnLeaderboard: boolean;
-  message?: string;
 };
 
 export type SupportTransactionSnapshot = {
   customRef: string;
   trxId: string;
-  username: string;
   amount: number;
   amountLabel: string;
   donor: SupportDonorSnapshot;
   status: SupportStatus;
   statusLabel: string;
   statusTone: "accent" | "success" | "muted" | "danger";
-  vendor?: string;
-  rrn?: string;
-  merchantId?: string;
   createdAtISO: string;
   updatedAtISO: string;
   finishedAtISO?: string;

@@ -140,14 +140,21 @@ export async function POST(request: NextRequest) {
       });
 
       if (formSubmission) {
-        return redirectWithSearch(request, "/admin/login", {
+        const response = redirectWithSearch(request, "/admin/login", {
           error: "Email atau password tidak valid.",
         });
+        response.headers.set("Cache-Control", "private, no-store");
+        return response;
       }
 
       return NextResponse.json(
         { error: "Email atau password tidak valid." },
-        { status: 401 },
+        {
+          status: 401,
+          headers: {
+            "Cache-Control": "private, no-store",
+          },
+        },
       );
     }
 
@@ -167,6 +174,7 @@ export async function POST(request: NextRequest) {
       const response = NextResponse.redirect(buildPublicUrl(request, "/admin"), {
         status: 303,
       });
+      response.headers.set("Cache-Control", "private, no-store");
 
       response.cookies.set({
         ...getSessionCookieOptions(),
@@ -176,10 +184,17 @@ export async function POST(request: NextRequest) {
       return response;
     }
 
-    const response = NextResponse.json({
-      success: true,
-      user: session,
-    });
+    const response = NextResponse.json(
+      {
+        success: true,
+        user: session,
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      },
+    );
 
     response.cookies.set({
       ...getSessionCookieOptions(),
@@ -202,15 +217,22 @@ export async function POST(request: NextRequest) {
     });
 
     if (formSubmission) {
-      return redirectWithSearch(request, "/admin/login", {
+      const response = redirectWithSearch(request, "/admin/login", {
         error: error instanceof Error ? error.message : "Login gagal.",
       });
+      response.headers.set("Cache-Control", "private, no-store");
+      return response;
     }
 
     const status = error instanceof SecurityError ? error.status : 400;
     const response = NextResponse.json(
       { error: error instanceof Error ? error.message : "Login gagal." },
-      { status },
+      {
+        status,
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      },
     );
 
     if (error instanceof SecurityError && error.retryAfter) {

@@ -29,7 +29,11 @@ export async function GET(request: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "Project tidak ditemukan." }, { status: 404 });
   }
 
-  return NextResponse.json(project);
+  return NextResponse.json(project, {
+    headers: {
+      "Cache-Control": "private, no-store",
+    },
+  });
 }
 
 export async function POST(request: NextRequest, { params }: Params) {

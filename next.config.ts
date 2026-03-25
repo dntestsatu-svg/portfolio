@@ -1,7 +1,26 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const siteOrigin = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").origin;
+
+function getSiteOrigin() {
+  const rawValue = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+  if (!rawValue) {
+    return "http://localhost:3000";
+  }
+
+  try {
+    return new URL(rawValue).origin;
+  } catch {
+    console.warn(
+      `[next.config] NEXT_PUBLIC_SITE_URL tidak valid: ${rawValue}. Fallback ke http://localhost:3000.`,
+    );
+    return "http://localhost:3000";
+  }
+}
+
+const siteOrigin = getSiteOrigin();
+const isHttpsSiteOrigin = siteOrigin.startsWith("https://");
 const formActionOrigins = new Set(["'self'", siteOrigin]);
 const cloudflareAnalyticsScriptOrigin = "https://static.cloudflareinsights.com";
 const cloudflareAnalyticsConnectOrigin = "https://cloudflareinsights.com";
@@ -69,6 +88,14 @@ const securityHeaders = [
     key: "Cross-Origin-Resource-Policy",
     value: "same-site",
   },
+  ...(!isDevelopment && isHttpsSiteOrigin
+    ? [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=31536000; includeSubDomains; preload",
+        },
+      ]
+    : []),
 ];
 
 const nextConfig: NextConfig = {

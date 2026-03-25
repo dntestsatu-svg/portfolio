@@ -16,7 +16,7 @@ import {
 } from "@/lib/support-shared";
 import type { GoqrWebhookInput, SupportGenerateInput } from "@/lib/validators";
 
-const FINAL_SUPPORT_STATUSES: SupportTransactionStatus[] = ["success", "failed", "expired"];
+const IMMUTABLE_SUPPORT_STATUSES: SupportTransactionStatus[] = ["success", "failed"];
 
 type ApplyWebhookResult = {
   transaction: SupportTransactionSnapshot;
@@ -89,8 +89,23 @@ function getSupportStatusMeta(status: SupportTransactionStatus) {
   }
 }
 
-function isFinalSupportStatus(status: SupportTransactionStatus) {
-  return FINAL_SUPPORT_STATUSES.includes(status);
+function isImmutableSupportStatus(status: SupportTransactionStatus) {
+  return IMMUTABLE_SUPPORT_STATUSES.includes(status);
+}
+
+export function shouldIgnoreSupportStatusTransition(
+  currentStatus: SupportTransactionStatus,
+  nextStatus: SupportTransactionStatus,
+) {
+  if (isImmutableSupportStatus(currentStatus)) {
+    return true;
+  }
+
+  if (currentStatus === "expired" && nextStatus === "pending") {
+    return true;
+  }
+
+  return false;
 }
 
 function parseWebhookDate(value: string) {
@@ -189,21 +204,16 @@ function mapSupportTransaction(record: SupportTransaction): SupportTransactionSn
   return {
     customRef: record.customRef,
     trxId: record.trxId,
-    username: record.username,
     amount: record.amount,
     amountLabel: formatSupportAmount(record.amount),
     donor: {
       displayName: getPublicSupporterDisplayName(record),
       isAnonymous: record.isAnonymous,
       showOnLeaderboard: record.showOnLeaderboard,
-      message: record.message?.trim() || undefined,
     },
     status: record.status,
     statusLabel: statusMeta.label,
     statusTone: statusMeta.tone,
-    vendor: record.vendor ?? undefined,
-    rrn: record.rrn ?? undefined,
-    merchantId: record.merchantId ?? undefined,
     createdAtISO: record.createdAt.toISOString(),
     updatedAtISO: record.updatedAt.toISOString(),
     finishedAtISO: record.finishedAt?.toISOString(),
@@ -444,7 +454,6 @@ export async function generateSupportTransaction(input: SupportGenerateInput) {
       amount: input.amount,
       qrisPayload: generated.qrisPayload,
       status: "pending",
-      merchantId: appEnv.goqrToken,
       rawGenerate: generated.rawGenerate ?? undefined,
       expiresAt,
     },
@@ -522,6 +531,14 @@ export async function applyGoqrWebhook(payload: GoqrWebhookInput): Promise<Apply
     throw new GoqrError("custom_ref tidak cocok dengan transaksi lokal.", 400);
   }
 
+  if (record.trxId !== payload.trx_id.trim()) {
+    throw new GoqrError("trx_id tidak cocok dengan transaksi lokal.", 400);
+  }
+
+  if (record.amount !== payload.amount) {
+    throw new GoqrError("amount tidak cocok dengan transaksi lokal.", 400);
+  }
+
   const nextStatus = normalizeSupportStatus(payload.status);
   const webhookData = {
     amount: payload.amount,
@@ -536,7 +553,7 @@ export async function applyGoqrWebhook(payload: GoqrWebhookInput): Promise<Apply
     finish_at: payload.finish_at,
   };
 
-  if (isFinalSupportStatus(record.status)) {
+  if (shouldIgnoreSupportStatusTransition(record.status, nextStatus)) {
     return {
       transaction: mapSupportTransaction(record),
       action: "ignored",

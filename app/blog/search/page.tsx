@@ -26,7 +26,7 @@ export async function generateMetadata({
   return {
     title: query ? `Cari: ${query}` : "Cari artikel",
     description: query
-      ? `Hasil pencarian artikel untuk kata kunci "${query}" di blog Mugiew Castello.`
+      ? `Hasil pencarian artikel untuk kata kunci "${query}" di blog Mugiew.`
       : "Cari artikel teknis berdasarkan topik, stack, atau kata kunci implementasi.",
     alternates: {
       canonical: query ? `/blog/search?q=${encodeURIComponent(query)}` : "/blog/search",
@@ -99,7 +99,7 @@ export default async function BlogSearchPage({ searchParams }: BlogSearchPagePro
             </div>
 
             <section className="surface-panel rounded-4xl p-6">
-              <form action="/blog/search" method="get" className="content-search-form">
+              <form action="/blog/search" method="get" data-route-progress="search" className="content-search-form">
                 <label className="sr-only" htmlFor="blog-search-page-input">
                   Cari artikel
                 </label>
@@ -220,4 +220,3 @@ export default async function BlogSearchPage({ searchParams }: BlogSearchPagePro
     </main>
   );
 }
-

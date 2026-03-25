@@ -13,21 +13,21 @@ import {
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Archive artikel teknis Mugiew Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
+    "Archive artikel teknis Mugiew: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
   alternates: {
     canonical: "/blog",
   },
   openGraph: {
     type: "website",
     url: "/blog",
-    title: "Blog | Mugiew Castello",
+    title: "Blog | Mugiew",
     description:
-      "Archive artikel teknis Mugiew Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
+      "Archive artikel teknis Mugiew: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
   },
   twitter: {
-    title: "Blog | Mugiew Castello",
+    title: "Blog | Mugiew",
     description:
-      "Archive artikel teknis Mugiew Castello: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
+      "Archive artikel teknis Mugiew: tutorial, catatan implementasi, dan pembahasan engineering yang SEO-aware dan production-minded.",
   },
 };
 
@@ -86,7 +86,7 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: "/blog",
-      title: "Blog | Mugiew Castello",
+      title: "Blog | Mugiew",
       description:
         "Archive artikel teknis yang memudahkan pengunjung menemukan tutorial, catatan implementasi, dan eksplorasi engineering dari berbagai kategori.",
     }),
@@ -143,7 +143,7 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
                 </p>
               </div>
 
-              <form action="/blog/search" method="get" className="content-search-form mt-5">
+              <form action="/blog/search" method="get" data-route-progress="search" className="content-search-form mt-5">
                 <label className="sr-only" htmlFor="blog-search-input-mobile">
                   Cari artikel
                 </label>
@@ -287,7 +287,7 @@ export default async function BlogPage({ searchParams }: BlogArchivePageProps) {
             <div className="content-sidebar-stack">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Cari artikel</h2>
-                <form action="/blog/search" method="get" className="content-search-form">
+                <form action="/blog/search" method="get" data-route-progress="search" className="content-search-form">
                   <label className="sr-only" htmlFor="blog-search-input">
                     Cari artikel
                   </label>

@@ -1,15 +1,17 @@
+import { appEnv } from "@/lib/env";
+
 export const siteConfig = {
-  name: "Mugiew Castello",
+  name: "Mugi Nurul Ihksani",
   shortName: "Mugiew",
   brandWordmark: "mugiew",
   role: "Backend-Focused Fullstack Developer",
-  title: "Mugiew Castello | Fullstack Developer",
+  title: "Mugiew | Fullstack Developer",
   description:
-    "Portfolio Mugiew Castello, backend-focused fullstack developer yang membangun aplikasi web modern, dashboard operasional, dan dokumentasi teknis yang rapi.",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
-  githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL,
-  linkedinUrl: process.env.NEXT_PUBLIC_LINKEDIN_URL,
+    "Portfolio Mugiew, backend-focused fullstack developer yang membangun aplikasi web modern, dashboard operasional, dan dokumentasi teknis yang rapi.",
+  siteUrl: appEnv.siteUrl,
+  email: appEnv.contactEmail,
+  githubUrl: appEnv.githubUrl,
+  linkedinUrl: appEnv.linkedinUrl,
 } as const;
 
 export const publicNavigation = [

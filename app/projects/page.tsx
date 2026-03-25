@@ -13,21 +13,21 @@ import {
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Archive studi kasus project Mugiew Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
+    "Archive studi kasus project Mugiew dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
   alternates: {
     canonical: "/projects",
   },
   openGraph: {
     type: "website",
     url: "/projects",
-    title: "Projects | Mugiew Castello",
+    title: "Projects | Mugiew",
     description:
-      "Archive studi kasus project Mugiew Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
+      "Archive studi kasus project Mugiew dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
   },
   twitter: {
-    title: "Projects | Mugiew Castello",
+    title: "Projects | Mugiew",
     description:
-      "Archive studi kasus project Mugiew Castello dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
+      "Archive studi kasus project Mugiew dengan jalur pencarian, filter stack, kategori, dan detail implementasi yang lebih matang.",
   },
 };
 
@@ -91,7 +91,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: "/projects",
-      title: "Projects | Mugiew Castello",
+      title: "Projects | Mugiew",
       description:
         "Archive studi kasus project yang membantu pengunjung menjelajahi sistem backend, dashboard, integrasi, dan produk berbasis konten secara lebih terarah.",
     }),
@@ -163,7 +163,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                 </p>
               </div>
 
-              <form action="/projects/search" method="get" className="content-search-form mt-5">
+              <form action="/projects/search" method="get" data-route-progress="search" className="content-search-form mt-5">
                 <label className="sr-only" htmlFor="project-search-input-mobile">
                   Cari project
                 </label>
@@ -340,7 +340,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
             <div className="content-sidebar-stack">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Cari project</h2>
-                <form action="/projects/search" method="get" className="content-search-form">
+                <form action="/projects/search" method="get" data-route-progress="search" className="content-search-form">
                   <label className="sr-only" htmlFor="project-search-input">
                     Cari project
                   </label>

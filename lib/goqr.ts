@@ -1,6 +1,7 @@
 import { appEnv, hasGoqrConfig } from "@/lib/env";
 
-const GOQR_GENERATE_PATH = "/payments/gateway/generate";
+const GOQR_GENERATE_PATH = "payments/gateway/generate";
+const GOQR_REQUEST_TIMEOUT_MS = 10_000;
 
 export class GoqrError extends Error {
   status: number;
@@ -45,7 +46,14 @@ function assertGoqrConfiguration() {
 }
 
 function getGoqrEndpoint(pathname: string) {
-  return new URL(pathname, appEnv.goqrEndpoint).toString();
+  const base = appEnv.goqrEndpoint?.replace(/\/+$/, "");
+  const normalizedPath = pathname.replace(/^\/+/, "");
+
+  if (!base) {
+    throw new GoqrError("API_GOQR_ENDPOINT belum dikonfigurasi.", 503);
+  }
+
+  return `${base}/${normalizedPath}`;
 }
 
 function getErrorMessage(payload: unknown) {
@@ -101,21 +109,35 @@ function normalizeGenerateResponse(payload: GoqrGenerateEnvelope | null): Normal
 export async function generateSupportQr(options: GenerateSupportQrOptions) {
   assertGoqrConfiguration();
 
-  const response = await fetch(getGoqrEndpoint(GOQR_GENERATE_PATH), {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${appEnv.goqrToken}`,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      username: options.username,
-      amount: options.amount,
-      expire: options.expireSeconds,
-      custom_ref: options.customRef,
-    }),
-    cache: "no-store",
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(getGoqrEndpoint(GOQR_GENERATE_PATH), {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${appEnv.goqrToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        username: options.username,
+        amount: options.amount,
+        expire: options.expireSeconds,
+        custom_ref: options.customRef,
+      }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(GOQR_REQUEST_TIMEOUT_MS),
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.name === "TimeoutError" || error.name === "AbortError")
+    ) {
+      throw new GoqrError("Gateway QRIS melebihi batas waktu respons.", 504);
+    }
+
+    throw new GoqrError("Koneksi ke gateway QRIS sedang bermasalah.", 502);
+  }
 
   const rawText = await response.text();
   let payload: GoqrGenerateEnvelope | null = null;

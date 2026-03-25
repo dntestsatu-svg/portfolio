@@ -29,7 +29,7 @@ export default async function AdminProtectedLayout({
           <aside className="admin-sidebar">
             <section className="admin-sidebar-panel">
               <Link href="/admin" className="admin-brand" aria-label="Kembali ke dashboard admin">
-                <span className="admin-brand-mark">RC</span>
+                <span className="admin-brand-mark">MN</span>
                 <span>
                   <span className="admin-panel-label">Admin workspace</span>
                   <span className="mt-2 block text-base font-semibold text-white">

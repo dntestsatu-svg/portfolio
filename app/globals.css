@@ -91,6 +91,76 @@ textarea {
   top: 1rem;
 }
 
+.site-route-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 160;
+  height: 0.25rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-soft);
+}
+
+.site-route-progress.is-visible {
+  opacity: 1;
+}
+
+.site-route-progress-track {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(201, 165, 106, 0.12), rgba(201, 165, 106, 0));
+}
+
+.site-route-progress-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(34vw, 18rem);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(241, 224, 186, 0.98), rgba(201, 165, 106, 0.94) 58%, rgba(201, 165, 106, 0.18));
+  box-shadow:
+    0 0 0.75rem rgba(201, 165, 106, 0.26),
+    0 0 1.6rem rgba(201, 165, 106, 0.12);
+  transform: translateX(-132%);
+  will-change: transform, width, opacity;
+}
+
+.site-route-progress-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+  mix-blend-mode: screen;
+}
+
+.site-route-progress.is-loading .site-route-progress-bar {
+  animation: site-route-progress-slide 1.1s var(--ease-premium) infinite;
+}
+
+.site-route-progress.is-finishing .site-route-progress-bar {
+  width: 100%;
+  transform: translateX(0);
+  opacity: 0;
+  transition:
+    width var(--motion-base) var(--ease-premium),
+    transform var(--motion-base) var(--ease-premium),
+    opacity var(--motion-fast) var(--ease-soft);
+}
+
+@keyframes site-route-progress-slide {
+  0% {
+    transform: translateX(-132%);
+  }
+
+  55% {
+    transform: translateX(34vw);
+  }
+
+  100% {
+    transform: translateX(118vw);
+  }
+}
+
 .site-shell {
   width: min(1200px, calc(100% - 1.5rem));
   margin-inline: auto;

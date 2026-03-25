@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.redirect(buildPublicUrl(request, "/admin/login"), {
       status: 303,
     });
+    response.headers.set("Cache-Control", "private, no-store");
 
     response.cookies.set({
       ...getSessionCookieOptions(),
@@ -41,14 +42,18 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     if (error instanceof SecurityError) {
-      return NextResponse.redirect(
+      const response = NextResponse.redirect(
         buildPublicUrl(request, `/admin?error=${encodeURIComponent(error.message)}`),
         { status: 303 },
       );
+      response.headers.set("Cache-Control", "private, no-store");
+      return response;
     }
 
-    return NextResponse.redirect(buildPublicUrl(request, "/admin?error=Logout%20gagal"), {
+    const response = NextResponse.redirect(buildPublicUrl(request, "/admin?error=Logout%20gagal"), {
       status: 303,
     });
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
   }
 }

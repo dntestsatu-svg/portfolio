@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import sharp from "sharp";
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
+const MAX_INPUT_PIXELS = 40_000_000;
 const ACCEPTED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function isAllowedMagicBytes(buffer: Buffer) {
@@ -55,13 +56,14 @@ export async function saveImageUpload(file: File, folder: "projects" | "blog") {
 
   await mkdir(absoluteDirectory, { recursive: true });
 
-  const outputBuffer = await sharp(buffer)
+  await sharp(buffer, {
+    limitInputPixels: MAX_INPUT_PIXELS,
+    failOn: "error",
+  })
     .rotate()
     .resize({ width: 1600, withoutEnlargement: true })
     .webp({ quality: 82 })
-    .toBuffer();
-
-  await sharp(outputBuffer).toFile(absolutePath);
+    .toFile(absolutePath);
 
   return `/${path.posix.join(relativeDirectory, fileName)}`;
 }

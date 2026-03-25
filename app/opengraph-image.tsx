@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Portfolio Mugiew Castello";
+export const alt = "Portfolio Mugiew";
 export const size = {
   width: 1200,
   height: 630,
@@ -49,7 +49,7 @@ export default function OpenGraphImage() {
               letterSpacing: 6,
             }}
           >
-            RC
+            MN
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div
@@ -60,7 +60,7 @@ export default function OpenGraphImage() {
                 color: "#c9a56a",
               }}
             >
-              Mugiew Castello
+              Mugiew
             </div>
             <div style={{ fontSize: 24, color: "#cbd5e1" }}>
               Backend-Focused Fullstack Developer

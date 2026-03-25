@@ -3,6 +3,7 @@ import {
   compareSupportLeaderboardEntries,
   getPublicSupporterDisplayName,
   hashSupporterIdentity,
+  shouldIgnoreSupportStatusTransition,
 } from "../lib/services/support";
 
 describe("support leaderboard helpers", () => {
@@ -61,5 +62,13 @@ describe("support leaderboard helpers", () => {
       items[1],
       items[0],
     ]);
+  });
+
+  test("keeps terminal support states immutable but allows expired to be corrected by final webhook", () => {
+    expect(shouldIgnoreSupportStatusTransition("success", "failed")).toBe(true);
+    expect(shouldIgnoreSupportStatusTransition("failed", "success")).toBe(true);
+    expect(shouldIgnoreSupportStatusTransition("expired", "pending")).toBe(true);
+    expect(shouldIgnoreSupportStatusTransition("expired", "success")).toBe(false);
+    expect(shouldIgnoreSupportStatusTransition("pending", "success")).toBe(false);
   });
 });

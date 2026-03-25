@@ -53,7 +53,7 @@ export default async function Home() {
       <section className="section-space pt-16 md:pt-24">
         <div className="site-shell home-hero-grid grid items-start gap-8 lg:grid-cols-[minmax(0,1.18fr)_400px] lg:gap-10">
           <div className="hero-reveal home-hero-copy space-y-7">
-            <span className="eyebrow">Mugiew Castello · Backend-focused fullstack developer</span>
+            <span className="eyebrow">Mugiew · Backend-focused fullstack developer</span>
             <div className="space-y-5">
               <h1 className="home-hero-title max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-white md:text-7xl">
                 Saya membangun backend, content system, dan internal tools yang siap dipakai di

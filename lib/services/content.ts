@@ -98,6 +98,14 @@ async function getUniqueSlug(
   }
 }
 
+async function cleanupSavedUpload(uploadPath: string | null | undefined) {
+  if (!uploadPath) {
+    return;
+  }
+
+  await removeLocalUpload(uploadPath);
+}
+
 export async function getPublicProjects() {
   const db = getDb();
 
@@ -223,27 +231,32 @@ export async function createProject(input: ProjectInput, thumbnailFile?: File | 
   const slug = await getUniqueSlug("project", input.slug || input.title);
   const thumbnailPath = thumbnailFile ? await saveImageUpload(thumbnailFile, "projects") : null;
 
-  const project = await db.project.create({
-    data: {
-      title: input.title,
-      slug,
-      category: input.category,
-      summary: input.summary,
-      description: input.description,
-      body: input.body,
-      tutorial: input.tutorial || null,
-      thumbnailPath,
-      demoUrl: input.demoUrl,
-      repoUrl: input.repoUrl,
-      techStack: input.techStack,
-      features: input.features,
-      published: input.published,
-      featured: input.featured,
-      publishedAt: input.published ? new Date() : null,
-    },
-  });
+  try {
+    const project = await db.project.create({
+      data: {
+        title: input.title,
+        slug,
+        category: input.category,
+        summary: input.summary,
+        description: input.description,
+        body: input.body,
+        tutorial: input.tutorial || null,
+        thumbnailPath,
+        demoUrl: input.demoUrl,
+        repoUrl: input.repoUrl,
+        techStack: input.techStack,
+        features: input.features,
+        published: input.published,
+        featured: input.featured,
+        publishedAt: input.published ? new Date() : null,
+      },
+    });
 
-  return mapProject(project);
+    return mapProject(project);
+  } catch (error) {
+    await cleanupSavedUpload(thumbnailPath);
+    throw error;
+  }
 }
 
 export async function updateProject(id: string, input: ProjectInput, thumbnailFile?: File | null) {
@@ -261,37 +274,44 @@ export async function updateProject(id: string, input: ProjectInput, thumbnailFi
 
   const slug = await getUniqueSlug("project", input.slug || input.title, id);
   let thumbnailPath = current.thumbnailPath;
+  let replacementThumbnailPath: string | null = null;
 
   if (thumbnailFile && thumbnailFile.size > 0) {
-    thumbnailPath = await saveImageUpload(thumbnailFile, "projects");
+    replacementThumbnailPath = await saveImageUpload(thumbnailFile, "projects");
+    thumbnailPath = replacementThumbnailPath;
   }
 
-  const project = await db.project.update({
-    where: { id },
-    data: {
-      title: input.title,
-      slug,
-      category: input.category,
-      summary: input.summary,
-      description: input.description,
-      body: input.body,
-      tutorial: input.tutorial || null,
-      thumbnailPath,
-      demoUrl: input.demoUrl,
-      repoUrl: input.repoUrl,
-      techStack: input.techStack,
-      features: input.features,
-      published: input.published,
-      featured: input.featured,
-      publishedAt: input.published ? current.publishedAt ?? new Date() : null,
-    },
-  });
+  try {
+    const project = await db.project.update({
+      where: { id },
+      data: {
+        title: input.title,
+        slug,
+        category: input.category,
+        summary: input.summary,
+        description: input.description,
+        body: input.body,
+        tutorial: input.tutorial || null,
+        thumbnailPath,
+        demoUrl: input.demoUrl,
+        repoUrl: input.repoUrl,
+        techStack: input.techStack,
+        features: input.features,
+        published: input.published,
+        featured: input.featured,
+        publishedAt: input.published ? current.publishedAt ?? new Date() : null,
+      },
+    });
 
-  if (thumbnailPath && thumbnailPath !== current.thumbnailPath) {
-    await removeLocalUpload(current.thumbnailPath);
+    if (thumbnailPath && thumbnailPath !== current.thumbnailPath) {
+      await removeLocalUpload(current.thumbnailPath);
+    }
+
+    return mapProject(project);
+  } catch (error) {
+    await cleanupSavedUpload(replacementThumbnailPath);
+    throw error;
   }
-
-  return mapProject(project);
 }
 
 export async function deleteProject(id: string) {
@@ -348,21 +368,26 @@ export async function createArticle(input: BlogInput, coverImage?: File | null) 
   const slug = await getUniqueSlug("blog", input.slug || input.title);
   const coverImagePath = coverImage ? await saveImageUpload(coverImage, "blog") : null;
 
-  const post = await db.blogPost.create({
-    data: {
-      title: input.title,
-      slug,
-      category: input.category,
-      summary: input.summary,
-      content: input.content,
-      tags: input.tags,
-      coverImage: coverImagePath,
-      published: input.published,
-      publishedAt: input.published ? new Date() : null,
-    },
-  });
+  try {
+    const post = await db.blogPost.create({
+      data: {
+        title: input.title,
+        slug,
+        category: input.category,
+        summary: input.summary,
+        content: input.content,
+        tags: input.tags,
+        coverImage: coverImagePath,
+        published: input.published,
+        publishedAt: input.published ? new Date() : null,
+      },
+    });
 
-  return mapArticle(post);
+    return mapArticle(post);
+  } catch (error) {
+    await cleanupSavedUpload(coverImagePath);
+    throw error;
+  }
 }
 
 export async function updateArticle(id: string, input: BlogInput, coverImage?: File | null) {
@@ -380,31 +405,38 @@ export async function updateArticle(id: string, input: BlogInput, coverImage?: F
 
   const slug = await getUniqueSlug("blog", input.slug || input.title, id);
   let coverImagePath = current.coverImage;
+  let replacementCoverImagePath: string | null = null;
 
   if (coverImage && coverImage.size > 0) {
-    coverImagePath = await saveImageUpload(coverImage, "blog");
+    replacementCoverImagePath = await saveImageUpload(coverImage, "blog");
+    coverImagePath = replacementCoverImagePath;
   }
 
-  const post = await db.blogPost.update({
-    where: { id },
-    data: {
-      title: input.title,
-      slug,
-      category: input.category,
-      summary: input.summary,
-      content: input.content,
-      tags: input.tags,
-      coverImage: coverImagePath,
-      published: input.published,
-      publishedAt: input.published ? current.publishedAt ?? new Date() : null,
-    },
-  });
+  try {
+    const post = await db.blogPost.update({
+      where: { id },
+      data: {
+        title: input.title,
+        slug,
+        category: input.category,
+        summary: input.summary,
+        content: input.content,
+        tags: input.tags,
+        coverImage: coverImagePath,
+        published: input.published,
+        publishedAt: input.published ? current.publishedAt ?? new Date() : null,
+      },
+    });
 
-  if (coverImagePath && coverImagePath !== current.coverImage) {
-    await removeLocalUpload(current.coverImage);
+    if (coverImagePath && coverImagePath !== current.coverImage) {
+      await removeLocalUpload(current.coverImage);
+    }
+
+    return mapArticle(post);
+  } catch (error) {
+    await cleanupSavedUpload(replacementCoverImagePath);
+    throw error;
   }
-
-  return mapArticle(post);
 }
 
 export async function deleteArticle(id: string) {

@@ -8,6 +8,8 @@ const encoder = new TextEncoder();
 const secret = hasAuthSecret ? encoder.encode(appEnv.authSecret) : null;
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
+const SESSION_ISSUER = "my-portfolio-admin";
+const SESSION_AUDIENCE = "admin";
 
 export type AdminSession = {
   userId: string;
@@ -36,6 +38,8 @@ export async function signAdminSession(session: AdminSession) {
   })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(session.userId)
+    .setIssuer(SESSION_ISSUER)
+    .setAudience(SESSION_AUDIENCE)
     .setIssuedAt()
     .setExpirationTime(`${SESSION_MAX_AGE}s`)
     .sign(ensureSecret());
@@ -43,7 +47,10 @@ export async function signAdminSession(session: AdminSession) {
 
 export async function verifyAdminSession(token: string): Promise<AdminSession | null> {
   try {
-    const verified = await jwtVerify<SessionPayload>(token, ensureSecret());
+    const verified = await jwtVerify<SessionPayload>(token, ensureSecret(), {
+      issuer: SESSION_ISSUER,
+      audience: SESSION_AUDIENCE,
+    });
 
     return {
       userId: verified.payload.sub ?? "",
@@ -83,6 +90,7 @@ export function getSessionCookieOptions() {
     httpOnly: true,
     sameSite: "lax" as const,
     secure: process.env.NODE_ENV === "production",
+    priority: "high" as const,
     path: "/",
     maxAge: SESSION_MAX_AGE,
   };

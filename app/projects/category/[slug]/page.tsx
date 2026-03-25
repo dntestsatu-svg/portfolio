@@ -65,11 +65,11 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       url: `/projects/category/${categoryPage.taxonomy.slug}`,
-      title: `${categoryPage.taxonomy.label} | Projects Mugiew Castello`,
+      title: `${categoryPage.taxonomy.label} | Projects Mugiew`,
       description: categoryPage.description,
     },
     twitter: {
-      title: `${categoryPage.taxonomy.label} | Projects Mugiew Castello`,
+      title: `${categoryPage.taxonomy.label} | Projects Mugiew`,
       description: categoryPage.description,
     },
   };
@@ -105,7 +105,7 @@ export default async function ProjectCategoryPage({
   const collectionJson = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: `/projects/category/${categoryPage.taxonomy.slug}`,
-      title: `Kategori ${categoryPage.taxonomy.label} | Projects Mugiew Castello`,
+      title: `Kategori ${categoryPage.taxonomy.label} | Projects Mugiew`,
       description: categoryPage.description,
     }),
   );
@@ -168,7 +168,7 @@ export default async function ProjectCategoryPage({
             <div className="content-sidebar-stack">
               <section className="content-sidebar-card">
                 <h2 className="content-sidebar-title">Cari project</h2>
-                <form action="/projects/search" method="get" className="content-search-form">
+                <form action="/projects/search" method="get" data-route-progress="search" className="content-search-form">
                   <label className="sr-only" htmlFor="project-category-search-input">
                     Cari project
                   </label>
@@ -212,4 +212,3 @@ export default async function ProjectCategoryPage({
     </main>
   );
 }
-

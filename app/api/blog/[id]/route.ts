@@ -29,7 +29,11 @@ export async function GET(request: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
   }
 
-  return NextResponse.json(article);
+  return NextResponse.json(article, {
+    headers: {
+      "Cache-Control": "private, no-store",
+    },
+  });
 }
 
 export async function POST(request: NextRequest, { params }: Params) {

@@ -38,13 +38,13 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       url: canonical,
-      title: `${title} | Mugiew Castello`,
+      title: `${title} | Mugiew`,
       description,
       images: ["/opengraph-image"],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | Mugiew Castello`,
+      title: `${title} | Mugiew`,
       description,
       images: ["/opengraph-image"],
     },
@@ -58,7 +58,7 @@ export default async function SupportRankingPage({ searchParams }: SupportRankin
   const structuredData = toStructuredDataJson(
     getCollectionPageStructuredData({
       path: page > 1 ? `/dukungan/ranking?page=${leaderboard.page}` : "/dukungan/ranking",
-      title: "Ranking Dukungan | Mugiew Castello",
+      title: "Ranking Dukungan | Mugiew",
       description:
         "Halaman apresiasi publik untuk supporter yang telah memberikan dukungan sukses dan memilih tampil di leaderboard.",
     }),

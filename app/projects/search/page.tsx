@@ -26,7 +26,7 @@ export async function generateMetadata({
   return {
     title: query ? `Cari project: ${query}` : "Cari project",
     description: query
-      ? `Hasil pencarian project untuk kata kunci "${query}" di archive projects Mugiew Castello.`
+      ? `Hasil pencarian project untuk kata kunci "${query}" di archive projects Mugiew.`
       : "Cari project berdasarkan nama, deskripsi, stack, atau kategori.",
     alternates: {
       canonical: query
@@ -101,7 +101,7 @@ export default async function ProjectSearchPage({ searchParams }: ProjectSearchP
             </div>
 
             <section className="surface-panel rounded-4xl p-6">
-              <form action="/projects/search" method="get" className="content-search-form">
+              <form action="/projects/search" method="get" data-route-progress="search" className="content-search-form">
                 <label className="sr-only" htmlFor="project-search-page-input">
                   Cari project
                 </label>
@@ -235,4 +235,3 @@ export default async function ProjectSearchPage({ searchParams }: ProjectSearchP
     </main>
   );
 }
-
